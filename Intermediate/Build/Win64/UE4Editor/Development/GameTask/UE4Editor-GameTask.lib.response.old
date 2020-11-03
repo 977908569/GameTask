@@ -1,0 +1,13 @@
+/NOLOGO
+/errorReport:prompt
+/MACHINE:x64
+/SUBSYSTEM:WINDOWS
+/DEF
+/NAME:"UE4Editor-GameTask.dll"
+/IGNORE:4221
+/NODEFAULTLIB
+"F:\NewTask\TaskProject\Intermediate\Build\Win64\TaskProjectEditor\Development\UnrealEd\SharedPCH.UnrealEd.ShadowErrors.h.obj"
+"F:\NewTask\TaskProject\Plugins\GameTask\Intermediate\Build\Win64\UE4Editor\Development\GameTask\Module.GameTask.cpp.obj"
+"F:\NewTask\TaskProject\Plugins\GameTask\Intermediate\Build\Win64\UE4Editor\Development\GameTask\Default.rc2.res"
+/OUT:"F:\NewTask\TaskProject\Plugins\GameTask\Intermediate\Build\Win64\UE4Editor\Development\GameTask\UE4Editor-GameTask.lib"
+/INCLUDE:IMPLEMENT_MODULE_GameTask

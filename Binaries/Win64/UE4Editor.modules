@@ -1,0 +1,8 @@
+{
+	"BuildId": "14469950",
+	"Modules": 
+	{
+		"GameTask": "UE4Editor-GameTask.dll",
+		"GameTaskEditor": "UE4Editor-GameTaskEditor.dll"
+	}
+}

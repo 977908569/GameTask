@@ -1,0 +1,21 @@
+{
+	"RemapUnityFiles": 
+	{
+		"Module.GameTask.cpp.obj": [
+			"GameTask.cpp.obj",
+			"GameTaskCompositeNode.cpp.obj",
+			"GameTaskEvent.cpp.obj",
+			"GameTaskExecuteNode.cpp.obj",
+			"GameTaskModule.cpp.obj",
+			"GameTaskNode.cpp.obj"
+		],
+		"Module.GameTask.gen.cpp.obj": [
+			"GameTask.gen.cpp.obj",
+			"GameTask.init.gen.cpp.obj",
+			"GameTaskCompositeNode.gen.cpp.obj",
+			"GameTaskEvent.gen.cpp.obj",
+			"GameTaskExecuteNode.gen.cpp.obj",
+			"GameTaskNode.gen.cpp.obj"
+		]
+	}
+}
