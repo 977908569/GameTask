@@ -5,7 +5,7 @@
 ===========================================================================*/
 
 #include "UObject/GeneratedCppIncludes.h"
-#include "GameTaskEditor/Private/GameTaskGraphNode_Root.h"
+#include "GameTaskEditor/Private/Node/GameTaskGraphNode_Root.h"
 #ifdef _MSC_VER
 #pragma warning (push)
 #pragma warning (disable : 4883)
@@ -41,8 +41,8 @@ void EmptyLinkFunctionForGeneratedCodeGameTaskGraphNode_Root() {}
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_UGameTaskGraphNode_Root_Statics::Class_MetaDataParams[] = {
 		{ "Comment", "/** Root node of this game task */" },
-		{ "IncludePath", "GameTaskGraphNode_Root.h" },
-		{ "ModuleRelativePath", "Private/GameTaskGraphNode_Root.h" },
+		{ "IncludePath", "Node/GameTaskGraphNode_Root.h" },
+		{ "ModuleRelativePath", "Private/Node/GameTaskGraphNode_Root.h" },
 		{ "ToolTip", "Root node of this game task" },
 	};
 #endif
@@ -73,7 +73,7 @@ void EmptyLinkFunctionForGeneratedCodeGameTaskGraphNode_Root() {}
 		}
 		return OuterClass;
 	}
-	IMPLEMENT_CLASS(UGameTaskGraphNode_Root, 4170647001);
+	IMPLEMENT_CLASS(UGameTaskGraphNode_Root, 3282434087);
 	template<> GAMETASKEDITOR_API UClass* StaticClass<UGameTaskGraphNode_Root>()
 	{
 		return UGameTaskGraphNode_Root::StaticClass();

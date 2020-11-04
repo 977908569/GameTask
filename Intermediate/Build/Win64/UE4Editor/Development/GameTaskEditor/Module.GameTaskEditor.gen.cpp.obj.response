@@ -34,10 +34,10 @@
 /I .
 /I F:\NewTask\TaskProject\Plugins\GameTask\Source\GameTaskEditor\Private
 /I Runtime
-/I Runtime\Projects\Public
 /I Runtime\TraceLog\Public
 /I Runtime\Core\Public
-/I Runtime\Json\Public
+/I Runtime\RenderCore\Public
+/I Runtime\RHI\Public
 /I ..\Intermediate\Build\Win64\UE4Editor\Inc\InputCore
 /I Runtime\InputCore\Classes
 /I Runtime\InputCore\Public
@@ -50,7 +50,6 @@
 /I Editor\UnrealEd\Classes
 /I Editor\UnrealEd\Public
 /I Runtime\ApplicationCore\Public
-/I Runtime\RHI\Public
 /I Developer
 /I Developer\DirectoryWatcher\Public
 /I Editor\Documentation\Public
@@ -61,6 +60,7 @@
 /I Runtime\Net
 /I Runtime\Net\Core\Classes
 /I Runtime\Net\Core\Public
+/I Runtime\Json\Public
 /I ..\Intermediate\Build\Win64\UE4Editor\Inc\SlateCore
 /I Runtime\SlateCore\Public
 /I ..\Intermediate\Build\Win64\UE4Editor\Inc\Slate
@@ -69,7 +69,6 @@
 /I Runtime\ImageWrapper\Public
 /I Runtime\Messaging\Public
 /I Runtime\MessagingCommon\Public
-/I Runtime\RenderCore\Public
 /I Runtime\Analytics
 /I Runtime\Analytics\AnalyticsET\Public
 /I Runtime\Analytics\Analytics\Public
@@ -134,6 +133,7 @@
 /I Developer\TargetPlatform\Public
 /I ..\Intermediate\Build\Win64\UE4Editor\Inc\AnimationCore
 /I Runtime\AnimationCore\Public
+/I Runtime\Projects\Public
 /I Runtime\SandboxFile\Public
 /I ..\Intermediate\Build\Win64\UE4Editor\Inc\EditorStyle
 /I Editor\EditorStyle\Public
@@ -234,6 +234,12 @@
 /I ..\Intermediate\Build\Win64\UE4Editor\Inc\ToolMenus
 /I Developer\ToolMenus\Public
 /I Developer\MessageLog\Public
+/I ..\Intermediate\Build\Win64\UE4Editor\Inc\AnimGraph
+/I Editor\AnimGraph\Classes
+/I Editor\AnimGraph\Public
+/I ..\Intermediate\Build\Win64\UE4Editor\Inc\AnimGraphRuntime
+/I Runtime\AnimGraphRuntime\Public
+/I Editor\KismetWidgets\Public
 /I F:\NewTask\TaskProject\Plugins\GameTask\Intermediate\Build\Win64\UE4Editor\Inc\GameTask
 /I F:\NewTask\TaskProject\Plugins\GameTask\Source
 /I F:\NewTask\TaskProject\Plugins\GameTask\Source\GameTask\Public

@@ -1,6 +1,6 @@
 #pragma once
 #include "GameTaskEditorModule.h"
-#include "GameTaskGraphEditor.h"
+#include "Graph/GameTaskGraphEditor.h"
 #include "GameTask.h"
 #include "WorkflowOrientedApp/WorkflowTabManager.h"
 

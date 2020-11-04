@@ -1,14 +1,21 @@
 #include "GameTaskEditorGraphSchema.h"
 #include "EdGraphNode_Comment.h"
-#include "GameTaskComposite_Parallel.h"
+#include "GameTaskCompositeNode.h"
 #include "GameTaskEditorModule.h"
-#include "GameTaskEditorTypes.h"
-#include "GameTaskGraphConnectionDrawingPolicy.h"
-#include "GameTaskGraphNodeBase.h"
-#include "GameTaskGraphNode_Root.h"
+#include "GameTaskEvent.h"
+#include "Graph/GameTaskGraphConnectionDrawingPolicy.h"
+#include "Node/GameTaskGraphNodeBase.h"
+#include "Node/GameTaskGraphNode_Root.h"
 #include "GraphEditorActions.h"
 #include "ToolMenu.h"
 #include "Framework/Commands/GenericCommands.h"
+#include "Node/GameTaskGraphNode_Event.h"
+#include "GameTaskEditorTypes.h"
+#include "GameTaskExecuteNode.h"
+#include "ObjectEditorUtils.h"
+#include "Node/GameTaskComposite_Parallel.h"
+#include "Node/GameTaskGraphNode_Composite.h"
+#include "Node/GameTaskGraphNode_Parallel.h"
 #define LOCTEXT_NAMESPACE "GameTask"
 #define SNAP_GRID (16) // @todo ensure this is the same as SNodePanel::GetSnapGridSize()
 namespace
@@ -328,6 +335,7 @@ void UGameTaskEditorGraphSchemaBase::GetGraphNodeContextActions(FGraphContextMen
 void UGameTaskEditorGraphSchemaBase::GetSubNodeClasses(int32 SubNodeFlags, TArray<FGameTaskGraphNodeClassData>& ClassData,
 	UClass*& GraphNodeClass) const
 {
+
 	
 }
 
@@ -362,11 +370,92 @@ void UGameTaskEditorGraphSchema::CreateDefaultNodesForGraph(UEdGraph& Graph) con
 
 void UGameTaskEditorGraphSchema::GetGraphContextActions(FGraphContextMenuBuilder& ContextMenuBuilder) const
 {
-	
+	const FName PinCategory = ContextMenuBuilder.FromPin ?
+		ContextMenuBuilder.FromPin->PinType.PinCategory :
+		UGameTaskEditorTypes::PinCategory_MultipleNodes;
+
+	const bool bNoParent = (ContextMenuBuilder.FromPin == nullptr);
+	const bool bOnlyTasks = (PinCategory == UGameTaskEditorTypes::PinCategory_SingleExecute);
+	const bool bOnlyComposites = (PinCategory == UGameTaskEditorTypes::PinCategory_SingleComposite);
+	const bool bAllowComposites = bNoParent || !bOnlyTasks || bOnlyComposites;
+	const bool bAllowTasks = bNoParent || !bOnlyComposites || bOnlyTasks;
+
+	FGameTaskEditorModule& EditorModule = FModuleManager::GetModuleChecked<FGameTaskEditorModule>(TEXT("GameTaskEditor"));
+	FGameTaskGraphNodeClassHelper* ClassCache = EditorModule.GetClassCache().Get();
+
+	if (bAllowComposites)
+	{
+		FCategorizedGraphActionListBuilder CompositesBuilder(TEXT("Composites"));
+
+		TArray<FGameTaskGraphNodeClassData> NodeClasses;
+		ClassCache->GatherClasses(UGameTaskCompositeNode::StaticClass(), NodeClasses);
+
+		const FString ParallelClassName = UGameTaskComposite_Parallel::StaticClass()->GetName();
+		for (const auto& NodeClass : NodeClasses)
+		{
+			const FText NodeTypeName = FText::FromString(FName::NameToDisplayString(NodeClass.ToString(), false));
+
+			TSharedPtr<FGameTaskSchemaAction_NewNode> AddOpAction = UGameTaskEditorGraphSchemaBase::AddNewNodeAction(CompositesBuilder, NodeClass.GetCategory(), NodeTypeName, FText::GetEmpty());
+
+			UClass* GraphNodeClass = UGameTaskGraphNode_Composite::StaticClass();
+			if (NodeClass.GetClassName() == ParallelClassName)
+			{
+				GraphNodeClass = UGameTaskGraphNode_Parallel::StaticClass();
+			}
+
+			UGameTaskGraphNode* OpNode = NewObject<UGameTaskGraphNode>(ContextMenuBuilder.OwnerOfTemporaries, GraphNodeClass);
+			OpNode->ClassData = NodeClass;
+			AddOpAction->NodeTemplate = OpNode;
+		}
+
+		ContextMenuBuilder.Append(CompositesBuilder);
+	}
+
+	if (bAllowTasks)
+	{
+		FCategorizedGraphActionListBuilder TasksBuilder(TEXT("Tasks"));
+
+		TArray<FGameTaskGraphNodeClassData> NodeClasses;
+		ClassCache->GatherClasses(UGameTaskExecuteNode::StaticClass(), NodeClasses);
+
+		for (const auto& NodeClass : NodeClasses)
+		{
+			const FText NodeTypeName = FText::FromString(FName::NameToDisplayString(NodeClass.ToString(), false));
+
+			TSharedPtr<FGameTaskSchemaAction_NewNode> AddOpAction = UGameTaskEditorGraphSchemaBase::AddNewNodeAction(TasksBuilder, NodeClass.GetCategory(), NodeTypeName, FText::GetEmpty());
+
+			UClass* GraphNodeClass = UGameTaskGraphNode::StaticClass();
+
+
+			UGameTaskGraphNode* OpNode = NewObject<UGameTaskGraphNode>(ContextMenuBuilder.OwnerOfTemporaries, GraphNodeClass);
+			OpNode->ClassData = NodeClass;
+			AddOpAction->NodeTemplate = OpNode;
+		}
+
+		ContextMenuBuilder.Append(TasksBuilder);
+	}
+
 }
 
 void UGameTaskEditorGraphSchema::GetContextMenuActions(UToolMenu* Menu, UGraphNodeContextMenuContext* Context) const
 {
+	if (Context->Node && !Context->Pin)
+	{
+		const UGameTaskGraphNode* GraphNode = Cast<const UGameTaskGraphNode>(Context->Node);
+		if (GraphNode && GraphNode->CanPlaceBreakpoints())
+		{
+			FToolMenuSection& Section = Menu->AddSection("EdGraphSchemaBreakpoints", LOCTEXT("BreakpointsHeader", "Breakpoints"));
+			{
+				Section.AddMenuEntry(FGraphEditorCommands::Get().ToggleBreakpoint);
+				Section.AddMenuEntry(FGraphEditorCommands::Get().AddBreakpoint);
+				Section.AddMenuEntry(FGraphEditorCommands::Get().RemoveBreakpoint);
+				Section.AddMenuEntry(FGraphEditorCommands::Get().EnableBreakpoint);
+				Section.AddMenuEntry(FGraphEditorCommands::Get().DisableBreakpoint);
+			}
+		}
+	}
+
+	Super::GetContextMenuActions(Menu, Context);
 }
 
 const FPinConnectionResponse UGameTaskEditorGraphSchema::CanCreateConnection(const UEdGraphPin* A,
@@ -416,13 +505,30 @@ void UGameTaskEditorGraphSchema::ForceVisualizationCacheClear() const
 void UGameTaskEditorGraphSchema::GetGraphNodeContextActions(FGraphContextMenuBuilder& ContextMenuBuilder,
 	int32 SubNodeFlags) const
 {
-	
+	Super::GetGraphNodeContextActions(ContextMenuBuilder, SubNodeFlags);
+
+	if (SubNodeFlags == EGameTaskSubNode::Event)
+	{
+		const FText Category = FObjectEditorUtils::GetCategoryText(UGameTaskGraphNode_Event::StaticClass());
+		UEdGraph* Graph = (UEdGraph*)ContextMenuBuilder.CurrentGraph;
+		UGameTaskGraphNode_Event* OpNode = NewObject<UGameTaskGraphNode_Event>(Graph);
+		TSharedPtr<FGameTaskSchemaAction_NewSubNode> AddOpAction = UGameTaskEditorGraphSchemaBase::AddNewSubNodeAction(ContextMenuBuilder, Category, FText::FromString(OpNode->GetNodeTypeDescription()), FText::GetEmpty());
+		AddOpAction->ParentNode = Cast<UGameTaskGraphNode>(ContextMenuBuilder.SelectedObjects[0]);
+		AddOpAction->NodeTemplate = OpNode;
+	}
 }
 
 void UGameTaskEditorGraphSchema::GetSubNodeClasses(int32 SubNodeFlags, TArray<FGameTaskGraphNodeClassData>& ClassData,
 	UClass*& GraphNodeClass) const
 {
-	FGameTaskEditorModule& EditorModule = FModuleManager::GetModuleChecked<FGameTaskEditorModule>(TEXT("BehaviorTreeEditor"));
+	FGameTaskEditorModule& EditorModule = FModuleManager::GetModuleChecked<FGameTaskEditorModule>(TEXT("GameTaskEditor"));
+	FGameTaskGraphNodeClassHelper* ClassCache = EditorModule.GetClassCache().Get();
+
+	if (SubNodeFlags == EGameTaskSubNode::Event)
+	{
+		ClassCache->GatherClasses(UGameTaskEvent::StaticClass(), ClassData);
+		GraphNodeClass = UGameTaskGraphNode_Event::StaticClass();
+	}
 	
 }
 

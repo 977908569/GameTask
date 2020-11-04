@@ -5,7 +5,7 @@
 ===========================================================================*/
 
 #include "UObject/GeneratedCppIncludes.h"
-#include "GameTaskEditor/Private/GameTaskGraphNode_Composite.h"
+#include "GameTaskEditor/Private/Node/GameTaskGraphNode_Composite.h"
 #ifdef _MSC_VER
 #pragma warning (push)
 #pragma warning (disable : 4883)
@@ -40,8 +40,8 @@ void EmptyLinkFunctionForGeneratedCodeGameTaskGraphNode_Composite() {}
 	};
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_UGameTaskGraphNode_Composite_Statics::Class_MetaDataParams[] = {
-		{ "IncludePath", "GameTaskGraphNode_Composite.h" },
-		{ "ModuleRelativePath", "Private/GameTaskGraphNode_Composite.h" },
+		{ "IncludePath", "Node/GameTaskGraphNode_Composite.h" },
+		{ "ModuleRelativePath", "Private/Node/GameTaskGraphNode_Composite.h" },
 	};
 #endif
 	const FCppClassTypeInfoStatic Z_Construct_UClass_UGameTaskGraphNode_Composite_Statics::StaticCppClassTypeInfo = {
@@ -71,7 +71,7 @@ void EmptyLinkFunctionForGeneratedCodeGameTaskGraphNode_Composite() {}
 		}
 		return OuterClass;
 	}
-	IMPLEMENT_CLASS(UGameTaskGraphNode_Composite, 751037687);
+	IMPLEMENT_CLASS(UGameTaskGraphNode_Composite, 328426834);
 	template<> GAMETASKEDITOR_API UClass* StaticClass<UGameTaskGraphNode_Composite>()
 	{
 		return UGameTaskGraphNode_Composite::StaticClass();

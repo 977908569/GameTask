@@ -94,7 +94,7 @@ void FGameTaskGraphNodeClassNode::AddUniqueSubNode(TSharedPtr<FGameTaskGraphNode
 
 }
 //===================================
-FGameTaskGraphNodeClassHelper::FGameTaskGraphNodeClassHelper(UClass* InRootClass) : RootNodeClass(nullptr)
+FGameTaskGraphNodeClassHelper::FGameTaskGraphNodeClassHelper(UClass* InRootClass) 
 {
 	RootNodeClass = InRootClass;
 

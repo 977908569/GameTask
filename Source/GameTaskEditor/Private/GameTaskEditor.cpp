@@ -1,12 +1,10 @@
 #include "GameTaskEditor.h"
-
-
-#include "GameTaskDebugger.h"
+#include "Debug/GameTaskDebugger.h"
 #include "GameTaskEditorGraphSchema.h"
-#include "GameTaskEditorModes.h"
+#include "Modes/GameTaskEditorModes.h"
 #include "GameTaskEditorTabFactories.h"
 #include "GameTaskEditorToolbar.h"
-#include "GameTaskGraph.h"
+#include "Graph/GameTaskGraph.h"
 #include "GraphEditorActions.h"
 #include "Kismet2/BlueprintEditorUtils.h"
 

@@ -5,7 +5,7 @@
 ===========================================================================*/
 
 #include "UObject/GeneratedCppIncludes.h"
-#include "GameTaskEditor/Private/GameTaskGraphNode_Parallel.h"
+#include "GameTaskEditor/Private/Node/GameTaskGraphNode_Parallel.h"
 #ifdef _MSC_VER
 #pragma warning (push)
 #pragma warning (disable : 4883)
@@ -40,8 +40,8 @@ void EmptyLinkFunctionForGeneratedCodeGameTaskGraphNode_Parallel() {}
 	};
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_UGameTaskGraphNode_Parallel_Statics::Class_MetaDataParams[] = {
-		{ "IncludePath", "GameTaskGraphNode_Parallel.h" },
-		{ "ModuleRelativePath", "Private/GameTaskGraphNode_Parallel.h" },
+		{ "IncludePath", "Node/GameTaskGraphNode_Parallel.h" },
+		{ "ModuleRelativePath", "Private/Node/GameTaskGraphNode_Parallel.h" },
 	};
 #endif
 	const FCppClassTypeInfoStatic Z_Construct_UClass_UGameTaskGraphNode_Parallel_Statics::StaticCppClassTypeInfo = {
@@ -71,7 +71,7 @@ void EmptyLinkFunctionForGeneratedCodeGameTaskGraphNode_Parallel() {}
 		}
 		return OuterClass;
 	}
-	IMPLEMENT_CLASS(UGameTaskGraphNode_Parallel, 559373160);
+	IMPLEMENT_CLASS(UGameTaskGraphNode_Parallel, 3402810845);
 	template<> GAMETASKEDITOR_API UClass* StaticClass<UGameTaskGraphNode_Parallel>()
 	{
 		return UGameTaskGraphNode_Parallel::StaticClass();

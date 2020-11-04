@@ -77,6 +77,7 @@
 "F:\UE4Launcher\Engine\Intermediate\Build\Win64\UE4Editor\Development\Kismet\UE4Editor-Kismet.lib"
 "F:\UE4Launcher\Engine\Intermediate\Build\Win64\UE4Editor\Development\PropertyEditor\UE4Editor-PropertyEditor.lib"
 "F:\UE4Launcher\Engine\Intermediate\Build\Win64\UE4Editor\Development\BlueprintGraph\UE4Editor-BlueprintGraph.lib"
+"F:\UE4Launcher\Engine\Intermediate\Build\Win64\UE4Editor\Development\AIModule\UE4Editor-AIModule.lib"
 "F:\NewTask\TaskProject\Plugins\GameTask\Intermediate\Build\Win64\UE4Editor\Development\GameTask\UE4Editor-GameTask.lib"
 "F:\UE4Launcher\Engine\Intermediate\Build\Win64\UE4Editor\Development\Core\UE4Editor-Core.lib"
 /OUT:"F:\NewTask\TaskProject\Plugins\GameTask\Binaries\Win64\UE4Editor-GameTaskEditor.dll"

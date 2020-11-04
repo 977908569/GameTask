@@ -5,7 +5,7 @@
 ===========================================================================*/
 
 #include "UObject/GeneratedCppIncludes.h"
-#include "GameTaskEditor/Private/GameTaskGraphNodeBase.h"
+#include "GameTaskEditor/Private/Node/GameTaskGraphNodeBase.h"
 #ifdef _MSC_VER
 #pragma warning (push)
 #pragma warning (disable : 4883)
@@ -78,14 +78,14 @@ void EmptyLinkFunctionForGeneratedCodeGameTaskGraphNodeBase() {}
 	};
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_UGameTaskGraphNodeBase_Statics::Class_MetaDataParams[] = {
-		{ "IncludePath", "GameTaskGraphNodeBase.h" },
-		{ "ModuleRelativePath", "Private/GameTaskGraphNodeBase.h" },
+		{ "IncludePath", "Node/GameTaskGraphNodeBase.h" },
+		{ "ModuleRelativePath", "Private/Node/GameTaskGraphNodeBase.h" },
 	};
 #endif
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_UGameTaskGraphNodeBase_Statics::NewProp_ErrorMessage_MetaData[] = {
 		{ "Comment", "/** error message for node */" },
-		{ "ModuleRelativePath", "Private/GameTaskGraphNodeBase.h" },
+		{ "ModuleRelativePath", "Private/Node/GameTaskGraphNodeBase.h" },
 		{ "ToolTip", "error message for node" },
 	};
 #endif
@@ -93,7 +93,7 @@ void EmptyLinkFunctionForGeneratedCodeGameTaskGraphNodeBase() {}
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_UGameTaskGraphNodeBase_Statics::NewProp_bIsSubNode_MetaData[] = {
 		{ "Comment", "/** if set, this node will be always considered as subnode */" },
-		{ "ModuleRelativePath", "Private/GameTaskGraphNodeBase.h" },
+		{ "ModuleRelativePath", "Private/Node/GameTaskGraphNodeBase.h" },
 		{ "ToolTip", "if set, this node will be always considered as subnode" },
 	};
 #endif
@@ -105,7 +105,7 @@ void EmptyLinkFunctionForGeneratedCodeGameTaskGraphNodeBase() {}
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_UGameTaskGraphNodeBase_Statics::NewProp_bIsReadOnly_MetaData[] = {
 		{ "Comment", "/** if set, all modifications (including delete/cut) are disabled */" },
-		{ "ModuleRelativePath", "Private/GameTaskGraphNodeBase.h" },
+		{ "ModuleRelativePath", "Private/Node/GameTaskGraphNodeBase.h" },
 		{ "ToolTip", "if set, all modifications (including delete/cut) are disabled" },
 	};
 #endif
@@ -117,34 +117,34 @@ void EmptyLinkFunctionForGeneratedCodeGameTaskGraphNodeBase() {}
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_UGameTaskGraphNodeBase_Statics::NewProp_CopySubNodeIndex_MetaData[] = {
 		{ "Comment", "/** subnode index assigned during copy operation to connect nodes again on paste */" },
-		{ "ModuleRelativePath", "Private/GameTaskGraphNodeBase.h" },
+		{ "ModuleRelativePath", "Private/Node/GameTaskGraphNodeBase.h" },
 		{ "ToolTip", "subnode index assigned during copy operation to connect nodes again on paste" },
 	};
 #endif
 	const UE4CodeGen_Private::FIntPropertyParams Z_Construct_UClass_UGameTaskGraphNodeBase_Statics::NewProp_CopySubNodeIndex = { "CopySubNodeIndex", nullptr, (EPropertyFlags)0x0010000000000000, UE4CodeGen_Private::EPropertyGenFlags::Int, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(UGameTaskGraphNodeBase, CopySubNodeIndex), METADATA_PARAMS(Z_Construct_UClass_UGameTaskGraphNodeBase_Statics::NewProp_CopySubNodeIndex_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_UGameTaskGraphNodeBase_Statics::NewProp_CopySubNodeIndex_MetaData)) };
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_UGameTaskGraphNodeBase_Statics::NewProp_SubNodes_MetaData[] = {
-		{ "ModuleRelativePath", "Private/GameTaskGraphNodeBase.h" },
+		{ "ModuleRelativePath", "Private/Node/GameTaskGraphNodeBase.h" },
 	};
 #endif
 	const UE4CodeGen_Private::FArrayPropertyParams Z_Construct_UClass_UGameTaskGraphNodeBase_Statics::NewProp_SubNodes = { "SubNodes", nullptr, (EPropertyFlags)0x0010000000000000, UE4CodeGen_Private::EPropertyGenFlags::Array, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(UGameTaskGraphNodeBase, SubNodes), EArrayPropertyFlags::None, METADATA_PARAMS(Z_Construct_UClass_UGameTaskGraphNodeBase_Statics::NewProp_SubNodes_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_UGameTaskGraphNodeBase_Statics::NewProp_SubNodes_MetaData)) };
 	const UE4CodeGen_Private::FObjectPropertyParams Z_Construct_UClass_UGameTaskGraphNodeBase_Statics::NewProp_SubNodes_Inner = { "SubNodes", nullptr, (EPropertyFlags)0x0000000000000000, UE4CodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, 1, 0, Z_Construct_UClass_UGameTaskGraphNodeBase_NoRegister, METADATA_PARAMS(nullptr, 0) };
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_UGameTaskGraphNodeBase_Statics::NewProp_ParentNode_MetaData[] = {
-		{ "ModuleRelativePath", "Private/GameTaskGraphNodeBase.h" },
+		{ "ModuleRelativePath", "Private/Node/GameTaskGraphNodeBase.h" },
 	};
 #endif
 	const UE4CodeGen_Private::FObjectPropertyParams Z_Construct_UClass_UGameTaskGraphNodeBase_Statics::NewProp_ParentNode = { "ParentNode", nullptr, (EPropertyFlags)0x0010000000002000, UE4CodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(UGameTaskGraphNodeBase, ParentNode), Z_Construct_UClass_UGameTaskGraphNodeBase_NoRegister, METADATA_PARAMS(Z_Construct_UClass_UGameTaskGraphNodeBase_Statics::NewProp_ParentNode_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_UGameTaskGraphNodeBase_Statics::NewProp_ParentNode_MetaData)) };
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_UGameTaskGraphNodeBase_Statics::NewProp_NodeInstance_MetaData[] = {
-		{ "ModuleRelativePath", "Private/GameTaskGraphNodeBase.h" },
+		{ "ModuleRelativePath", "Private/Node/GameTaskGraphNodeBase.h" },
 	};
 #endif
 	const UE4CodeGen_Private::FObjectPropertyParams Z_Construct_UClass_UGameTaskGraphNodeBase_Statics::NewProp_NodeInstance = { "NodeInstance", nullptr, (EPropertyFlags)0x0010000000000000, UE4CodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(UGameTaskGraphNodeBase, NodeInstance), Z_Construct_UClass_UObject_NoRegister, METADATA_PARAMS(Z_Construct_UClass_UGameTaskGraphNodeBase_Statics::NewProp_NodeInstance_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_UGameTaskGraphNodeBase_Statics::NewProp_NodeInstance_MetaData)) };
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_UGameTaskGraphNodeBase_Statics::NewProp_ClassData_MetaData[] = {
 		{ "Comment", "/** instance class */" },
-		{ "ModuleRelativePath", "Private/GameTaskGraphNodeBase.h" },
+		{ "ModuleRelativePath", "Private/Node/GameTaskGraphNodeBase.h" },
 		{ "ToolTip", "instance class" },
 	};
 #endif
@@ -187,7 +187,7 @@ void EmptyLinkFunctionForGeneratedCodeGameTaskGraphNodeBase() {}
 		}
 		return OuterClass;
 	}
-	IMPLEMENT_CLASS(UGameTaskGraphNodeBase, 433705703);
+	IMPLEMENT_CLASS(UGameTaskGraphNodeBase, 2483240942);
 	template<> GAMETASKEDITOR_API UClass* StaticClass<UGameTaskGraphNodeBase>()
 	{
 		return UGameTaskGraphNodeBase::StaticClass();

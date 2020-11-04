@@ -21,7 +21,7 @@ void EmptyLinkFunctionForGeneratedCodeGameTaskEditor_init() {}
 				nullptr,
 				0,
 				PKG_CompiledIn | 0x00000040,
-				0xF583344B,
+				0xE42A92FB,
 				0x5C6F8FC4,
 				METADATA_PARAMS(nullptr, 0)
 			};

@@ -5,7 +5,7 @@
 ===========================================================================*/
 
 #include "UObject/GeneratedCppIncludes.h"
-#include "GameTaskEditor/Private/GameTaskGraphNode.h"
+#include "GameTaskEditor/Private/Node/GameTaskGraphNode.h"
 #ifdef _MSC_VER
 #pragma warning (push)
 #pragma warning (disable : 4883)
@@ -46,13 +46,13 @@ void EmptyLinkFunctionForGeneratedCodeGameTaskGraphNode() {}
 	};
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_UGameTaskGraphNode_Statics::Class_MetaDataParams[] = {
-		{ "IncludePath", "GameTaskGraphNode.h" },
-		{ "ModuleRelativePath", "Private/GameTaskGraphNode.h" },
+		{ "IncludePath", "Node/GameTaskGraphNode.h" },
+		{ "ModuleRelativePath", "Private/Node/GameTaskGraphNode.h" },
 	};
 #endif
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_UGameTaskGraphNode_Statics::NewProp_Events_MetaData[] = {
-		{ "ModuleRelativePath", "Private/GameTaskGraphNode.h" },
+		{ "ModuleRelativePath", "Private/Node/GameTaskGraphNode.h" },
 	};
 #endif
 	const UE4CodeGen_Private::FArrayPropertyParams Z_Construct_UClass_UGameTaskGraphNode_Statics::NewProp_Events = { "Events", nullptr, (EPropertyFlags)0x0010000000000000, UE4CodeGen_Private::EPropertyGenFlags::Array, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(UGameTaskGraphNode, Events), EArrayPropertyFlags::None, METADATA_PARAMS(Z_Construct_UClass_UGameTaskGraphNode_Statics::NewProp_Events_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_UGameTaskGraphNode_Statics::NewProp_Events_MetaData)) };
@@ -88,7 +88,7 @@ void EmptyLinkFunctionForGeneratedCodeGameTaskGraphNode() {}
 		}
 		return OuterClass;
 	}
-	IMPLEMENT_CLASS(UGameTaskGraphNode, 1663720798);
+	IMPLEMENT_CLASS(UGameTaskGraphNode, 2715362837);
 	template<> GAMETASKEDITOR_API UClass* StaticClass<UGameTaskGraphNode>()
 	{
 		return UGameTaskGraphNode::StaticClass();

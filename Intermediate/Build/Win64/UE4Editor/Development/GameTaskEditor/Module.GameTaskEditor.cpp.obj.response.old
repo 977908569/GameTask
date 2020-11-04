@@ -233,6 +233,7 @@
 /I Runtime\AIModule\Classes
 /I ..\Intermediate\Build\Win64\UE4Editor\Inc\ToolMenus
 /I Developer\ToolMenus\Public
+/I Developer\MessageLog\Public
 /I F:\NewTask\TaskProject\Plugins\GameTask\Intermediate\Build\Win64\UE4Editor\Inc\GameTask
 /I F:\NewTask\TaskProject\Plugins\GameTask\Source
 /I F:\NewTask\TaskProject\Plugins\GameTask\Source\GameTask\Public

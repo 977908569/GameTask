@@ -14,27 +14,21 @@ public class GameTaskEditor : ModuleRules
 			}
             );
 
-
-        PrivateIncludePaths.AddRange(
-            new string[] {
-				// ... add other private include paths required here ...
-			}
-            );
-
-
-        PublicDependencyModuleNames.AddRange(
-            new string[]
-            {
-                "Core",
-				// ... add other public dependencies that you statically link with here ...
-			}
-            );
+        PrivateIncludePathModuleNames.AddRange(
+          new string[] {
+                "AssetRegistry",
+                "AssetTools",
+                "PropertyEditor",
+                "ContentBrowser"
+          }
+      );
 
 
         PrivateDependencyModuleNames.AddRange(
             new string[]
             {
-                "Projects",
+                "Core",
+                "RenderCore",
                 "InputCore",
                 "UnrealEd",
                 "ToolMenus",
@@ -49,19 +43,27 @@ public class GameTaskEditor : ModuleRules
                 "GraphEditor",
                 "Kismet",
                 "PropertyEditor",
+                "AnimGraph",
                 "BlueprintGraph",
                 "AIModule",
+                "Kismet",
+                "KismetWidgets",
+                "ClassViewer",
                 "GameTask",
 				// ... add private dependencies that you statically link with here ...	
 			}
             );
 
+        PublicIncludePathModuleNames.Add("LevelEditor");
 
         DynamicallyLoadedModuleNames.AddRange(
             new string[]
             {
-				// ... add any modules that your module loads dynamically here ...
-			}
+                "WorkspaceMenuStructure",
+                "AssetTools",
+                "AssetRegistry",
+                "ContentBrowser"
+            }
             );
     }
 }

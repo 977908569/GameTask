@@ -17,6 +17,27 @@ struct FGameTaskCompareNodeXLocation
 	}
 };
 
+namespace EGameTaskSubNode
+{
+	enum Type {
+		Event,
+		Condition
+	};
+}
+
+
+struct FGameTaskNodeBounds
+{
+	FVector2D Position;
+	FVector2D Size;
+
+	FGameTaskNodeBounds(FVector2D InPos, FVector2D InSize)
+	{
+		Position = InPos;
+		Size = InSize;
+	}
+};
+
 UCLASS()
 class UGameTaskEditorTypes : public UObject
 {

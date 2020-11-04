@@ -30,6 +30,8 @@ public:
 	virtual TSharedRef<IGameTaskEditor> CreateGameTaskEditor(const EToolkitMode::Type Mode, const TSharedPtr< class IToolkitHost >& InitToolkitHost, class UObject* Object);
 	virtual TSharedPtr<FExtensibilityManager> GetMenuExtensibilityManager() override { return MenuExtensibilityManager; }
 	virtual TSharedPtr<FExtensibilityManager> GetToolBarExtensibilityManager() override { return ToolBarExtensibilityManager; }
+
+	TSharedPtr<struct FGameTaskGraphNodeClassHelper> GetClassCache() { return ClassCache; }
 	static const FName GameTaskEditorAppIdentifier;
 private:
 	TSharedPtr<FExtensibilityManager> MenuExtensibilityManager;

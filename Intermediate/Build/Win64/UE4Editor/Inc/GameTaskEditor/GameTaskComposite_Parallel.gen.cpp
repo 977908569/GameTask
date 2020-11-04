@@ -5,7 +5,7 @@
 ===========================================================================*/
 
 #include "UObject/GeneratedCppIncludes.h"
-#include "GameTaskEditor/Private/GameTaskComposite_Parallel.h"
+#include "GameTaskEditor/Private/Node/GameTaskComposite_Parallel.h"
 #ifdef _MSC_VER
 #pragma warning (push)
 #pragma warning (disable : 4883)
@@ -41,8 +41,8 @@ void EmptyLinkFunctionForGeneratedCodeGameTaskComposite_Parallel() {}
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_UGameTaskComposite_Parallel_Statics::Class_MetaDataParams[] = {
 		{ "HideCategories", "Composite" },
-		{ "IncludePath", "GameTaskComposite_Parallel.h" },
-		{ "ModuleRelativePath", "Private/GameTaskComposite_Parallel.h" },
+		{ "IncludePath", "Node/GameTaskComposite_Parallel.h" },
+		{ "ModuleRelativePath", "Private/Node/GameTaskComposite_Parallel.h" },
 	};
 #endif
 	const FCppClassTypeInfoStatic Z_Construct_UClass_UGameTaskComposite_Parallel_Statics::StaticCppClassTypeInfo = {
@@ -72,7 +72,7 @@ void EmptyLinkFunctionForGeneratedCodeGameTaskComposite_Parallel() {}
 		}
 		return OuterClass;
 	}
-	IMPLEMENT_CLASS(UGameTaskComposite_Parallel, 1947584595);
+	IMPLEMENT_CLASS(UGameTaskComposite_Parallel, 696337082);
 	template<> GAMETASKEDITOR_API UClass* StaticClass<UGameTaskComposite_Parallel>()
 	{
 		return UGameTaskComposite_Parallel::StaticClass();

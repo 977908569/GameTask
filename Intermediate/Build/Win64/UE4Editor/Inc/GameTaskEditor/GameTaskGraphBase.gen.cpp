@@ -5,7 +5,7 @@
 ===========================================================================*/
 
 #include "UObject/GeneratedCppIncludes.h"
-#include "GameTaskEditor/Private/GameTaskGraphBase.h"
+#include "GameTaskEditor/Private/Graph/GameTaskGraphBase.h"
 #include "Serialization/ArchiveUObjectFromStructuredArchive.h"
 #ifdef _MSC_VER
 #pragma warning (push)
@@ -46,13 +46,13 @@ void EmptyLinkFunctionForGeneratedCodeGameTaskGraphBase() {}
 	};
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_UGameTaskGraphBase_Statics::Class_MetaDataParams[] = {
-		{ "IncludePath", "GameTaskGraphBase.h" },
-		{ "ModuleRelativePath", "Private/GameTaskGraphBase.h" },
+		{ "IncludePath", "Graph/GameTaskGraphBase.h" },
+		{ "ModuleRelativePath", "Private/Graph/GameTaskGraphBase.h" },
 	};
 #endif
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_UGameTaskGraphBase_Statics::NewProp_GraphVersion_MetaData[] = {
-		{ "ModuleRelativePath", "Private/GameTaskGraphBase.h" },
+		{ "ModuleRelativePath", "Private/Graph/GameTaskGraphBase.h" },
 	};
 #endif
 	const UE4CodeGen_Private::FIntPropertyParams Z_Construct_UClass_UGameTaskGraphBase_Statics::NewProp_GraphVersion = { "GraphVersion", nullptr, (EPropertyFlags)0x0010000000000000, UE4CodeGen_Private::EPropertyGenFlags::Int, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(UGameTaskGraphBase, GraphVersion), METADATA_PARAMS(Z_Construct_UClass_UGameTaskGraphBase_Statics::NewProp_GraphVersion_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_UGameTaskGraphBase_Statics::NewProp_GraphVersion_MetaData)) };
@@ -86,7 +86,7 @@ void EmptyLinkFunctionForGeneratedCodeGameTaskGraphBase() {}
 		}
 		return OuterClass;
 	}
-	IMPLEMENT_CLASS(UGameTaskGraphBase, 2737394179);
+	IMPLEMENT_CLASS(UGameTaskGraphBase, 4185753343);
 	template<> GAMETASKEDITOR_API UClass* StaticClass<UGameTaskGraphBase>()
 	{
 		return UGameTaskGraphBase::StaticClass();

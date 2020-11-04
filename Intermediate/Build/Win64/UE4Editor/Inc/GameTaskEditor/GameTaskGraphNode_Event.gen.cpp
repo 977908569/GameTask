@@ -5,7 +5,7 @@
 ===========================================================================*/
 
 #include "UObject/GeneratedCppIncludes.h"
-#include "GameTaskEditor/Private/GameTaskGraphNode_Event.h"
+#include "GameTaskEditor/Private/Node/GameTaskGraphNode_Event.h"
 #ifdef _MSC_VER
 #pragma warning (push)
 #pragma warning (disable : 4883)
@@ -40,8 +40,8 @@ void EmptyLinkFunctionForGeneratedCodeGameTaskGraphNode_Event() {}
 	};
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_UGameTaskGraphNode_Event_Statics::Class_MetaDataParams[] = {
-		{ "IncludePath", "GameTaskGraphNode_Event.h" },
-		{ "ModuleRelativePath", "Private/GameTaskGraphNode_Event.h" },
+		{ "IncludePath", "Node/GameTaskGraphNode_Event.h" },
+		{ "ModuleRelativePath", "Private/Node/GameTaskGraphNode_Event.h" },
 	};
 #endif
 	const FCppClassTypeInfoStatic Z_Construct_UClass_UGameTaskGraphNode_Event_Statics::StaticCppClassTypeInfo = {
@@ -71,7 +71,7 @@ void EmptyLinkFunctionForGeneratedCodeGameTaskGraphNode_Event() {}
 		}
 		return OuterClass;
 	}
-	IMPLEMENT_CLASS(UGameTaskGraphNode_Event, 555456893);
+	IMPLEMENT_CLASS(UGameTaskGraphNode_Event, 3867662242);
 	template<> GAMETASKEDITOR_API UClass* StaticClass<UGameTaskGraphNode_Event>()
 	{
 		return UGameTaskGraphNode_Event::StaticClass();
