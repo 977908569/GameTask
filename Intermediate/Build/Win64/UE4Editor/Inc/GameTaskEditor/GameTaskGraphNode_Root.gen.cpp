@@ -61,7 +61,7 @@ void EmptyLinkFunctionForGeneratedCodeGameTaskGraphNode_Root() {}
 		0,
 		0,
 		0,
-		0x000000A0u,
+		0x001000A0u,
 		METADATA_PARAMS(Z_Construct_UClass_UGameTaskGraphNode_Root_Statics::Class_MetaDataParams, UE_ARRAY_COUNT(Z_Construct_UClass_UGameTaskGraphNode_Root_Statics::Class_MetaDataParams))
 	};
 	UClass* Z_Construct_UClass_UGameTaskGraphNode_Root()
@@ -73,7 +73,7 @@ void EmptyLinkFunctionForGeneratedCodeGameTaskGraphNode_Root() {}
 		}
 		return OuterClass;
 	}
-	IMPLEMENT_CLASS(UGameTaskGraphNode_Root, 3282434087);
+	IMPLEMENT_CLASS(UGameTaskGraphNode_Root, 3224003962);
 	template<> GAMETASKEDITOR_API UClass* StaticClass<UGameTaskGraphNode_Root>()
 	{
 		return UGameTaskGraphNode_Root::StaticClass();

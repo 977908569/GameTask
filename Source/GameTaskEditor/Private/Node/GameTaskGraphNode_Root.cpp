@@ -7,7 +7,7 @@ UGameTaskGraphNode_Root::UGameTaskGraphNode_Root(const FObjectInitializer& Objec
 }
 
 void UGameTaskGraphNode_Root::AllocateDefaultPins() {
-	CreatePin(EGPD_Output, UGameTaskEditorTypes::PinCategory_SingleComposite, TEXT("In"));
+	CreatePin(EGPD_Output, UGameTaskEditorTypes::PinCategory_SingleFlow, TEXT("In"));
 }
 
 FText UGameTaskGraphNode_Root::GetNodeTitle(
@@ -22,4 +22,9 @@ FName UGameTaskGraphNode_Root::GetNameIcon() const
 
 FText UGameTaskGraphNode_Root::GetTooltipText() const {
 	return UEdGraphNode::GetTooltipText();
+}
+
+FText UGameTaskGraphNode_Root::GetDescription() const
+{
+	return  FText::GetEmpty();
 }

@@ -69,10 +69,14 @@ public:
 	FGraphAppearanceInfo GetGraphAppearance() const;
 	bool InEditingMode(bool bGraphIsEditable) const;
 
+	bool IsPropertyEditable() const;
+	void OnFinishedChangingProperties(const FPropertyChangedEvent& PropertyChangedEvent);
+	
 	/** Spawns the tab with the update graph inside */
 	TSharedRef<SWidget> SpawnProperties();
 	UGameTask* GetGameTask() const;
-
+	
+	void RegisterToolbarTab(const TSharedRef<class FTabManager>& TabManager);
 	void RestoreGameTask();
 
 	TSharedPtr<class FGameTaskEditorToolbar> GetToolbarBuilder() const;
@@ -81,6 +85,9 @@ private:
 	void CreateInternalWidgets();
 	void ExtendMenu();
 	void BindCommonCommands();
+
+	/** Called when the selection changes in the GraphEditor */
+	virtual void OnSelectedNodesChanged(const TSet<class UObject*>& NewSelection) override;
 
 	TSharedRef<class SGraphEditor> CreateGraphEditorWidget(UEdGraph* InGraph);
 

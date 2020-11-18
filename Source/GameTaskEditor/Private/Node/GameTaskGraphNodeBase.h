@@ -74,6 +74,8 @@ public:
 	virtual void OnSubNodeRemoved(UGameTaskGraphNodeBase* SubNode);
 	virtual void OnSubNodeAdded(UGameTaskGraphNodeBase* SubNode);
 
+	virtual int32 GetSubNodeNum();
+
 	virtual int32 FindSubNodeDropIndex(UGameTaskGraphNodeBase* SubNode) const;
 	virtual void InsertSubNodeAt(UGameTaskGraphNodeBase* SubNode, int32 DropIndex);
 

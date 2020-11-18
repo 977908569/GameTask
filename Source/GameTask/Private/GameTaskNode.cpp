@@ -1,7 +1,24 @@
 #include "GameTaskNode.h"
+#include "GameTaskTypes.h"
 
 UGameTaskNode::UGameTaskNode(const FObjectInitializer& ObjectInitializer)
-  : Super(ObjectInitializer), GameTaskAsset(nullptr), ParentNode(nullptr) {
+	: Super(ObjectInitializer), GameTaskAsset(nullptr), ParentNode(nullptr) {
+}
+
+void UGameTaskNode::Enter() {
+	DoEnter();
+	OnEnter();
+}
+
+void UGameTaskNode::DoEnter() {
+}
+
+void UGameTaskNode::Exit() {
+	DoExit();
+	OnExit();
+}
+
+void UGameTaskNode::DoExit() {
 }
 
 UWorld* UGameTaskNode::GetWorld() const
@@ -11,6 +28,11 @@ UWorld* UGameTaskNode::GetWorld() const
 		return nullptr;
 	}
 	return GetOuter()->GetWorld();
+}
+
+void UGameTaskNode::InitializeFromAsset(UGameTask& Asset)
+{
+	GameTaskAsset = &Asset;
 }
 
 void UGameTaskNode::InitializeNode(UGameTaskCompositeNode* InParentNode)
@@ -35,7 +57,7 @@ UGameTask* UGameTaskNode::GetGameTaskAsset() const
 
 FString UGameTaskNode::GetStaticDescription() const
 {
-	return TEXT("");
+	return UGameTaskTypes::GetShortTypeName(this);
 }
 
 #if WITH_EDITOR

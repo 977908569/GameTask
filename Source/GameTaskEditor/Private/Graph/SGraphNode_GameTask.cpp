@@ -1,5 +1,6 @@
 #include "SGraphNode_GameTask.h"
 #include "GameTaskColor.h"
+#include "GameTaskCompositeNode.h"
 #include "GameTaskNode.h"
 #include "GraphEditorSettings.h"
 #include "IDocumentation.h"
@@ -11,6 +12,9 @@
 #include "Widgets/Text/SInlineEditableTextBlock.h"
 #include "SLevelOfDetailBranchNode.h"
 #include "Debug/GameTaskDebugger.h"
+#include "Node/GameTaskGraphNode_Composite.h"
+#include "Node/GameTaskGraphNode_Execute.h"
+#include "Node/GameTaskGraphNode_Flow.h"
 #include "Node/GameTaskGraphNode_Root.h"
 
 #define LOCTEXT_NAMESPACE "GameTask"
@@ -30,6 +34,8 @@ public:
 protected:
 	/** @return The color that we should use to draw this pin */
 	virtual FSlateColor GetPinColor() const override;
+	virtual void OnDragEnter(const FGeometry& MyGeometry, const FDragDropEvent& DragDropEvent) override;
+	virtual void OnDragLeave(const FDragDropEvent& DragDropEvent) override;
 };
 
 void SGameTaskPin::Construct(const FArguments& InArgs, UEdGraphPin* InPin)
@@ -39,7 +45,32 @@ void SGameTaskPin::Construct(const FArguments& InArgs, UEdGraphPin* InPin)
 
 FSlateColor SGameTaskPin::GetPinColor() const
 {
-	return GameTaskColors::Pin::Default;
+	return
+		GraphPinObj->bIsDiffing ? GameTaskColors::Pin::Diff :
+		IsHovered() ? GameTaskColors::Pin::Hover :
+		(GraphPinObj->PinType.PinCategory == UGameTaskEditorTypes::PinCategory_SingleComposite) ? GameTaskColors::Pin::CompositeOnly :
+		(GraphPinObj->PinType.PinCategory == UGameTaskEditorTypes::PinCategory_SingleExecute) ? GameTaskColors::Pin::TaskOnly :
+		(GraphPinObj->PinType.PinCategory == UGameTaskEditorTypes::PinCategory_SingleFlow) ? GameTaskColors::Pin::SingleNode :
+		GameTaskColors::Pin::Default;
+}
+
+void SGameTaskPin::OnDragEnter(const FGeometry& MyGeometry, const FDragDropEvent& DragDropEvent)
+{
+	SGraphPinGameTask::OnDragEnter(MyGeometry, DragDropEvent);
+	const EEdGraphPinDirection DragDir = GetDirection();
+	if (const auto MyNode = Cast<UGameTaskGraphNode>(GraphPinObj->GetOwningNode()))
+	{
+		MyNode->bDragEnter = DragDir == EEdGraphPinDirection::EGPD_Input;
+	}
+}
+
+void SGameTaskPin::OnDragLeave(const FDragDropEvent& DragDropEvent)
+{
+	SGraphPinGameTask::OnDragLeave(DragDropEvent);
+	if (const auto MyNode = Cast<UGameTaskGraphNode>(GraphPinObj->GetOwningNode()))
+	{
+		MyNode->bDragEnter = true;
+	}
 }
 
 
@@ -143,31 +174,74 @@ void SGraphNode_GameTask::UpdateGraphNode()
 	InputPins.Empty();
 	OutputPins.Empty();
 
-	if (EventsBox.IsValid())
+	if (EnterEventsBox.IsValid())
 	{
-		EventsBox->ClearChildren();
+		EnterEventsBox->ClearChildren();
 	}
 	else
 	{
-		SAssignNew(EventsBox, SVerticalBox);
+		SAssignNew(EnterEventsBox, SVerticalBox);
+	}
+
+	if (ExitEventsBox.IsValid())
+	{
+		ExitEventsBox->ClearChildren();
+	}
+	else
+	{
+		SAssignNew(ExitEventsBox, SVerticalBox);
 	}
 
 	// Reset variables that are going to be exposed, in case we are refreshing an already setup node.
 	RightNodeBox.Reset();
 	LeftNodeBox.Reset();
-	EventWidgets.Reset();
+	EnterWidgets.Reset();
+	ExitWidgets.Reset();
 	SubNodes.Reset();
 	OutputPinBox.Reset();
 
-	UGameTaskGraphNode* GameTaskNode = Cast<UGameTaskGraphNode>(GraphNode);
 
-	if (GameTaskNode)
+	//Add Event
+
+	if (UGameTaskGraphNode_Flow* GameTaskFlowNode = Cast<UGameTaskGraphNode_Flow>(GraphNode))
 	{
-		for (int32 i = 0; i < GameTaskNode->Events.Num(); i++)
+		for (int32 i = 0; i < GameTaskFlowNode->EnterEvents.Num(); i++)
 		{
-			if (GameTaskNode->Events[i])
+			if (GameTaskFlowNode->EnterEvents[i])
 			{
-				TSharedPtr<SGraphNode> NewNode = FNodeFactory::CreateNodeWidget(GameTaskNode->Events[i]);
+				TSharedPtr<SGraphNode> NewNode = FNodeFactory::CreateNodeWidget(GameTaskFlowNode->EnterEvents[i]);
+				if (OwnerGraphPanelPtr.IsValid())
+				{
+					NewNode->SetOwner(OwnerGraphPanelPtr.Pin().ToSharedRef());
+					OwnerGraphPanelPtr.Pin()->AttachGraphEvents(NewNode);
+				}
+				AddEvent(NewNode, true);
+				NewNode->UpdateGraphNode();
+			}
+		}
+
+		for (int32 i = 0; i < GameTaskFlowNode->ExitEvents.Num(); i++)
+		{
+			if (GameTaskFlowNode->ExitEvents[i])
+			{
+				TSharedPtr<SGraphNode> NewNode = FNodeFactory::CreateNodeWidget(GameTaskFlowNode->ExitEvents[i]);
+				if (OwnerGraphPanelPtr.IsValid())
+				{
+					NewNode->SetOwner(OwnerGraphPanelPtr.Pin().ToSharedRef());
+					OwnerGraphPanelPtr.Pin()->AttachGraphEvents(NewNode);
+				}
+				AddEvent(NewNode, false);
+				NewNode->UpdateGraphNode();
+			}
+		}
+	}
+	else if (UGameTaskGraphNode_Execute* GameTaskExecuteNode = Cast<UGameTaskGraphNode_Execute>(GraphNode))
+	{
+		for (int32 i = 0; i < GameTaskExecuteNode->EnterEvents.Num(); i++)
+		{
+			if (GameTaskExecuteNode->EnterEvents[i])
+			{
+				TSharedPtr<SGraphNode> NewNode = FNodeFactory::CreateNodeWidget(GameTaskExecuteNode->EnterEvents[i]);
 				if (OwnerGraphPanelPtr.IsValid())
 				{
 					NewNode->SetOwner(OwnerGraphPanelPtr.Pin().ToSharedRef());
@@ -247,7 +321,11 @@ void SGraphNode_GameTask::UpdateGraphNode()
 			+ SVerticalBox::Slot()
 		.AutoHeight()
 		[
-			EventsBox.ToSharedRef()
+			SNew(SBox)
+		.Visibility(this, &SGraphNode_GameTask::GetEventVisibility)
+		[
+			EnterEventsBox.ToSharedRef()
+		]
 		]
 	+ SVerticalBox::Slot()
 		.AutoHeight()
@@ -344,6 +422,16 @@ void SGraphNode_GameTask::UpdateGraphNode()
 		]
 		]
 		]
+	+ SVerticalBox::Slot()
+		.AutoHeight()
+		.Padding(FMargin(10.0f, 0, 0, 0))
+		[
+			SNew(SBox)
+		.Visibility(this, &SGraphNode_GameTask::GetEventVisibility)
+		[
+			ExitEventsBox.ToSharedRef()
+		]
+		]
 		]
 
 	// OUTPUT PIN AREA
@@ -378,7 +466,7 @@ void SGraphNode_GameTask::UpdateGraphNode()
 		.Visibility(this, &SGraphNode_GameTask::GetDragOverMarkerVisibility)
 		[
 			SNew(SBox)
-			.HeightOverride(4)
+			.HeightOverride(40)
 		]
 		]
 
@@ -464,14 +552,14 @@ void SGraphNode_GameTask::AddPin(const TSharedRef<SGraphPin>& PinToAdd)
 	}
 	else // Direction == EEdGraphPinDirection::EGPD_Output
 	{
-		const bool bIsSingleTaskPin = PinObj && (PinObj->PinType.PinCategory == UGameTaskEditorTypes::PinCategory_SingleExecute);
+		const bool bIsSingleTaskPin = PinObj && (PinObj->PinType.PinCategory == UGameTaskEditorTypes::PinCategory_SingleFlow);
 		if (bIsSingleTaskPin)
 		{
 			OutputPinBox->AddSlot()
 				.HAlign(HAlign_Fill)
 				.VAlign(VAlign_Fill)
 				.FillWidth(0.4f)
-				.Padding(0, 0, 20.0f, 0)
+				.Padding(8.0f, 0, 5.0f, 0)
 				[
 					PinToAdd
 				];
@@ -514,16 +602,16 @@ TArray<FOverlayWidgetInfo> SGraphNode_GameTask::GetOverlayWidgets(bool bSelected
 
 	FVector2D Origin(0.0f, 0.0f);
 
-	// build overlays for decorator sub-nodes
-	for (const auto& DecoratorWidget : EventWidgets)
+	// build overlays for event sub-nodes
+	for (const auto& EventWidget : EnterWidgets)
 	{
-		TArray<FOverlayWidgetInfo> OverlayWidgets = DecoratorWidget->GetOverlayWidgets(bSelected, WidgetSize);
+		TArray<FOverlayWidgetInfo> OverlayWidgets = EventWidget->GetOverlayWidgets(bSelected, WidgetSize);
 		for (auto& OverlayWidget : OverlayWidgets)
 		{
 			OverlayWidget.OverlayOffset.Y += Origin.Y;
 		}
 		Widgets.Append(OverlayWidgets);
-		Origin.Y += DecoratorWidget->GetDesiredSize().Y;
+		Origin.Y += EventWidget->GetDesiredSize().Y;
 	}
 
 	FOverlayWidgetInfo Overlay(IndexOverlay);
@@ -531,6 +619,17 @@ TArray<FOverlayWidgetInfo> SGraphNode_GameTask::GetOverlayWidgets(bool bSelected
 	Widgets.Add(Overlay);
 
 	Origin.Y += NodeBody->GetDesiredSize().Y;
+
+	for (const auto& ExitWidget : ExitWidgets)
+	{
+		TArray<FOverlayWidgetInfo> OverlayWidgets = ExitWidget->GetOverlayWidgets(bSelected, WidgetSize);
+		for (auto& OverlayWidget : OverlayWidgets)
+		{
+			OverlayWidget.OverlayOffset.Y += Origin.Y;
+		}
+		Widgets.Append(OverlayWidgets);
+		Origin.Y += ExitWidget->GetDesiredSize().Y;
+	}
 
 	return Widgets;
 }
@@ -570,6 +669,7 @@ void SGraphNode_GameTask::MoveTo(const FVector2D& NewPosition, FNodeSet& NodeFil
 	}
 }
 
+
 FReply SGraphNode_GameTask::OnMouseButtonDoubleClick(const FGeometry& InMyGeometry, const FPointerEvent& InMouseEvent)
 {
 	return SGraphNode::OnMouseButtonDoubleClick(InMyGeometry, InMouseEvent);
@@ -579,28 +679,35 @@ void SGraphNode_GameTask::Tick(const FGeometry& AllottedGeometry, const double I
 {
 	SGraphNode::Tick(AllottedGeometry, InCurrentTime, InDeltaTime);
 	CachedPosition = AllottedGeometry.AbsolutePosition / AllottedGeometry.Scale;
-
 	UGameTaskGraphNode* MyNode = Cast<UGameTaskGraphNode>(GraphNode);
-
-
 	DebuggerStateDuration += InDeltaTime;
 
 	UGameTaskGraphNode* GameTaskGraphNode = Cast<UGameTaskGraphNode>(GraphNode);
 	float NewFlashAlpha = 0.0f;
 	TriggerOffsets.Reset();
 
-	
+
 	FlashAlpha = NewFlashAlpha;
 }
 
-void SGraphNode_GameTask::AddEvent(TSharedPtr<SGraphNode> EventWidget)
+void SGraphNode_GameTask::AddEvent(TSharedPtr<SGraphNode> EventWidget, bool bEnterEvent)
 {
-	EventsBox->AddSlot().AutoHeight()
-		[
-			EventWidget.ToSharedRef()
-		];
-
-	EventWidgets.Add(EventWidget);
+	if (bEnterEvent)
+	{
+		EnterEventsBox->AddSlot().AutoHeight()
+			[
+				EventWidget.ToSharedRef()
+			];
+		EnterWidgets.Add(EventWidget);
+	}
+	else
+	{
+		ExitEventsBox->AddSlot().AutoHeight()
+			[
+				EventWidget.ToSharedRef()
+			];
+		ExitWidgets.Add(EventWidget);
+	}
 	AddSubNode(EventWidget);
 }
 
@@ -612,7 +719,19 @@ EVisibility SGraphNode_GameTask::GetDebuggerSearchFailedMarkerVisibility() const
 
 FSlateColor SGraphNode_GameTask::GetBorderBackgroundColor() const
 {
-	return GameTaskColors::NodeBorder::QuickFind;
+	UGameTaskGraphNode* GameTaskGraphNode = Cast<UGameTaskGraphNode>(GraphNode);
+	UGameTaskGraphNode* GameTaskParentNode = GameTaskGraphNode ? Cast<UGameTaskGraphNode>(GameTaskGraphNode->ParentNode) : nullptr;
+
+	const bool bSelectedSubNode = GameTaskParentNode && GetOwnerPanel()->SelectionManager.SelectedNodes.Contains(GraphNode);
+
+	UGameTaskNode* NodeInstance = GameTaskGraphNode ? Cast<UGameTaskNode>(GameTaskGraphNode->NodeInstance) : nullptr;
+	const bool bIsConnectedTreeRoot = GameTaskGraphNode && GameTaskGraphNode->IsA<UGameTaskGraphNode_Root>() && GameTaskGraphNode->Pins.IsValidIndex(0) && GameTaskGraphNode->Pins[0]->LinkedTo.Num() > 0;
+	const bool bIsEvent = GameTaskGraphNode && GameTaskGraphNode->IsA(UGameTaskGraphNode_Event::StaticClass());
+	const bool bIsBrokenWithParent = bIsEvent;
+	return bSelectedSubNode ? GameTaskColors::NodeBorder::Selected :
+		bIsBrokenWithParent ? GameTaskColors::NodeBorder::BrokenWithParent :
+		bIsConnectedTreeRoot ? GameTaskColors::NodeBorder::Root :
+		GameTaskColors::NodeBorder::Inactive;
 }
 
 FSlateColor SGraphNode_GameTask::GetBackgroundColor() const
@@ -622,7 +741,32 @@ FSlateColor SGraphNode_GameTask::GetBackgroundColor() const
 
 
 	FLinearColor NodeColor = GameTaskColors::NodeBody::Default;
-	return  NodeColor;
+	if (GameTaskGraphNode && GameTaskGraphNode->HasErrors())
+	{
+		NodeColor = GameTaskColors::NodeBody::Error;
+	}
+
+	else if (Cast<UGameTaskGraphNode_Execute>(GraphNode))
+	{
+		check(GameTaskGraphNode);
+		NodeColor = GameTaskColors::NodeBody::Execute;
+	}
+	else if (Cast<UGameTaskGraphNode_Composite>(GraphNode))
+	{
+		check(GameTaskGraphNode);
+		UGameTaskCompositeNode* CompositeNodeInstance = Cast<UGameTaskCompositeNode>(GameTaskGraphNode->NodeInstance);
+		NodeColor = GameTaskColors::NodeBody::Composite;
+	}
+	else if (Cast<UGameTaskGraphNode_Event>(GraphNode))
+	{
+		NodeColor = GameTaskColors::NodeBody::Event;
+	}
+	else if (Cast<UGameTaskGraphNode_Root>(GraphNode) && GraphNode->Pins.IsValidIndex(0) && GraphNode->Pins[0]->LinkedTo.Num() > 0)
+	{
+		NodeColor = GameTaskColors::NodeBody::Root;
+	}
+
+	return (FlashAlpha > 0.0f) ? FMath::Lerp(NodeColor, FlashColor, FlashAlpha) : NodeColor;
 }
 
 const FSlateBrush* SGraphNode_GameTask::GetNameIcon() const
@@ -681,15 +825,10 @@ FText SGraphNode_GameTask::GetIndexText() const
 	CA_SUPPRESS(6235);
 	if (bShowExecutionIndexInEditorMode || GEditor->bIsSimulatingInEditor || GEditor->PlayWorld != NULL)
 	{
-
-
-
 	}
 	else
 	{
-
 	}
-
 	return FText::AsNumber(Index);
 }
 

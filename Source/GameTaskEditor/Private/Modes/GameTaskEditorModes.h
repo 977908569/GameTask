@@ -2,7 +2,7 @@
 #include "WorkflowOrientedApp/WorkflowTabManager.h"
 #include "WorkflowOrientedApp/ApplicationMode.h"
 
-class FGameTaskEditorApplicationModes :public FApplicationMode
+class GAMETASKEDITOR_API FGameTaskEditorApplicationModes :public FApplicationMode
 {
 public:
 	FGameTaskEditorApplicationModes(TSharedPtr<class FGameTaskEditor> InGameTaskEditor);

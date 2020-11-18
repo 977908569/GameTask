@@ -59,7 +59,7 @@ void EmptyLinkFunctionForGeneratedCodeGameTaskGraphNode_Parallel() {}
 		0,
 		0,
 		0,
-		0x000000A0u,
+		0x001000A0u,
 		METADATA_PARAMS(Z_Construct_UClass_UGameTaskGraphNode_Parallel_Statics::Class_MetaDataParams, UE_ARRAY_COUNT(Z_Construct_UClass_UGameTaskGraphNode_Parallel_Statics::Class_MetaDataParams))
 	};
 	UClass* Z_Construct_UClass_UGameTaskGraphNode_Parallel()
@@ -71,7 +71,7 @@ void EmptyLinkFunctionForGeneratedCodeGameTaskGraphNode_Parallel() {}
 		}
 		return OuterClass;
 	}
-	IMPLEMENT_CLASS(UGameTaskGraphNode_Parallel, 3402810845);
+	IMPLEMENT_CLASS(UGameTaskGraphNode_Parallel, 364474203);
 	template<> GAMETASKEDITOR_API UClass* StaticClass<UGameTaskGraphNode_Parallel>()
 	{
 		return UGameTaskGraphNode_Parallel::StaticClass();

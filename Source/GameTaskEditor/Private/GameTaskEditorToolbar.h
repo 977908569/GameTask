@@ -11,6 +11,11 @@ public:
 	void AddModesToolbar(TSharedPtr<FExtender> Extender);
 	void AddDebuggerToolbar(TSharedPtr<FExtender> Extender);
 	void AddGameTaskToolbar(TSharedPtr<FExtender> Extender);
+
+private:
+	void FillModesToolbar(FToolBarBuilder& ToolbarBuilder);
+	void FillDebuggerToolbar(FToolBarBuilder& ToolbarBuilder);
+	void FillGameTaskToolbar(FToolBarBuilder& ToolbarBuilder);
 protected:
 	TWeakPtr<FGameTaskEditor> GameTaskEditor;
 };

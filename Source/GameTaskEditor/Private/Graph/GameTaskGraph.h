@@ -29,7 +29,6 @@ public:
 	void ReplaceNodeConnections(UEdGraphNode* OldNode, UEdGraphNode* NewNode);
 
 	void RebuildChildOrder(UEdGraphNode* ParentNode);
-	void SpawnMissingNodesForParallel();
 	void RemoveUnknownSubNodes();
 
 	void AutoArrange();

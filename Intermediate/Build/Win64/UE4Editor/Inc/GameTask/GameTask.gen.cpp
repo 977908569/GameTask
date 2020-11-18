@@ -29,11 +29,19 @@ void EmptyLinkFunctionForGeneratedCodeGameTask() {}
 		*(UWorld**)Z_Param__Result=P_THIS->GetWorld();
 		P_NATIVE_END;
 	}
+	DEFINE_FUNCTION(UGameTask::execStart)
+	{
+		P_FINISH;
+		P_NATIVE_BEGIN;
+		P_THIS->Start();
+		P_NATIVE_END;
+	}
 	void UGameTask::StaticRegisterNativesUGameTask()
 	{
 		UClass* Class = UGameTask::StaticClass();
 		static const FNameNativePtrPair Funcs[] = {
 			{ "GetWorld", &UGameTask::execGetWorld },
+			{ "Start", &UGameTask::execStart },
 		};
 		FNativeFunctionRegistrar::RegisterFunctions(Class, Funcs, UE_ARRAY_COUNT(Funcs));
 	}
@@ -66,6 +74,28 @@ void EmptyLinkFunctionForGeneratedCodeGameTask() {}
 		if (!ReturnFunction)
 		{
 			UE4CodeGen_Private::ConstructUFunction(ReturnFunction, Z_Construct_UFunction_UGameTask_GetWorld_Statics::FuncParams);
+		}
+		return ReturnFunction;
+	}
+	struct Z_Construct_UFunction_UGameTask_Start_Statics
+	{
+#if WITH_METADATA
+		static const UE4CodeGen_Private::FMetaDataPairParam Function_MetaDataParams[];
+#endif
+		static const UE4CodeGen_Private::FFunctionParams FuncParams;
+	};
+#if WITH_METADATA
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_UGameTask_Start_Statics::Function_MetaDataParams[] = {
+		{ "ModuleRelativePath", "Public/GameTask.h" },
+	};
+#endif
+	const UE4CodeGen_Private::FFunctionParams Z_Construct_UFunction_UGameTask_Start_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_UGameTask, nullptr, "Start", nullptr, nullptr, 0, nullptr, 0, RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x04020401, 0, 0, METADATA_PARAMS(Z_Construct_UFunction_UGameTask_Start_Statics::Function_MetaDataParams, UE_ARRAY_COUNT(Z_Construct_UFunction_UGameTask_Start_Statics::Function_MetaDataParams)) };
+	UFunction* Z_Construct_UFunction_UGameTask_Start()
+	{
+		static UFunction* ReturnFunction = nullptr;
+		if (!ReturnFunction)
+		{
+			UE4CodeGen_Private::ConstructUFunction(ReturnFunction, Z_Construct_UFunction_UGameTask_Start_Statics::FuncParams);
 		}
 		return ReturnFunction;
 	}
@@ -115,6 +145,7 @@ void EmptyLinkFunctionForGeneratedCodeGameTask() {}
 	};
 	const FClassFunctionLinkInfo Z_Construct_UClass_UGameTask_Statics::FuncInfo[] = {
 		{ &Z_Construct_UFunction_UGameTask_GetWorld, "GetWorld" }, // 4131854955
+		{ &Z_Construct_UFunction_UGameTask_Start, "Start" }, // 304758969
 	};
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_UGameTask_Statics::Class_MetaDataParams[] = {
@@ -154,7 +185,9 @@ void EmptyLinkFunctionForGeneratedCodeGameTask() {}
 #endif // WITH_EDITORONLY_DATA
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_UGameTask_Statics::NewProp_RootNode_MetaData[] = {
+		{ "Comment", "//First Flow Node\n" },
 		{ "ModuleRelativePath", "Public/GameTask.h" },
+		{ "ToolTip", "First Flow Node" },
 	};
 #endif
 	const UE4CodeGen_Private::FObjectPropertyParams Z_Construct_UClass_UGameTask_Statics::NewProp_RootNode = { "RootNode", nullptr, (EPropertyFlags)0x0010000000000000, UE4CodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(UGameTask, RootNode), Z_Construct_UClass_UGameTaskCompositeNode_NoRegister, METADATA_PARAMS(Z_Construct_UClass_UGameTask_Statics::NewProp_RootNode_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_UGameTask_Statics::NewProp_RootNode_MetaData)) };
@@ -195,7 +228,7 @@ void EmptyLinkFunctionForGeneratedCodeGameTask() {}
 		}
 		return OuterClass;
 	}
-	IMPLEMENT_CLASS(UGameTask, 636138405);
+	IMPLEMENT_CLASS(UGameTask, 2871260799);
 	template<> GAMETASK_API UClass* StaticClass<UGameTask>()
 	{
 		return UGameTask::StaticClass();

@@ -59,6 +59,16 @@ FGameTaskEditorApplicationModes::FGameTaskEditorApplicationModes(TSharedPtr<FGam
 
 void FGameTaskEditorApplicationModes::RegisterTabFactories(
     TSharedPtr<FTabManager> InTabManager) {
+
+	check(GameTaskEditor.IsValid());
+	TSharedPtr<FGameTaskEditor> GameTaskEditorPtr = GameTaskEditor.Pin();
+
+	GameTaskEditorPtr->RegisterToolbarTab(InTabManager.ToSharedRef());
+
+	// Mode-specific setup
+	GameTaskEditorPtr->PushTabFactories(GameTaskEditorTabFactories);
+
+	FApplicationMode::RegisterTabFactories(InTabManager);
 }
 
 void FGameTaskEditorApplicationModes::PreDeactivateMode() {

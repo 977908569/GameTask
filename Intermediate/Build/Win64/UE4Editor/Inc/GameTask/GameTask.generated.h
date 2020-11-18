@@ -17,12 +17,14 @@ class UWorld;
 #define TaskProject_Plugins_GameTask_Source_GameTask_Public_GameTask_h_8_SPARSE_DATA
 #define TaskProject_Plugins_GameTask_Source_GameTask_Public_GameTask_h_8_RPC_WRAPPERS \
  \
-	DECLARE_FUNCTION(execGetWorld);
+	DECLARE_FUNCTION(execGetWorld); \
+	DECLARE_FUNCTION(execStart);
 
 
 #define TaskProject_Plugins_GameTask_Source_GameTask_Public_GameTask_h_8_RPC_WRAPPERS_NO_PURE_DECLS \
  \
-	DECLARE_FUNCTION(execGetWorld);
+	DECLARE_FUNCTION(execGetWorld); \
+	DECLARE_FUNCTION(execStart);
 
 
 #define TaskProject_Plugins_GameTask_Source_GameTask_Public_GameTask_h_8_INCLASS_NO_PURE_DECLS \

@@ -1,19 +1,44 @@
 
 #pragma once
+#include "CoreMinimal.h"
 #include "UObject/Object.h"
 #include "GameTaskNode.generated.h"
 
 class UGameTaskCompositeNode;
 class UGameTask;
 
+/**
+ * Task Node
+ */
 UCLASS(Abstract)
 class GAMETASK_API UGameTaskNode : public UObject
 {
 	GENERATED_UCLASS_BODY()
 public:
+	/**
+	 * Enter the node
+	 */
+	UFUNCTION(BlueprintCallable)
+		virtual	void Enter();
+	virtual void DoEnter();
+	UFUNCTION(BlueprintImplementableEvent)
+		void OnEnter();
+	/**
+	 * Exit the node
+	 */
+	UFUNCTION(BlueprintCallable)
+		virtual void Exit();
+	virtual  void DoExit();
+	UFUNCTION(BlueprintImplementableEvent)
+		void OnExit();
+
+
+public:
 	virtual UWorld* GetWorld() const override;
 
-	void InitializeNode(UGameTaskCompositeNode* InParentNode);
+
+	virtual void InitializeFromAsset(UGameTask& Asset);
+	virtual void InitializeNode(UGameTaskCompositeNode* InParentNode);
 
 	/** @return parent node */
 	UGameTaskCompositeNode* GetParentNode() const;

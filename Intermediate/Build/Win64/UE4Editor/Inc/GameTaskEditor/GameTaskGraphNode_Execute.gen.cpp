@@ -17,6 +17,7 @@ void EmptyLinkFunctionForGeneratedCodeGameTaskGraphNode_Execute() {}
 	GAMETASKEDITOR_API UClass* Z_Construct_UClass_UGameTaskGraphNode_Execute();
 	GAMETASKEDITOR_API UClass* Z_Construct_UClass_UGameTaskGraphNode();
 	UPackage* Z_Construct_UPackage__Script_GameTaskEditor();
+	GAMETASKEDITOR_API UClass* Z_Construct_UClass_UGameTaskGraphNode_Event_NoRegister();
 // End Cross Module References
 	void UGameTaskGraphNode_Execute::StaticRegisterNativesUGameTaskGraphNode_Execute()
 	{
@@ -31,6 +32,17 @@ void EmptyLinkFunctionForGeneratedCodeGameTaskGraphNode_Execute() {}
 #if WITH_METADATA
 		static const UE4CodeGen_Private::FMetaDataPairParam Class_MetaDataParams[];
 #endif
+#if WITH_METADATA
+		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_ExitEvents_MetaData[];
+#endif
+		static const UE4CodeGen_Private::FArrayPropertyParams NewProp_ExitEvents;
+		static const UE4CodeGen_Private::FObjectPropertyParams NewProp_ExitEvents_Inner;
+#if WITH_METADATA
+		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_EnterEvents_MetaData[];
+#endif
+		static const UE4CodeGen_Private::FArrayPropertyParams NewProp_EnterEvents;
+		static const UE4CodeGen_Private::FObjectPropertyParams NewProp_EnterEvents_Inner;
+		static const UE4CodeGen_Private::FPropertyParamsBase* const PropPointers[];
 		static const FCppClassTypeInfoStatic StaticCppClassTypeInfo;
 		static const UE4CodeGen_Private::FClassParams ClassParams;
 	};
@@ -44,6 +56,26 @@ void EmptyLinkFunctionForGeneratedCodeGameTaskGraphNode_Execute() {}
 		{ "ModuleRelativePath", "Private/Node/GameTaskGraphNode_Execute.h" },
 	};
 #endif
+#if WITH_METADATA
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_UGameTaskGraphNode_Execute_Statics::NewProp_ExitEvents_MetaData[] = {
+		{ "ModuleRelativePath", "Private/Node/GameTaskGraphNode_Execute.h" },
+	};
+#endif
+	const UE4CodeGen_Private::FArrayPropertyParams Z_Construct_UClass_UGameTaskGraphNode_Execute_Statics::NewProp_ExitEvents = { "ExitEvents", nullptr, (EPropertyFlags)0x0010000000000000, UE4CodeGen_Private::EPropertyGenFlags::Array, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(UGameTaskGraphNode_Execute, ExitEvents), EArrayPropertyFlags::None, METADATA_PARAMS(Z_Construct_UClass_UGameTaskGraphNode_Execute_Statics::NewProp_ExitEvents_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_UGameTaskGraphNode_Execute_Statics::NewProp_ExitEvents_MetaData)) };
+	const UE4CodeGen_Private::FObjectPropertyParams Z_Construct_UClass_UGameTaskGraphNode_Execute_Statics::NewProp_ExitEvents_Inner = { "ExitEvents", nullptr, (EPropertyFlags)0x0000000000000000, UE4CodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, 1, 0, Z_Construct_UClass_UGameTaskGraphNode_Event_NoRegister, METADATA_PARAMS(nullptr, 0) };
+#if WITH_METADATA
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_UGameTaskGraphNode_Execute_Statics::NewProp_EnterEvents_MetaData[] = {
+		{ "ModuleRelativePath", "Private/Node/GameTaskGraphNode_Execute.h" },
+	};
+#endif
+	const UE4CodeGen_Private::FArrayPropertyParams Z_Construct_UClass_UGameTaskGraphNode_Execute_Statics::NewProp_EnterEvents = { "EnterEvents", nullptr, (EPropertyFlags)0x0010000000000000, UE4CodeGen_Private::EPropertyGenFlags::Array, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(UGameTaskGraphNode_Execute, EnterEvents), EArrayPropertyFlags::None, METADATA_PARAMS(Z_Construct_UClass_UGameTaskGraphNode_Execute_Statics::NewProp_EnterEvents_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_UGameTaskGraphNode_Execute_Statics::NewProp_EnterEvents_MetaData)) };
+	const UE4CodeGen_Private::FObjectPropertyParams Z_Construct_UClass_UGameTaskGraphNode_Execute_Statics::NewProp_EnterEvents_Inner = { "EnterEvents", nullptr, (EPropertyFlags)0x0000000000000000, UE4CodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, 1, 0, Z_Construct_UClass_UGameTaskGraphNode_Event_NoRegister, METADATA_PARAMS(nullptr, 0) };
+	const UE4CodeGen_Private::FPropertyParamsBase* const Z_Construct_UClass_UGameTaskGraphNode_Execute_Statics::PropPointers[] = {
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UGameTaskGraphNode_Execute_Statics::NewProp_ExitEvents,
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UGameTaskGraphNode_Execute_Statics::NewProp_ExitEvents_Inner,
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UGameTaskGraphNode_Execute_Statics::NewProp_EnterEvents,
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UGameTaskGraphNode_Execute_Statics::NewProp_EnterEvents_Inner,
+	};
 	const FCppClassTypeInfoStatic Z_Construct_UClass_UGameTaskGraphNode_Execute_Statics::StaticCppClassTypeInfo = {
 		TCppClassTypeTraits<UGameTaskGraphNode_Execute>::IsAbstract,
 	};
@@ -53,13 +85,13 @@ void EmptyLinkFunctionForGeneratedCodeGameTaskGraphNode_Execute() {}
 		&StaticCppClassTypeInfo,
 		DependentSingletons,
 		nullptr,
-		nullptr,
+		Z_Construct_UClass_UGameTaskGraphNode_Execute_Statics::PropPointers,
 		nullptr,
 		UE_ARRAY_COUNT(DependentSingletons),
 		0,
+		UE_ARRAY_COUNT(Z_Construct_UClass_UGameTaskGraphNode_Execute_Statics::PropPointers),
 		0,
-		0,
-		0x000000A0u,
+		0x001000A0u,
 		METADATA_PARAMS(Z_Construct_UClass_UGameTaskGraphNode_Execute_Statics::Class_MetaDataParams, UE_ARRAY_COUNT(Z_Construct_UClass_UGameTaskGraphNode_Execute_Statics::Class_MetaDataParams))
 	};
 	UClass* Z_Construct_UClass_UGameTaskGraphNode_Execute()
@@ -71,7 +103,7 @@ void EmptyLinkFunctionForGeneratedCodeGameTaskGraphNode_Execute() {}
 		}
 		return OuterClass;
 	}
-	IMPLEMENT_CLASS(UGameTaskGraphNode_Execute, 2682861239);
+	IMPLEMENT_CLASS(UGameTaskGraphNode_Execute, 3181852016);
 	template<> GAMETASKEDITOR_API UClass* StaticClass<UGameTaskGraphNode_Execute>()
 	{
 		return UGameTaskGraphNode_Execute::StaticClass();

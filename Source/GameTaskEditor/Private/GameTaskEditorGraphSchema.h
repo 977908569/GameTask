@@ -1,5 +1,7 @@
 #pragma once
 #include "GameTaskEditorGraphTypes.h"
+#include "GameTaskEditorTypes.h"
+
 #include "GameTaskEditorGraphSchema.generated.h"
 
 USTRUCT()
@@ -88,7 +90,9 @@ struct GAMETASKEDITOR_API FGameTaskSchemaAction_NewSubNode : public FEdGraphSche
 	//~ End FEdGraphSchemaAction Interface
 };
 
-
+/**
+ * 
+ */
 UCLASS()
 class GAMETASKEDITOR_API UGameTaskEditorGraphSchemaBase : public UEdGraphSchema
 {
@@ -108,8 +112,8 @@ public:
 	virtual int32 GetNodeSelectionCount(const UEdGraph* Graph) const override;
 	//~ End EdGraphSchema Interface
 
-	virtual void GetGraphNodeContextActions(FGraphContextMenuBuilder& ContextMenuBuilder, int32 SubNodeFlags) const;
-	virtual void GetSubNodeClasses(int32 SubNodeFlags, TArray<FGameTaskGraphNodeClassData>& ClassData, UClass*& GraphNodeClass) const;
+	virtual void GetGraphNodeContextActions(FGraphContextMenuBuilder& ContextMenuBuilder, EGameTaskSubNode SubNodeFlags) const;
+	virtual void GetSubNodeClasses(EGameTaskSubNode SubNodeFlags, TArray<FGameTaskGraphNodeClassData>& ClassData, UClass*& GraphNodeClass) const;
 
 protected:
 
@@ -135,8 +139,8 @@ public:
 	virtual void ForceVisualizationCacheClear() const override;
 	//~ End EdGraphSchema Interface
 
-	virtual void GetGraphNodeContextActions(FGraphContextMenuBuilder& ContextMenuBuilder, int32 SubNodeFlags) const override;
-	virtual void GetSubNodeClasses(int32 SubNodeFlags, TArray<FGameTaskGraphNodeClassData>& ClassData, UClass*& GraphNodeClass) const override;
+	virtual void GetGraphNodeContextActions(FGraphContextMenuBuilder& ContextMenuBuilder, EGameTaskSubNode SubNodeFlags) const override;
+	virtual void GetSubNodeClasses(EGameTaskSubNode SubNodeFlags, TArray<FGameTaskGraphNodeClassData>& ClassData, UClass*& GraphNodeClass) const override;
 
 private:
 	// ID for checking dirty status of node titles against, increases whenever 

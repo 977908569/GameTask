@@ -43,12 +43,13 @@ void FGameTaskGraphEditorSummoner::OnTabActivated(
     TSharedPtr<SDockTab> Tab) const {
 	check(GameTaskEditorPtr.IsValid());
 	TSharedRef<SGraphEditor> GraphEditor = StaticCastSharedRef<SGraphEditor>(Tab->GetContent());
-	//GameTaskEditorPtr.Pin()->OnGraphEditorFocused(GraphEditor);
+	GameTaskEditorPtr.Pin()->OnGraphEditorFocused(GraphEditor);
 }
 
 void FGameTaskGraphEditorSummoner::OnTabRefreshed(
     TSharedPtr<SDockTab> Tab) const {
-
+	TSharedRef<SGraphEditor> GraphEditor = StaticCastSharedRef<SGraphEditor>(Tab->GetContent());
+	GraphEditor->NotifyGraphChanged();
 }
 
 TAttribute<FText> FGameTaskGraphEditorSummoner::ConstructTabNameForObject(

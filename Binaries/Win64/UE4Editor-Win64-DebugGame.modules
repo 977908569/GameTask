@@ -1,0 +1,8 @@
+{
+	"BuildId": "14469950",
+	"Modules": 
+	{
+		"GameTask": "UE4Editor-GameTask-Win64-DebugGame.dll",
+		"GameTaskEditor": "UE4Editor-GameTaskEditor-Win64-DebugGame.dll"
+	}
+}

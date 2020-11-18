@@ -19,21 +19,22 @@
 			"GameTaskGraphBase.cpp.obj",
 			"GameTaskGraphConnectionDrawingPolicy.cpp.obj",
 			"GameTaskGraphEditor.cpp.obj",
+			"SGraphEditorActionMenuGameTask.cpp.obj",
 			"SGraphNode_Event.cpp.obj",
 			"SGraphNode_GameTask.cpp.obj",
 			"SGraphNodeGameTaskBase.cpp.obj",
 			"GameTaskEditorModes.cpp.obj",
-			"GameTaskComposite_Parallel.cpp.obj",
 			"GameTaskGraphNode.cpp.obj",
 			"GameTaskGraphNode_Composite.cpp.obj",
 			"GameTaskGraphNode_Event.cpp.obj",
 			"GameTaskGraphNode_Execute.cpp.obj",
+			"GameTaskGraphNode_Flow.cpp.obj",
 			"GameTaskGraphNode_Parallel.cpp.obj",
 			"GameTaskGraphNode_Root.cpp.obj",
+			"GameTaskGraphNode_Sequence.cpp.obj",
 			"GameTaskGraphNodeBase.cpp.obj"
 		],
 		"Module.GameTaskEditor.gen.cpp.obj": [
-			"GameTaskComposite_Parallel.gen.cpp.obj",
 			"GameTaskEditor.init.gen.cpp.obj",
 			"GameTaskEditorGraphSchema.gen.cpp.obj",
 			"GameTaskEditorGraphTypes.gen.cpp.obj",
@@ -45,8 +46,10 @@
 			"GameTaskGraphNode_Composite.gen.cpp.obj",
 			"GameTaskGraphNode_Event.gen.cpp.obj",
 			"GameTaskGraphNode_Execute.gen.cpp.obj",
+			"GameTaskGraphNode_Flow.gen.cpp.obj",
 			"GameTaskGraphNode_Parallel.gen.cpp.obj",
 			"GameTaskGraphNode_Root.gen.cpp.obj",
+			"GameTaskGraphNode_Sequence.gen.cpp.obj",
 			"GameTaskGraphNodeBase.gen.cpp.obj"
 		]
 	}

@@ -11,7 +11,8 @@ void FGameTaskGraphConnectionDrawingPolicy::DetermineWiringStyle(UEdGraphPin* Ou
 	Params.AssociatedPin1 = OutputPin;
 	Params.AssociatedPin2 = InputPin;
 	Params.WireThickness = 1.5f;
-
+	const UEdGraphSchema* Schema = GraphObj->GetSchema();
+	Params.WireColor = Schema->GetPinTypeColor(OutputPin->PinType);
 	const bool bDeemphasizeUnhoveredPins = HoveredPins.Num() > 0;
 	if (bDeemphasizeUnhoveredPins)
 	{

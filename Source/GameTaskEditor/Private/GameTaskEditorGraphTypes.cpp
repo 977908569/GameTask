@@ -1,13 +1,9 @@
 #include "GameTaskEditorGraphTypes.h"
-
-
 #include "AssetRegistryModule.h"
 #include "ObjectEditorUtils.h"
 #include "Misc/HotReloadInterface.h"
 #include "UObject/ConstructorHelpers.h"
-
 #define OCTEXT_NAMESPACE "GameTask"
-
 
 TArray<FName> FGameTaskGraphNodeClassHelper::UnknownPackages;
 TMap<UClass*, int32> FGameTaskGraphNodeClassHelper::BlueprintClassCount;
@@ -15,13 +11,27 @@ FGameTaskGraphNodeClassHelper::FOnPackageListUpdated FGameTaskGraphNodeClassHelp
 
 FGameTaskGraphNodeClassData::FGameTaskGraphNodeClassData(UClass* InClass, const FString& InDeprecatedMessage) :
 	bIsHidden(0),
-	bHideParent(0)
+	bHideParent(0),
+	Class(InClass),
+	DeprecatedMessage(InDeprecatedMessage)
 {
+	Category = GetCategory();
+	if (InClass)
+	{
+		ClassName = InClass->GetName();
+	}
 }
 
 FGameTaskGraphNodeClassData::FGameTaskGraphNodeClassData(const FString& InAssetName,
-	const FString& InGeneratedClassPackage, const FString& InClassName, UClass* InClass) : bIsHidden(0), bHideParent(0)
+	const FString& InGeneratedClassPackage, const FString& InClassName, UClass* InClass) :
+	bIsHidden(0),
+	bHideParent(0),
+	Class(InClass),
+	AssetName(InAssetName),
+	GeneratedClassPackage(InGeneratedClassPackage),
+	ClassName(InClassName)
 {
+	Category = GetCategory();
 }
 
 FString FGameTaskGraphNodeClassData::ToString() const
@@ -94,7 +104,7 @@ void FGameTaskGraphNodeClassNode::AddUniqueSubNode(TSharedPtr<FGameTaskGraphNode
 
 }
 //===================================
-FGameTaskGraphNodeClassHelper::FGameTaskGraphNodeClassHelper(UClass* InRootClass) 
+FGameTaskGraphNodeClassHelper::FGameTaskGraphNodeClassHelper(UClass* InRootClass)
 {
 	RootNodeClass = InRootClass;
 
@@ -299,10 +309,10 @@ TSharedPtr<FGameTaskGraphNodeClassNode> FGameTaskGraphNodeClassHelper::CreateCla
 	FString AssetParentClassName;
 	if (AssetData.GetTagValue(FBlueprintTags::GeneratedClassPath, AssetClassName) && AssetData.GetTagValue(FBlueprintTags::ParentClassPath, AssetParentClassName))
 	{
-		UObject* Outer1(NULL);
+		UObject* Outer1(nullptr);
 		ResolveName(Outer1, AssetClassName, false, false);
 
-		UObject* Outer2(NULL);
+		UObject* Outer2(nullptr);
 		ResolveName(Outer2, AssetParentClassName, false, false);
 
 		Node = MakeShareable(new FGameTaskGraphNodeClassNode);

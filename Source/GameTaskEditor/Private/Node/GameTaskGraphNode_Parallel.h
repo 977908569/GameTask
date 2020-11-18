@@ -5,7 +5,7 @@
 class UEdGraphPin;
 
 UCLASS()
-class UGameTaskGraphNode_Parallel : public UGameTaskGraphNode_Composite
+class GAMETASKEDITOR_API UGameTaskGraphNode_Parallel : public UGameTaskGraphNode_Composite
 {
 	GENERATED_UCLASS_BODY()
 

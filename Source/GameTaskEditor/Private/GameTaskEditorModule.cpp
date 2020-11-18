@@ -1,5 +1,3 @@
-// Copyright Epic Games, Inc. All Rights Reserved.
-
 #include "GameTaskEditorModule.h"
 #include "AssetToolsModule.h"
 #include "EdGraphUtilities.h"
@@ -9,8 +7,6 @@
 #include "GameTaskNode.h"
 #include "IAssetTools.h"
 #include "Node/GameTaskGraphNode.h"
-#include "Node/GameTaskGraphNode_Event.h"
-#include "Graph/SGraphNode_Event.h"
 #include "Graph/SGraphNode_GameTask.h"
 #define LOCTEXT_NAMESPACE "FGameTaskModule"
 
@@ -27,13 +23,7 @@ class FGraphPanelNodeFactory_GameTask : public FGraphPanelNodeFactory
 		{
 			return SNew(SGraphNode_GameTask, GameTaskNode);
 		}
-
-		if (UGameTaskGraphNode_Event* InnerNode = Cast<UGameTaskGraphNode_Event>(Node))
-		{
-			return SNew(SGraphNode_Event, InnerNode);
-		}
-
-		return NULL;
+		return nullptr;
 	}
 };
 
@@ -47,7 +37,7 @@ void FGameTaskEditorModule::StartupModule()
 
 	GraphPanelNodeFactory_GameTask = MakeShareable(new FGraphPanelNodeFactory_GameTask());
 	FEdGraphUtilities::RegisterVisualNodeFactory(GraphPanelNodeFactory_GameTask);
-	
+
 	IAssetTools& AssetToolsModule = FModuleManager::LoadModuleChecked<FAssetToolsModule>("AssetTools").Get();
 	TSharedPtr<FAssetTypeActions_GameTask> GameTaskAssetTypeAction = MakeShareable(new FAssetTypeActions_GameTask);
 	ItemDataAssetTypeActions.Add(GameTaskAssetTypeAction);
@@ -70,7 +60,7 @@ void FGameTaskEditorModule::ShutdownModule()
 		FEdGraphUtilities::UnregisterVisualNodeFactory(GraphPanelNodeFactory_GameTask);
 		GraphPanelNodeFactory_GameTask.Reset();
 	}
-	
+
 	// Unregister the BehaviorTree item data asset type actions
 	if (FModuleManager::Get().IsModuleLoaded("AssetTools"))
 	{

@@ -4,7 +4,7 @@
 
 /** Root node of this game task */
 UCLASS()
-class UGameTaskGraphNode_Root : public UGameTaskGraphNode
+class GAMETASKEDITOR_API UGameTaskGraphNode_Root : public UGameTaskGraphNode
 {
 	GENERATED_UCLASS_BODY()
 public:
@@ -16,4 +16,6 @@ public:
 	virtual FText GetNodeTitle(ENodeTitleType::Type TitleType) const override;
 	virtual FName GetNameIcon() const override;
 	virtual FText GetTooltipText() const override;
+
+	virtual FText GetDescription() const override;
 };

@@ -1,6 +1,7 @@
 #include "GameTaskEditorGraphSchema.h"
 #include "EdGraphNode_Comment.h"
 #include "GameTaskCompositeNode.h"
+#include "GameTaskComposite_Flow.h"
 #include "GameTaskEditorModule.h"
 #include "GameTaskEvent.h"
 #include "Graph/GameTaskGraphConnectionDrawingPolicy.h"
@@ -11,10 +12,13 @@
 #include "Framework/Commands/GenericCommands.h"
 #include "Node/GameTaskGraphNode_Event.h"
 #include "GameTaskEditorTypes.h"
-#include "GameTaskExecuteNode.h"
 #include "ObjectEditorUtils.h"
-#include "Node/GameTaskComposite_Parallel.h"
+#include "GameTaskComposite_Parallel.h"
+#include "GameTask_Execute.h"
+#include "Debug/GameTaskDebugger.h"
 #include "Node/GameTaskGraphNode_Composite.h"
+#include "Node/GameTaskGraphNode_Execute.h"
+#include "Node/GameTaskGraphNode_Flow.h"
 #include "Node/GameTaskGraphNode_Parallel.h"
 #define LOCTEXT_NAMESPACE "GameTask"
 #define SNAP_GRID (16) // @todo ensure this is the same as SNodePanel::GetSnapGridSize()
@@ -137,13 +141,13 @@ UEdGraphNode* FGameTaskSchemaAction_NewSubNode::PerformAction(UEdGraph* ParentGr
 	const FVector2D Location, bool bSelectNewNode)
 {
 	ParentNode->AddSubNode(NodeTemplate, ParentGraph);
-	return NULL;
+	return nullptr;
 }
 
 UEdGraphNode* FGameTaskSchemaAction_NewSubNode::PerformAction(UEdGraph* ParentGraph, TArray<UEdGraphPin*>& FromPins,
 	const FVector2D Location, bool bSelectNewNode)
 {
-	return PerformAction(ParentGraph, NULL, Location, bSelectNewNode);
+	return PerformAction(ParentGraph, nullptr, Location, bSelectNewNode);
 }
 
 void FGameTaskSchemaAction_NewSubNode::AddReferencedObjects(FReferenceCollector& Collector)
@@ -309,7 +313,7 @@ int32 UGameTaskEditorGraphSchemaBase::GetNodeSelectionCount(const UEdGraph* Grap
 }
 
 void UGameTaskEditorGraphSchemaBase::GetGraphNodeContextActions(FGraphContextMenuBuilder& ContextMenuBuilder,
-	int32 SubNodeFlags) const
+	EGameTaskSubNode SubNodeFlags) const
 {
 	UEdGraph* Graph = (UEdGraph*)ContextMenuBuilder.CurrentGraph;
 	UClass* GraphNodeClass = nullptr;
@@ -332,11 +336,10 @@ void UGameTaskEditorGraphSchemaBase::GetGraphNodeContextActions(FGraphContextMen
 	}
 }
 
-void UGameTaskEditorGraphSchemaBase::GetSubNodeClasses(int32 SubNodeFlags, TArray<FGameTaskGraphNodeClassData>& ClassData,
+void UGameTaskEditorGraphSchemaBase::GetSubNodeClasses(EGameTaskSubNode SubNodeFlags, TArray<FGameTaskGraphNodeClassData>& ClassData,
 	UClass*& GraphNodeClass) const
 {
-
-	
+	// empty in base class
 }
 
 TSharedPtr<FGameTaskSchemaAction_NewNode> UGameTaskEditorGraphSchemaBase::AddNewNodeAction(
@@ -374,14 +377,41 @@ void UGameTaskEditorGraphSchema::GetGraphContextActions(FGraphContextMenuBuilder
 		ContextMenuBuilder.FromPin->PinType.PinCategory :
 		UGameTaskEditorTypes::PinCategory_MultipleNodes;
 
+	if (PinCategory == UGameTaskEditorTypes::PinCategory_OnlyShow)
+		return;
+
 	const bool bNoParent = (ContextMenuBuilder.FromPin == nullptr);
-	const bool bOnlyTasks = (PinCategory == UGameTaskEditorTypes::PinCategory_SingleExecute);
-	const bool bOnlyComposites = (PinCategory == UGameTaskEditorTypes::PinCategory_SingleComposite);
-	const bool bAllowComposites = bNoParent || !bOnlyTasks || bOnlyComposites;
-	const bool bAllowTasks = bNoParent || !bOnlyComposites || bOnlyTasks;
+	//
+	const bool bOnlyFlow = (PinCategory == UGameTaskEditorTypes::PinCategory_SingleFlow);
+
+	const bool bAllowComposites = bNoParent || !bOnlyFlow;
+	const bool bAllowExecute = bNoParent || !bOnlyFlow;
 
 	FGameTaskEditorModule& EditorModule = FModuleManager::GetModuleChecked<FGameTaskEditorModule>(TEXT("GameTaskEditor"));
 	FGameTaskGraphNodeClassHelper* ClassCache = EditorModule.GetClassCache().Get();
+
+	if (bOnlyFlow)
+	{
+		FCategorizedGraphActionListBuilder FlowBuilder(TEXT("Flow"));
+		TArray<FGameTaskGraphNodeClassData> NodeClasses;
+		ClassCache->GatherClasses(UGameTaskComposite_Flow::StaticClass(), NodeClasses);
+
+		for (const auto& NodeClass : NodeClasses)
+		{
+			const FText NodeTypeName = FText::FromString(FName::NameToDisplayString(NodeClass.ToString(), false));
+
+			TSharedPtr<FGameTaskSchemaAction_NewNode> AddOpAction = UGameTaskEditorGraphSchemaBase::AddNewNodeAction(FlowBuilder, NodeClass.GetCategory(), NodeTypeName, FText::GetEmpty());
+
+			UClass* GraphNodeClass = UGameTaskGraphNode_Flow::StaticClass();
+
+			UGameTaskGraphNode_Flow* OpNode = NewObject<UGameTaskGraphNode_Flow>(ContextMenuBuilder.OwnerOfTemporaries, GraphNodeClass);
+			OpNode->ClassData = NodeClass;
+			AddOpAction->NodeTemplate = OpNode;
+		}
+
+		ContextMenuBuilder.Append(FlowBuilder);
+
+	}
 
 	if (bAllowComposites)
 	{
@@ -389,7 +419,7 @@ void UGameTaskEditorGraphSchema::GetGraphContextActions(FGraphContextMenuBuilder
 
 		TArray<FGameTaskGraphNodeClassData> NodeClasses;
 		ClassCache->GatherClasses(UGameTaskCompositeNode::StaticClass(), NodeClasses);
-
+		//并行
 		const FString ParallelClassName = UGameTaskComposite_Parallel::StaticClass()->GetName();
 		for (const auto& NodeClass : NodeClasses)
 		{
@@ -411,28 +441,27 @@ void UGameTaskEditorGraphSchema::GetGraphContextActions(FGraphContextMenuBuilder
 		ContextMenuBuilder.Append(CompositesBuilder);
 	}
 
-	if (bAllowTasks)
+	if (bAllowExecute)
 	{
-		FCategorizedGraphActionListBuilder TasksBuilder(TEXT("Tasks"));
+		FCategorizedGraphActionListBuilder ExecutesBuilder(TEXT("Executes"));
 
 		TArray<FGameTaskGraphNodeClassData> NodeClasses;
-		ClassCache->GatherClasses(UGameTaskExecuteNode::StaticClass(), NodeClasses);
+		ClassCache->GatherClasses(UGameTask_Execute::StaticClass(), NodeClasses);
 
 		for (const auto& NodeClass : NodeClasses)
 		{
 			const FText NodeTypeName = FText::FromString(FName::NameToDisplayString(NodeClass.ToString(), false));
 
-			TSharedPtr<FGameTaskSchemaAction_NewNode> AddOpAction = UGameTaskEditorGraphSchemaBase::AddNewNodeAction(TasksBuilder, NodeClass.GetCategory(), NodeTypeName, FText::GetEmpty());
+			TSharedPtr<FGameTaskSchemaAction_NewNode> AddOpAction = UGameTaskEditorGraphSchemaBase::AddNewNodeAction(ExecutesBuilder, NodeClass.GetCategory(), NodeTypeName, FText::GetEmpty());
 
-			UClass* GraphNodeClass = UGameTaskGraphNode::StaticClass();
+			UClass* GraphNodeClass = UGameTaskGraphNode_Execute::StaticClass();
 
-
-			UGameTaskGraphNode* OpNode = NewObject<UGameTaskGraphNode>(ContextMenuBuilder.OwnerOfTemporaries, GraphNodeClass);
+			UGameTaskGraphNode_Execute* OpNode = NewObject<UGameTaskGraphNode_Execute>(ContextMenuBuilder.OwnerOfTemporaries, GraphNodeClass);
 			OpNode->ClassData = NodeClass;
 			AddOpAction->NodeTemplate = OpNode;
 		}
 
-		ContextMenuBuilder.Append(TasksBuilder);
+		ContextMenuBuilder.Append(ExecutesBuilder);
 	}
 
 }
@@ -458,25 +487,181 @@ void UGameTaskEditorGraphSchema::GetContextMenuActions(UToolMenu* Menu, UGraphNo
 	Super::GetContextMenuActions(Menu, Context);
 }
 
-const FPinConnectionResponse UGameTaskEditorGraphSchema::CanCreateConnection(const UEdGraphPin* A,
-	const UEdGraphPin* B) const
+const FPinConnectionResponse UGameTaskEditorGraphSchema::CanCreateConnection(const UEdGraphPin* PinA, const UEdGraphPin* PinB) const
 {
 	// Make sure the pins are not on the same node
-	if (A->GetOwningNode() == B->GetOwningNode())
+	if (PinA->GetOwningNode() == PinB->GetOwningNode())
 	{
 		return FPinConnectionResponse(CONNECT_RESPONSE_DISALLOW, LOCTEXT("PinErrorSameNode", "Both are on the same node"));
 	}
+
+	const bool bPinAIsSingleComposite = PinA->PinType.PinCategory == UGameTaskEditorTypes::PinCategory_SingleComposite;
+	const bool bPinAIsSingleExecute = PinA->PinType.PinCategory == UGameTaskEditorTypes::PinCategory_SingleExecute;
+	const bool bPinAIsSingleFlow = PinA->PinType.PinCategory == UGameTaskEditorTypes::PinCategory_SingleFlow;
+
+	const bool bPinBIsSingleComposite = PinB->PinType.PinCategory == UGameTaskEditorTypes::PinCategory_SingleComposite;
+	const bool bPinBIsSingleExecute = PinB->PinType.PinCategory == UGameTaskEditorTypes::PinCategory_SingleExecute;
+	const bool bPinBIsSingleFlow = PinB->PinType.PinCategory == UGameTaskEditorTypes::PinCategory_SingleFlow;
+
+
+	const bool bPinAIsExecute = PinA->GetOwningNode()->IsA(UGameTaskGraphNode_Execute::StaticClass());
+	const bool bPinAIsComposite = PinA->GetOwningNode()->IsA(UGameTaskGraphNode_Composite::StaticClass());
+	const bool bPinAIsFlow = PinA->GetOwningNode()->IsA(UGameTaskGraphNode_Flow::StaticClass());
+
+	const bool bPinBIsExecute = PinB->GetOwningNode()->IsA(UGameTaskGraphNode_Execute::StaticClass());
+	const bool bPinBIsComposite = PinB->GetOwningNode()->IsA(UGameTaskGraphNode_Composite::StaticClass());
+	const bool bPinBIsFlow = PinB->GetOwningNode()->IsA(UGameTaskGraphNode_Flow::StaticClass());
+
+	if(PinA->PinType.PinCategory == UGameTaskEditorTypes::PinCategory_OnlyShow|| PinB->PinType.PinCategory == UGameTaskEditorTypes::PinCategory_OnlyShow)
+	{
+		return FPinConnectionResponse(CONNECT_RESPONSE_DISALLOW, LOCTEXT("PinErrorOnlyShow", "Only show"));
+	}
+	
+	if ((bPinAIsSingleComposite && !bPinBIsComposite) || (bPinBIsSingleComposite && !bPinAIsComposite))
+	{
+		return FPinConnectionResponse(CONNECT_RESPONSE_DISALLOW, LOCTEXT("PinErrorOnlyComposite", "Only composite nodes are allowed"));
+	}
+
+	if ((bPinAIsSingleExecute && !bPinBIsExecute) || (bPinBIsSingleExecute && !bPinAIsExecute))
+	{
+		return FPinConnectionResponse(CONNECT_RESPONSE_DISALLOW, LOCTEXT("PinErrorOnlyTask", "Only task nodes are allowed"));
+	}
+
+	// Compare the directions
+	if ((PinA->Direction == EGPD_Input) && (PinB->Direction == EGPD_Input))
+	{
+		return FPinConnectionResponse(CONNECT_RESPONSE_DISALLOW, LOCTEXT("PinErrorInput", "Can't connect input node to input node"));
+	}
+	else if ((PinB->Direction == EGPD_Output) && (PinA->Direction == EGPD_Output))
+	{
+		return FPinConnectionResponse(CONNECT_RESPONSE_DISALLOW, LOCTEXT("PinErrorOutput", "Can't connect output node to output node"));
+	}
+
+	class FNodeVisitorCycleChecker
+	{
+	public:
+		/** Check whether a loop in the graph would be caused by linking the passed-in nodes */
+		bool CheckForLoop(UEdGraphNode* StartNode, UEdGraphNode* EndNode)
+		{
+			VisitedNodes.Add(EndNode);
+			return TraverseInputNodesToRoot(StartNode);
+		}
+
+	private:
+		/**
+		 * Helper function for CheckForLoop()
+		 * @param	Node	The node to start traversal at
+		 * @return true if we reached a root node (i.e. a node with no input pins), false if we encounter a node we have already seen
+		 */
+		bool TraverseInputNodesToRoot(UEdGraphNode* Node)
+		{
+			VisitedNodes.Add(Node);
+
+			// Follow every input pin until we cant any more ('root') or we reach a node we have seen (cycle)
+			for (int32 PinIndex = 0; PinIndex < Node->Pins.Num(); ++PinIndex)
+			{
+				UEdGraphPin* MyPin = Node->Pins[PinIndex];
+
+				if (MyPin->Direction == EGPD_Input)
+				{
+					for (int32 LinkedPinIndex = 0; LinkedPinIndex < MyPin->LinkedTo.Num(); ++LinkedPinIndex)
+					{
+						UEdGraphPin* OtherPin = MyPin->LinkedTo[LinkedPinIndex];
+						if (OtherPin)
+						{
+							UEdGraphNode* OtherNode = OtherPin->GetOwningNode();
+							if (VisitedNodes.Contains(OtherNode))
+							{
+								return false;
+							}
+							else
+							{
+								return TraverseInputNodesToRoot(OtherNode);
+							}
+						}
+					}
+				}
+			}
+
+			return true;
+		}
+
+		TSet<UEdGraphNode*> VisitedNodes;
+	};
+
+	// check for cycles
+	FNodeVisitorCycleChecker CycleChecker;
+	if (!CycleChecker.CheckForLoop(PinA->GetOwningNode(), PinB->GetOwningNode()))
+	{
+		return FPinConnectionResponse(CONNECT_RESPONSE_DISALLOW, LOCTEXT("PinErrorcycle", "Can't create a graph cycle"));
+	}
+
+	const bool bPinASingleLink = bPinAIsSingleComposite || bPinAIsSingleExecute || bPinAIsSingleFlow;
+	const bool bPinBSingleLink = bPinBIsSingleComposite || bPinBIsSingleExecute || bPinBIsSingleFlow;
+
+	if (PinB->Direction == EGPD_Input && PinB->LinkedTo.Num() > 0)
+	{
+		if (bPinASingleLink)
+		{
+			return FPinConnectionResponse(CONNECT_RESPONSE_BREAK_OTHERS_AB, LOCTEXT("PinConnectReplace", "Replace connection"));
+		}
+		else
+		{
+			return FPinConnectionResponse(CONNECT_RESPONSE_BREAK_OTHERS_B, LOCTEXT("PinConnectReplace", "Replace connection"));
+		}
+	}
+	else if (PinA->Direction == EGPD_Input && PinA->LinkedTo.Num() > 0)
+	{
+		if (bPinBSingleLink)
+		{
+			return FPinConnectionResponse(CONNECT_RESPONSE_BREAK_OTHERS_AB, LOCTEXT("PinConnectReplace", "Replace connection"));
+		}
+		else
+		{
+			return FPinConnectionResponse(CONNECT_RESPONSE_BREAK_OTHERS_A, LOCTEXT("PinConnectReplace", "Replace connection"));
+		}
+	}
+
+	if (bPinASingleLink && PinA->LinkedTo.Num() > 0)
+	{
+		return FPinConnectionResponse(CONNECT_RESPONSE_BREAK_OTHERS_A, LOCTEXT("PinConnectReplace", "Replace connection"));
+	}
+	else if (bPinBSingleLink && PinB->LinkedTo.Num() > 0)
+	{
+		return FPinConnectionResponse(CONNECT_RESPONSE_BREAK_OTHERS_B, LOCTEXT("PinConnectReplace", "Replace connection"));
+	}
+
 	return FPinConnectionResponse(CONNECT_RESPONSE_MAKE, LOCTEXT("PinConnect", "Connect nodes"));
 }
 
-const FPinConnectionResponse UGameTaskEditorGraphSchema::CanMergeNodes(const UEdGraphNode* A,
-	const UEdGraphNode* B) const
+const FPinConnectionResponse UGameTaskEditorGraphSchema::CanMergeNodes(const UEdGraphNode* NodeA,
+	const UEdGraphNode* NodeB) const
 {
+	// Make sure the nodes are not the same 
+	if (NodeA == NodeB)
+	{
+		return FPinConnectionResponse(CONNECT_RESPONSE_DISALLOW, TEXT("Both are the same node"));
+	}
+
+	const bool bNodeAIsEvent = NodeA->IsA(UGameTaskGraphNode_Event::StaticClass());
+
+	const bool bNodeBIsFlow = NodeB->IsA(UGameTaskGraphNode_Flow::StaticClass());
+	const bool bNodeBIsExecute = NodeB->IsA(UGameTaskGraphNode_Execute::StaticClass());
+
+	if (bNodeAIsEvent && (bNodeBIsFlow || bNodeBIsExecute))
+	{
+		return FPinConnectionResponse(CONNECT_RESPONSE_MAKE, TEXT(""));
+	}
+
 	return FPinConnectionResponse(CONNECT_RESPONSE_DISALLOW, TEXT(""));
 }
 
 FLinearColor UGameTaskEditorGraphSchema::GetPinTypeColor(const FEdGraphPinType& PinType) const
 {
+	if (PinType.PinCategory == UGameTaskEditorTypes::PinCategory_SingleFlow)
+	{
+		return FColor::Purple;
+	}
 	return FColor::White;
 }
 
@@ -503,22 +688,12 @@ void UGameTaskEditorGraphSchema::ForceVisualizationCacheClear() const
 }
 
 void UGameTaskEditorGraphSchema::GetGraphNodeContextActions(FGraphContextMenuBuilder& ContextMenuBuilder,
-	int32 SubNodeFlags) const
+	EGameTaskSubNode SubNodeFlags) const
 {
 	Super::GetGraphNodeContextActions(ContextMenuBuilder, SubNodeFlags);
-
-	if (SubNodeFlags == EGameTaskSubNode::Event)
-	{
-		const FText Category = FObjectEditorUtils::GetCategoryText(UGameTaskGraphNode_Event::StaticClass());
-		UEdGraph* Graph = (UEdGraph*)ContextMenuBuilder.CurrentGraph;
-		UGameTaskGraphNode_Event* OpNode = NewObject<UGameTaskGraphNode_Event>(Graph);
-		TSharedPtr<FGameTaskSchemaAction_NewSubNode> AddOpAction = UGameTaskEditorGraphSchemaBase::AddNewSubNodeAction(ContextMenuBuilder, Category, FText::FromString(OpNode->GetNodeTypeDescription()), FText::GetEmpty());
-		AddOpAction->ParentNode = Cast<UGameTaskGraphNode>(ContextMenuBuilder.SelectedObjects[0]);
-		AddOpAction->NodeTemplate = OpNode;
-	}
 }
 
-void UGameTaskEditorGraphSchema::GetSubNodeClasses(int32 SubNodeFlags, TArray<FGameTaskGraphNodeClassData>& ClassData,
+void UGameTaskEditorGraphSchema::GetSubNodeClasses(EGameTaskSubNode SubNodeFlags, TArray<FGameTaskGraphNodeClassData>& ClassData,
 	UClass*& GraphNodeClass) const
 {
 	FGameTaskEditorModule& EditorModule = FModuleManager::GetModuleChecked<FGameTaskEditorModule>(TEXT("GameTaskEditor"));
@@ -529,7 +704,7 @@ void UGameTaskEditorGraphSchema::GetSubNodeClasses(int32 SubNodeFlags, TArray<FG
 		ClassCache->GatherClasses(UGameTaskEvent::StaticClass(), ClassData);
 		GraphNodeClass = UGameTaskGraphNode_Event::StaticClass();
 	}
-	
+
 }
 
 #undef LOCTEXT_NAMESPACE

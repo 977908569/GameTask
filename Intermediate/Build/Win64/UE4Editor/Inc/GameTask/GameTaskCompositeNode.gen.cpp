@@ -15,8 +15,7 @@ void EmptyLinkFunctionForGeneratedCodeGameTaskCompositeNode() {}
 // Cross Module References
 	GAMETASK_API UScriptStruct* Z_Construct_UScriptStruct_FGameTaskCompositeChild();
 	UPackage* Z_Construct_UPackage__Script_GameTask();
-	GAMETASK_API UClass* Z_Construct_UClass_UGameTaskEvent_NoRegister();
-	GAMETASK_API UClass* Z_Construct_UClass_UGameTaskExecuteNode_NoRegister();
+	GAMETASK_API UClass* Z_Construct_UClass_UGameTask_Execute_NoRegister();
 	GAMETASK_API UClass* Z_Construct_UClass_UGameTaskCompositeNode_NoRegister();
 	GAMETASK_API UClass* Z_Construct_UClass_UGameTaskCompositeNode();
 	GAMETASK_API UClass* Z_Construct_UClass_UGameTaskNode();
@@ -50,11 +49,6 @@ static struct FScriptStruct_GameTask_StaticRegisterNativesFGameTaskCompositeChil
 #endif
 		static void* NewStructOps();
 #if WITH_METADATA
-		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_Events_MetaData[];
-#endif
-		static const UE4CodeGen_Private::FArrayPropertyParams NewProp_Events;
-		static const UE4CodeGen_Private::FObjectPropertyParams NewProp_Events_Inner;
-#if WITH_METADATA
 		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_ChildExecute_MetaData[];
 #endif
 		static const UE4CodeGen_Private::FObjectPropertyParams NewProp_ChildExecute;
@@ -75,18 +69,11 @@ static struct FScriptStruct_GameTask_StaticRegisterNativesFGameTaskCompositeChil
 		return (UScriptStruct::ICppStructOps*)new UScriptStruct::TCppStructOps<FGameTaskCompositeChild>();
 	}
 #if WITH_METADATA
-	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UScriptStruct_FGameTaskCompositeChild_Statics::NewProp_Events_MetaData[] = {
-		{ "ModuleRelativePath", "Public/GameTaskCompositeNode.h" },
-	};
-#endif
-	const UE4CodeGen_Private::FArrayPropertyParams Z_Construct_UScriptStruct_FGameTaskCompositeChild_Statics::NewProp_Events = { "Events", nullptr, (EPropertyFlags)0x0010000000000000, UE4CodeGen_Private::EPropertyGenFlags::Array, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(FGameTaskCompositeChild, Events), EArrayPropertyFlags::None, METADATA_PARAMS(Z_Construct_UScriptStruct_FGameTaskCompositeChild_Statics::NewProp_Events_MetaData, UE_ARRAY_COUNT(Z_Construct_UScriptStruct_FGameTaskCompositeChild_Statics::NewProp_Events_MetaData)) };
-	const UE4CodeGen_Private::FObjectPropertyParams Z_Construct_UScriptStruct_FGameTaskCompositeChild_Statics::NewProp_Events_Inner = { "Events", nullptr, (EPropertyFlags)0x0000000000000000, UE4CodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, 1, 0, Z_Construct_UClass_UGameTaskEvent_NoRegister, METADATA_PARAMS(nullptr, 0) };
-#if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UScriptStruct_FGameTaskCompositeChild_Statics::NewProp_ChildExecute_MetaData[] = {
 		{ "ModuleRelativePath", "Public/GameTaskCompositeNode.h" },
 	};
 #endif
-	const UE4CodeGen_Private::FObjectPropertyParams Z_Construct_UScriptStruct_FGameTaskCompositeChild_Statics::NewProp_ChildExecute = { "ChildExecute", nullptr, (EPropertyFlags)0x0010000000000000, UE4CodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(FGameTaskCompositeChild, ChildExecute), Z_Construct_UClass_UGameTaskExecuteNode_NoRegister, METADATA_PARAMS(Z_Construct_UScriptStruct_FGameTaskCompositeChild_Statics::NewProp_ChildExecute_MetaData, UE_ARRAY_COUNT(Z_Construct_UScriptStruct_FGameTaskCompositeChild_Statics::NewProp_ChildExecute_MetaData)) };
+	const UE4CodeGen_Private::FObjectPropertyParams Z_Construct_UScriptStruct_FGameTaskCompositeChild_Statics::NewProp_ChildExecute = { "ChildExecute", nullptr, (EPropertyFlags)0x0010000000000000, UE4CodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(FGameTaskCompositeChild, ChildExecute), Z_Construct_UClass_UGameTask_Execute_NoRegister, METADATA_PARAMS(Z_Construct_UScriptStruct_FGameTaskCompositeChild_Statics::NewProp_ChildExecute_MetaData, UE_ARRAY_COUNT(Z_Construct_UScriptStruct_FGameTaskCompositeChild_Statics::NewProp_ChildExecute_MetaData)) };
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UScriptStruct_FGameTaskCompositeChild_Statics::NewProp_ChildComposite_MetaData[] = {
 		{ "Comment", "/** child node */" },
@@ -96,8 +83,6 @@ static struct FScriptStruct_GameTask_StaticRegisterNativesFGameTaskCompositeChil
 #endif
 	const UE4CodeGen_Private::FObjectPropertyParams Z_Construct_UScriptStruct_FGameTaskCompositeChild_Statics::NewProp_ChildComposite = { "ChildComposite", nullptr, (EPropertyFlags)0x0010000000000000, UE4CodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(FGameTaskCompositeChild, ChildComposite), Z_Construct_UClass_UGameTaskCompositeNode_NoRegister, METADATA_PARAMS(Z_Construct_UScriptStruct_FGameTaskCompositeChild_Statics::NewProp_ChildComposite_MetaData, UE_ARRAY_COUNT(Z_Construct_UScriptStruct_FGameTaskCompositeChild_Statics::NewProp_ChildComposite_MetaData)) };
 	const UE4CodeGen_Private::FPropertyParamsBase* const Z_Construct_UScriptStruct_FGameTaskCompositeChild_Statics::PropPointers[] = {
-		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UScriptStruct_FGameTaskCompositeChild_Statics::NewProp_Events,
-		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UScriptStruct_FGameTaskCompositeChild_Statics::NewProp_Events_Inner,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UScriptStruct_FGameTaskCompositeChild_Statics::NewProp_ChildExecute,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UScriptStruct_FGameTaskCompositeChild_Statics::NewProp_ChildComposite,
 	};
@@ -111,7 +96,7 @@ static struct FScriptStruct_GameTask_StaticRegisterNativesFGameTaskCompositeChil
 		Z_Construct_UScriptStruct_FGameTaskCompositeChild_Statics::PropPointers,
 		UE_ARRAY_COUNT(Z_Construct_UScriptStruct_FGameTaskCompositeChild_Statics::PropPointers),
 		RF_Public|RF_Transient|RF_MarkAsNative,
-		EStructFlags(0x00000001),
+		EStructFlags(0x00000201),
 		METADATA_PARAMS(Z_Construct_UScriptStruct_FGameTaskCompositeChild_Statics::Struct_MetaDataParams, UE_ARRAY_COUNT(Z_Construct_UScriptStruct_FGameTaskCompositeChild_Statics::Struct_MetaDataParams))
 	};
 	UScriptStruct* Z_Construct_UScriptStruct_FGameTaskCompositeChild()
@@ -129,7 +114,7 @@ static struct FScriptStruct_GameTask_StaticRegisterNativesFGameTaskCompositeChil
 		}
 		return ReturnStruct;
 	}
-	uint32 Get_Z_Construct_UScriptStruct_FGameTaskCompositeChild_Hash() { return 2085996089U; }
+	uint32 Get_Z_Construct_UScriptStruct_FGameTaskCompositeChild_Hash() { return 912460802U; }
 	void UGameTaskCompositeNode::StaticRegisterNativesUGameTaskCompositeNode()
 	{
 	}
@@ -143,11 +128,6 @@ static struct FScriptStruct_GameTask_StaticRegisterNativesFGameTaskCompositeChil
 #if WITH_METADATA
 		static const UE4CodeGen_Private::FMetaDataPairParam Class_MetaDataParams[];
 #endif
-#if WITH_METADATA
-		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_Events_MetaData[];
-#endif
-		static const UE4CodeGen_Private::FArrayPropertyParams NewProp_Events;
-		static const UE4CodeGen_Private::FObjectPropertyParams NewProp_Events_Inner;
 #if WITH_METADATA
 		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_Children_MetaData[];
 #endif
@@ -168,13 +148,6 @@ static struct FScriptStruct_GameTask_StaticRegisterNativesFGameTaskCompositeChil
 	};
 #endif
 #if WITH_METADATA
-	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_UGameTaskCompositeNode_Statics::NewProp_Events_MetaData[] = {
-		{ "ModuleRelativePath", "Public/GameTaskCompositeNode.h" },
-	};
-#endif
-	const UE4CodeGen_Private::FArrayPropertyParams Z_Construct_UClass_UGameTaskCompositeNode_Statics::NewProp_Events = { "Events", nullptr, (EPropertyFlags)0x0010000000000000, UE4CodeGen_Private::EPropertyGenFlags::Array, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(UGameTaskCompositeNode, Events), EArrayPropertyFlags::None, METADATA_PARAMS(Z_Construct_UClass_UGameTaskCompositeNode_Statics::NewProp_Events_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_UGameTaskCompositeNode_Statics::NewProp_Events_MetaData)) };
-	const UE4CodeGen_Private::FObjectPropertyParams Z_Construct_UClass_UGameTaskCompositeNode_Statics::NewProp_Events_Inner = { "Events", nullptr, (EPropertyFlags)0x0000000000000000, UE4CodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, 1, 0, Z_Construct_UClass_UGameTaskEvent_NoRegister, METADATA_PARAMS(nullptr, 0) };
-#if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_UGameTaskCompositeNode_Statics::NewProp_Children_MetaData[] = {
 		{ "Comment", "/** child nodes */" },
 		{ "ModuleRelativePath", "Public/GameTaskCompositeNode.h" },
@@ -184,8 +157,6 @@ static struct FScriptStruct_GameTask_StaticRegisterNativesFGameTaskCompositeChil
 	const UE4CodeGen_Private::FArrayPropertyParams Z_Construct_UClass_UGameTaskCompositeNode_Statics::NewProp_Children = { "Children", nullptr, (EPropertyFlags)0x0010000000000000, UE4CodeGen_Private::EPropertyGenFlags::Array, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(UGameTaskCompositeNode, Children), EArrayPropertyFlags::None, METADATA_PARAMS(Z_Construct_UClass_UGameTaskCompositeNode_Statics::NewProp_Children_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_UGameTaskCompositeNode_Statics::NewProp_Children_MetaData)) };
 	const UE4CodeGen_Private::FStructPropertyParams Z_Construct_UClass_UGameTaskCompositeNode_Statics::NewProp_Children_Inner = { "Children", nullptr, (EPropertyFlags)0x0000000000000000, UE4CodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, 1, 0, Z_Construct_UScriptStruct_FGameTaskCompositeChild, METADATA_PARAMS(nullptr, 0) };
 	const UE4CodeGen_Private::FPropertyParamsBase* const Z_Construct_UClass_UGameTaskCompositeNode_Statics::PropPointers[] = {
-		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UGameTaskCompositeNode_Statics::NewProp_Events,
-		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UGameTaskCompositeNode_Statics::NewProp_Events_Inner,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UGameTaskCompositeNode_Statics::NewProp_Children,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UGameTaskCompositeNode_Statics::NewProp_Children_Inner,
 	};
@@ -216,7 +187,7 @@ static struct FScriptStruct_GameTask_StaticRegisterNativesFGameTaskCompositeChil
 		}
 		return OuterClass;
 	}
-	IMPLEMENT_CLASS(UGameTaskCompositeNode, 806450076);
+	IMPLEMENT_CLASS(UGameTaskCompositeNode, 3992124383);
 	template<> GAMETASK_API UClass* StaticClass<UGameTaskCompositeNode>()
 	{
 		return UGameTaskCompositeNode::StaticClass();

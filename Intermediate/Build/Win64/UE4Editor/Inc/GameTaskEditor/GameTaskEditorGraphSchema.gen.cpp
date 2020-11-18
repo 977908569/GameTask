@@ -300,6 +300,7 @@ static struct FScriptStruct_GameTaskEditor_StaticRegisterNativesFGameTaskSchemaA
 	};
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_UGameTaskEditorGraphSchemaBase_Statics::Class_MetaDataParams[] = {
+		{ "Comment", "/**\n * \n */" },
 		{ "IncludePath", "GameTaskEditorGraphSchema.h" },
 		{ "ModuleRelativePath", "Private/GameTaskEditorGraphSchema.h" },
 	};
@@ -331,7 +332,7 @@ static struct FScriptStruct_GameTaskEditor_StaticRegisterNativesFGameTaskSchemaA
 		}
 		return OuterClass;
 	}
-	IMPLEMENT_CLASS(UGameTaskEditorGraphSchemaBase, 2150464936);
+	IMPLEMENT_CLASS(UGameTaskEditorGraphSchemaBase, 2250363385);
 	template<> GAMETASKEDITOR_API UClass* StaticClass<UGameTaskEditorGraphSchemaBase>()
 	{
 		return UGameTaskEditorGraphSchemaBase::StaticClass();
@@ -391,7 +392,7 @@ static struct FScriptStruct_GameTaskEditor_StaticRegisterNativesFGameTaskSchemaA
 		}
 		return OuterClass;
 	}
-	IMPLEMENT_CLASS(UGameTaskEditorGraphSchema, 457799452);
+	IMPLEMENT_CLASS(UGameTaskEditorGraphSchema, 4252171292);
 	template<> GAMETASKEDITOR_API UClass* StaticClass<UGameTaskEditorGraphSchema>()
 	{
 		return UGameTaskEditorGraphSchema::StaticClass();

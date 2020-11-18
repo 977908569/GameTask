@@ -1,16 +1,20 @@
 #include "GameTaskGraph.h"
 #include "GameTask.h"
 #include "GameTaskCompositeNode.h"
-#include "Node/GameTaskComposite_Parallel.h"
+#include "GameTaskComposite_Flow.h"
+#include "GameTaskComposite_Parallel.h"
+#include "GameTaskComposite_Sequence.h"
 #include "GameTaskEditorGraphSchema.h"
 #include "GameTaskEditorTypes.h"
 #include "GameTaskEvent.h"
-#include "GameTaskExecuteNode.h"
 #include "Node/GameTaskGraphNode_Event.h"
 #include "Node/GameTaskGraphNode_Execute.h"
 #include "Node/GameTaskGraphNode_Parallel.h"
 #include "Node/GameTaskGraphNode_Root.h"
 #include "GameTaskNode.h"
+#include "GameTask_Execute.h"
+#include "Node/GameTaskGraphNode_Flow.h"
+#include "Node/GameTaskGraphNode_Sequence.h"
 
 UGameTaskGraph::UGameTaskGraph(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
@@ -37,7 +41,6 @@ void UGameTaskGraph::Initialize()
 
 void UGameTaskGraph::OnSave()
 {
-	SpawnMissingNodesForParallel();
 	UpdateAsset();
 }
 
@@ -58,30 +61,40 @@ void UGameTaskGraph::UpdateAsset(int32 UpdateFlags)
 	}
 
 	// initial cleanup & root node search
-	UGameTaskGraphNode_Root* RootNode = NULL;
+	UGameTaskGraphNode_Root* RootNode = nullptr;
 	for (int32 Index = 0; Index < Nodes.Num(); ++Index)
 	{
 		UGameTaskGraphNode* Node = Cast<UGameTaskGraphNode>(Nodes[Index]);
-
 		if (Node == nullptr)
 		{
 			// ignore.
 			continue;
 		}
-
 		// debugger flags
 		if (UpdateFlags & ClearDebuggerFlags)
 		{
-
+			//TODO Debug
 		}
-
 		// parent chain
-		Node->ParentNode = NULL;
-		for (int32 EIdx = 0; EIdx < Node->Events.Num(); EIdx++)
+		Node->ParentNode = nullptr;
+
+		if (auto FlowNode = Cast<UGameTaskGraphNode_Flow>(Node))
 		{
-			Node->Events[EIdx]->ParentNode = Node;
+			for (auto FlowEach : FlowNode->EnterEvents)
+			{
+				if (FlowEach)
+					FlowEach->ParentNode = Node;
+			}
 		}
 
+		if (auto ExecuteNode = Cast<UGameTaskGraphNode_Execute>(Node))
+		{
+			for (auto ExecuteEach : ExecuteNode->EnterEvents)
+			{
+				if (ExecuteEach)
+					ExecuteEach->ParentNode = Node;
+			}
+		}
 
 		// prepare node instance
 		UGameTaskNode* NodeInstance = Cast<UGameTaskNode>(Node->NodeInstance);
@@ -105,7 +118,6 @@ void UGameTaskGraph::UpdateAsset(int32 UpdateFlags)
 		if (Node)
 		{
 			CreateGameTaskFromGraph(Node);
-
 		}
 	}
 }
@@ -124,14 +136,23 @@ namespace GameTaskGraphHelpers
 		int32 LastIdx;
 	};
 
-	void CollectEvents(UGameTask* GameTaskAsset,
-		UGameTaskGraphNode* GraphNode, TArray<UGameTaskEvent*>& EventInstances, UGameTaskCompositeNode* RootNode)
+	void CollectEvents(UGameTask* GameTaskAsset, UGameTaskGraphNode* GraphNode, TArray<UGameTaskEvent*>& EventInstances, UGameTaskCompositeNode* RootNode)
 	{
+		TArray<UGameTaskGraphNode*> Events;
+		if (const auto FlowNode = Cast<UGameTaskGraphNode_Flow>(GraphNode))
+		{
+			Events.Append(FlowNode->EnterEvents);
+		}
+		else if (const auto ExeNode = Cast<UGameTaskGraphNode_Execute>(GraphNode))
+		{
+			Events.Append(ExeNode->EnterEvents);
+		}
+
 		int32 NumNodes = 0;
 
-		for (int32 Index = 0; Index < GraphNode->Events.Num(); Index++)
+		for (int32 Index = 0; Index < Events.Num(); Index++)
 		{
-			UGameTaskGraphNode* MyNode = GraphNode->Events[Index];
+			UGameTaskGraphNode* MyNode = Events[Index];
 			if (MyNode == nullptr)
 			{
 				continue;
@@ -165,31 +186,11 @@ namespace GameTaskGraphHelpers
 		}
 
 		RootNode->Children.Reset();
-		RootNode->Events.Reset();
-
-		// collect events (composite node)
-		if (RootEdNode->Events.Num())
-		{
-			for (int32 ServiceIdx = 0; ServiceIdx < RootEdNode->Events.Num(); ServiceIdx++)
-			{
-				UGameTaskEvent* EventInstance = RootEdNode->Events[ServiceIdx] ? Cast<UGameTaskEvent>(RootEdNode->Events[ServiceIdx]->NodeInstance) : nullptr;
-				if (EventInstance)
-				{
-					if (Cast<UGameTask>(EventInstance->GetOuter()) == nullptr)
-					{
-						EventInstance->Rename(nullptr, GameTaskAsset);
-					}
-					EventInstance->InitializeNode(RootNode);
-
-					RootNode->Events.Add(EventInstance);
-				}
-			}
-		}
-
 		// gather all nodes
 		int32 ChildIdx = 0;
 		for (int32 PinIdx = 0; PinIdx < RootEdNode->Pins.Num(); PinIdx++)
 		{
+			//Ignor InPut
 			UEdGraphPin* Pin = RootEdNode->Pins[PinIdx];
 			if (Pin->Direction != EGPD_Output)
 			{
@@ -206,13 +207,13 @@ namespace GameTaskGraphHelpers
 				{
 					continue;
 				}
-
-				UGameTaskExecuteNode* ExecuteInstance = Cast<UGameTaskExecuteNode>(GraphNode->NodeInstance);
+				//Execute
+				UGameTask_Execute* ExecuteInstance = Cast<UGameTask_Execute>(GraphNode->NodeInstance);
 				if (ExecuteInstance && Cast<UGameTask>(ExecuteInstance->GetOuter()) == nullptr)
 				{
 					ExecuteInstance->Rename(nullptr, GameTaskAsset);
 				}
-
+				//Child
 				UGameTaskCompositeNode* CompositeInstance = Cast<UGameTaskCompositeNode>(GraphNode->NodeInstance);
 				if (CompositeInstance && Cast<UGameTask>(CompositeInstance->GetOuter()) == nullptr)
 				{
@@ -224,49 +225,47 @@ namespace GameTaskGraphHelpers
 					continue;
 				}
 
-				// collect events
-				TArray<UGameTaskEvent*> EventInstances;
-
-				CollectEvents(GameTaskAsset, GraphNode, EventInstances, RootNode);
-
-				// store child data
-				ChildIdx = RootNode->Children.AddDefaulted();
-				FGameTaskCompositeChild& ChildInfo = RootNode->Children[ChildIdx];
-				ChildInfo.ChildComposite = CompositeInstance;
-				ChildInfo.ChildExecute = ExecuteInstance;
-				ChildInfo.Events = EventInstances;
-
-
 				UGameTaskNode* ChildNode = CompositeInstance ? (UGameTaskNode*)CompositeInstance : (UGameTaskNode*)ExecuteInstance;
 				if (ChildNode && Cast<UGameTask>(ChildNode->GetOuter()) == nullptr)
 				{
 					ChildNode->Rename(nullptr, GameTaskAsset);
 				}
 
-				// collect events (exe node)
+				//Flow
+				UGameTaskComposite_Flow* FlowInstance = Cast<UGameTaskComposite_Flow>(ChildNode);
+				if (FlowInstance)
+				{
+					FlowInstance->EnterEvents.Reset();
+					FlowInstance->ExitEvents.Reset();
+					TArray<UGameTaskEvent*>EnterInstances;
+					CollectEvents(GameTaskAsset, GraphNode, EnterInstances, RootNode);
+					FlowInstance->EnterEvents.Append(EnterInstances);
+					UGameTaskComposite_Flow* RootFlow = Cast<UGameTaskComposite_Flow>(RootNode);
+					if (RootFlow)
+					{
+						RootFlow->Next = FlowInstance;
+					}
+				}
+				else
+				{
+					// store child data
+					ChildIdx = RootNode->Children.AddDefaulted();
+					FGameTaskCompositeChild& ChildInfo = RootNode->Children[ChildIdx];
+					ChildInfo.ChildComposite = CompositeInstance;
+					ChildInfo.ChildExecute = ExecuteInstance;
+				}
+
+				//任务节点
 				if (ExecuteInstance)
 				{
 					ExecuteInstance->Events.Reset();
-
-					for (int32 EventIdx = 0; EventIdx < GraphNode->Events.Num(); EventIdx++)
-					{
-						UGameTaskEvent* EventInstance = GraphNode->Events[EventIdx] ? Cast<UGameTaskEvent>(GraphNode->Events[EventIdx]->NodeInstance) : nullptr;
-						if (EventInstance)
-						{
-							if (Cast<UGameTask>(EventInstance->GetOuter()) == nullptr)
-							{
-								EventInstance->Rename(nullptr, GameTaskAsset);
-							}
-
-							EventInstance->InitializeNode(RootNode);
-							ExecuteInstance->Events.Add(EventInstance);
-						}
-					}
+					TArray<UGameTaskEvent*>EventInstances;
+					CollectEvents(GameTaskAsset, GraphNode, EventInstances, RootNode);
+					ExecuteInstance->Events.Append(EventInstances);
 				}
 
 				// assign execution index to child node
 				ChildNode->InitializeNode(RootNode);
-
 
 				if (CompositeInstance)
 				{
@@ -291,24 +290,35 @@ namespace GameTaskGraphHelpers
 		return Pin;
 	}
 
-	void SpawnMissingEventNodes(UGameTaskGraphNode* GraphNode, const TArray<UGameTaskEvent*>& Events, UGameTaskGraph* Graph)
-	{
-
-	}
-
 	UGameTaskGraphNode* SpawnMissingGraphNodesWorker(UGameTaskNode* Node, UGameTaskGraphNode* ParentGraphNode, UGameTaskGraph* Graph, int32 ChildIdx, int32 ParentEventCount)
 	{
 		if (Node == nullptr)
 		{
 			return nullptr;
 		}
-
 		UGameTaskGraphNode* GraphNode = nullptr;
-
 		UGameTaskCompositeNode* CompositeNode = Cast<UGameTaskCompositeNode>(Node);
 		if (Node->IsA(UGameTaskComposite_Parallel::StaticClass()))
 		{
 			FGraphNodeCreator<UGameTaskGraphNode_Parallel> NodeBuilder(*Graph);
+			GraphNode = NodeBuilder.CreateNode();
+			NodeBuilder.Finalize();
+		}
+		else if (Node->IsA(UGameTaskComposite_Sequence::StaticClass()))
+		{
+			FGraphNodeCreator<UGameTaskGraphNode_Sequence> NodeBuilder(*Graph);
+			GraphNode = NodeBuilder.CreateNode();
+			NodeBuilder.Finalize();
+		}
+		else if (Node->IsA(UGameTaskComposite_Flow::StaticClass()))
+		{
+			FGraphNodeCreator<UGameTaskGraphNode_Flow> NodeBuilder(*Graph);
+			GraphNode = NodeBuilder.CreateNode();
+			NodeBuilder.Finalize();
+		}
+		else if (Node->IsA(UGameTask_Execute::StaticClass()))
+		{
+			FGraphNodeCreator<UGameTaskGraphNode_Execute> NodeBuilder(*Graph);
 			GraphNode = NodeBuilder.CreateNode();
 			NodeBuilder.Finalize();
 		}
@@ -318,41 +328,45 @@ namespace GameTaskGraphHelpers
 			GraphNode = NodeBuilder.CreateNode();
 			NodeBuilder.Finalize();
 		}
-		else
-		{
-			FGraphNodeCreator<UGameTaskGraphNode_Execute> NodeBuilder(*Graph);
-			GraphNode = NodeBuilder.CreateNode();
-			NodeBuilder.Finalize();
-		}
 
 		if (GraphNode)
 		{
-			const int32 ParentSubNodes = ParentGraphNode->Events.Num();
+			const int32 ParentSubNodes = ParentGraphNode->GetSubNodeNum();
 			GraphNode->NodePosX = ParentGraphNode->NodePosX + ChildIdx * 400.0f;
 			GraphNode->NodePosY = ParentGraphNode->NodePosY + (ParentEventCount + ParentSubNodes + 1) * 75.0f;
 			GraphNode->NodeInstance = Node;
 		}
 
+		if (auto ExecuteNode = Cast<UGameTask_Execute>(Node))
+		{
+			for (int32 SubIdx = 0; SubIdx < ExecuteNode->Events.Num(); SubIdx++)
+			{
+				UGameTaskGraphNode* EventNode = NewObject<UGameTaskGraphNode_Event>(Graph);
+				EventNode->NodeInstance = ExecuteNode->Events[SubIdx];
+				GraphNode->AddSubNode(EventNode, Graph);
+			}
+		}
+
 		if (CompositeNode)
 		{
-			for (int32 SubIdx = 0; SubIdx < CompositeNode->Events.Num(); SubIdx++)
+			auto FlowNode = Cast<UGameTaskComposite_Flow>(CompositeNode);
+			if (FlowNode)
 			{
-				UGameTaskGraphNode* ServiceNode = NewObject<UGameTaskGraphNode_Event>(Graph);
-				ServiceNode->NodeInstance = CompositeNode->Events[SubIdx];
-				GraphNode->AddSubNode(ServiceNode, Graph);
+				for (int32 SubIdx = 0; SubIdx < FlowNode->EnterEvents.Num(); SubIdx++)
+				{
+					UGameTaskGraphNode* EventNode = NewObject<UGameTaskGraphNode_Event>(Graph);
+					EventNode->NodeInstance = FlowNode->EnterEvents[SubIdx];
+					GraphNode->AddSubNode(EventNode, Graph);
+				}
 			}
-
 			UEdGraphPin* OutputPin = FindGraphNodePin(GraphNode, EGPD_Output);
 
 			for (int32 Idx = 0; Idx < CompositeNode->Children.Num(); Idx++)
 			{
 				UGameTaskNode* ChildNode = CompositeNode->GetChildNode(Idx);
-				UGameTaskGraphNode* ChildGraphNode = SpawnMissingGraphNodesWorker(ChildNode, GraphNode, Graph,
-					Idx, ParentEventCount + CompositeNode->Children[Idx].Events.Num());
 
-				SpawnMissingEventNodes(ChildGraphNode,
-					CompositeNode->Children[Idx].Events,
-					Graph);
+				UGameTaskGraphNode* ChildGraphNode = SpawnMissingGraphNodesWorker(ChildNode, GraphNode, Graph,
+					Idx, ParentEventCount);
 
 				UEdGraphPin* ChildInputPin = FindGraphNodePin(ChildGraphNode, EGPD_Input);
 
@@ -371,32 +385,26 @@ namespace GameTaskGraphHelpers
 		}
 
 		UGameTaskGraphNode* GraphNode = SpawnMissingGraphNodesWorker(Asset->RootNode, ParentGraphNode, Graph, 0, 0);
-		//SpawnMissingEventNodes(GraphNode, Asset->RootDecorators, Asset->RootDecoratorOps, Graph);
 		return GraphNode;
 	}
 
-} // namespace BTGraphHelpers
-
-
+} // namespace GameTaskGraphHelpers
 
 void UGameTaskGraph::CreateGameTaskFromGraph(UGameTaskGraphNode* RootEdNode)
 {
+	//Asset
 	UGameTask* GameTaskAsset = Cast<UGameTask>(GetOuter());
 	GameTaskAsset->RootNode = nullptr;
-
+	//Start Node
 	GameTaskAsset->RootNode = Cast<UGameTaskCompositeNode>(RootEdNode->NodeInstance);
 	if (GameTaskAsset->RootNode)
 	{
+		//Clear Parent Node
 		GameTaskAsset->RootNode->InitializeNode(nullptr);
 	}
 
-	// collect root level decorators
-	uint16 DummyIndex = MAX_uint16;
-
-	//GameTaskGraphHelpers::CollectEvents(GameTaskAsset, RootEdNode, GameTaskAsset->RootDecorators);
-
 	// connect tree nodes
-	GameTaskGraphHelpers::CreateChildren(GameTaskAsset, GameTaskAsset->RootNode, RootEdNode); //-V595
+	GameTaskGraphHelpers::CreateChildren(GameTaskAsset, GameTaskAsset->RootNode, RootEdNode);
 
 	// Now remove any orphaned nodes left behind after regeneration
 	RemoveOrphanedNodes();
@@ -503,10 +511,6 @@ void UGameTaskGraph::RebuildChildOrder(UEdGraphNode* ParentNode)
 	}
 }
 
-void UGameTaskGraph::SpawnMissingNodesForParallel()
-{
-}
-
 void UGameTaskGraph::RemoveUnknownSubNodes()
 {
 	for (int32 Index = 0; Index < Nodes.Num(); ++Index)
@@ -516,12 +520,7 @@ void UGameTaskGraph::RemoveUnknownSubNodes()
 		{
 			for (int32 SubIdx = Node->SubNodes.Num() - 1; SubIdx >= 0; SubIdx--)
 			{
-				const bool bIsDecorator = Node->Events.Contains(Node->SubNodes[SubIdx]);
 
-				if (!bIsDecorator)
-				{
-					Node->SubNodes.RemoveAt(SubIdx);
-				}
 			}
 		}
 	}

@@ -4,9 +4,12 @@
 #include "Modes/GameTaskEditorModes.h"
 #include "GameTaskEditorTabFactories.h"
 #include "GameTaskEditorToolbar.h"
+#include "GameTaskEditorUtils.h"
 #include "Graph/GameTaskGraph.h"
 #include "GraphEditorActions.h"
+#include "Graph/GameTaskColor.h"
 #include "Kismet2/BlueprintEditorUtils.h"
+#include "Node/GameTaskGraphNode_Root.h"
 
 #define LOCTEXT_NAMESPACE "GameTaskEditor"
 
@@ -180,10 +183,18 @@ void FGameTaskEditor::NotifyPostChange(const FPropertyChangedEvent& PropertyChan
 }
 
 void FGameTaskEditor::OnNodeDoubleClicked(UEdGraphNode* Node) {
+	
 }
 
 void FGameTaskEditor::OnGraphEditorFocused(
 	const TSharedRef<SGraphEditor>& InGraphEditor) {
+
+	UpdateGraphEdPtr = InGraphEditor;
+
+	FGraphPanelSelectionSet CurrentSelection;
+	CurrentSelection = InGraphEditor->GetSelectedNodes();
+	OnSelectedNodesChanged(CurrentSelection);
+	
 }
 
 void FGameTaskEditor::OnNodeTitleCommitted(const FText& NewText,
@@ -191,6 +202,13 @@ void FGameTaskEditor::OnNodeTitleCommitted(const FText& NewText,
 }
 
 void FGameTaskEditor::OnAddInputPin() {
+	TSharedPtr<SGraphEditor> FocusedGraphEd = UpdateGraphEdPtr.Pin();
+
+	// Refresh the current graph, so the pins can be updated
+	if (FocusedGraphEd.IsValid())
+	{
+		FocusedGraphEd->NotifyGraphChanged();
+	}
 }
 
 bool FGameTaskEditor::CanAddInputPin() const {
@@ -198,6 +216,20 @@ bool FGameTaskEditor::CanAddInputPin() const {
 }
 
 void FGameTaskEditor::OnRemoveInputPin() {
+	TSharedPtr<SGraphEditor> FocusedGraphEd = UpdateGraphEdPtr.Pin();
+	if (FocusedGraphEd.IsValid())
+	{
+		const FScopedTransaction Transaction(LOCTEXT("RemoveInputPin", "Remove Input Pin"));
+
+		UEdGraphPin* SelectedPin = FocusedGraphEd->GetGraphPinForMenu();
+		UEdGraphNode* OwningNode = SelectedPin->GetOwningNode();
+
+		OwningNode->Modify();
+		SelectedPin->Modify();
+
+		// Update the graph so that the node will be refreshed
+		FocusedGraphEd->NotifyGraphChanged();
+	}
 }
 
 bool FGameTaskEditor::CanRemoveInputPin() const {
@@ -250,6 +282,20 @@ bool FGameTaskEditor::InEditingMode(bool bGraphIsEditable) const {
 	return bGraphIsEditable;
 }
 
+bool FGameTaskEditor::IsPropertyEditable() const
+{
+	TSharedPtr<SGraphEditor> FocusedGraphEd = UpdateGraphEdPtr.Pin();
+	return FocusedGraphEd.IsValid() && FocusedGraphEd->GetCurrentGraph() && FocusedGraphEd->GetCurrentGraph()->bEditable;
+}
+
+void FGameTaskEditor::OnFinishedChangingProperties(const FPropertyChangedEvent& PropertyChangedEvent)
+{
+	if (PropertyChangedEvent.Property)
+	{
+		//
+	}
+}
+
 TSharedRef<SWidget> FGameTaskEditor::SpawnProperties() {
 	return
 		SNew(SVerticalBox)
@@ -259,11 +305,15 @@ TSharedRef<SWidget> FGameTaskEditor::SpawnProperties() {
 		[
 			DetailsView.ToSharedRef()
 		];
-
 }
 
 UGameTask* FGameTaskEditor::GetGameTask() const {
 	return GameTask;
+}
+
+void FGameTaskEditor::RegisterToolbarTab(const TSharedRef<FTabManager>& InTabManager)
+{
+	FAssetEditorToolkit::RegisterTabSpawners(InTabManager);
 }
 
 void FGameTaskEditor::RestoreGameTask() {
@@ -314,12 +364,62 @@ TSharedPtr<FGameTaskEditorToolbar> FGameTaskEditor::GetToolbarBuilder() const {
 }
 
 void FGameTaskEditor::CreateInternalWidgets() {
+	FPropertyEditorModule& PropertyEditorModule = FModuleManager::GetModuleChecked<FPropertyEditorModule>("PropertyEditor");
+	FDetailsViewArgs DetailsViewArgs(false, false, true, FDetailsViewArgs::HideNameArea, false);
+	DetailsViewArgs.NotifyHook = this;
+	DetailsViewArgs.DefaultsOnlyVisibility = EEditDefaultsOnlyNodeVisibility::Hide;
+	DetailsView = PropertyEditorModule.CreateDetailView(DetailsViewArgs);
+	DetailsView->SetObject(NULL);
+	DetailsView->SetIsPropertyEditingEnabledDelegate(FIsPropertyEditingEnabled::CreateSP(this, &FGameTaskEditor::IsPropertyEditable));
+	DetailsView->OnFinishedChangingProperties().AddSP(this, &FGameTaskEditor::OnFinishedChangingProperties);
 }
 
 void FGameTaskEditor::ExtendMenu() {
 }
 
 void FGameTaskEditor::BindCommonCommands() {
+}
+
+void FGameTaskEditor::OnSelectedNodesChanged(const TSet<UObject*>& NewSelection)
+{
+	GameTaskEditorUtils::FGameTaskPropertySelectionInfo SelectionInfo;
+	TArray<UObject*> Selection = GameTaskEditorUtils::GetSelectionForPropertyEditor(NewSelection, SelectionInfo);
+
+	UGameTaskGraph* MyGraph = Cast<UGameTaskGraph>(GameTask->TaskGraph);
+
+	if (Selection.Num() == 1)
+	{
+		if (DetailsView.IsValid())
+		{
+			DetailsView->SetObjects(Selection);
+		}
+
+		if (SelectionInfo.FoundEvent)
+		{
+			
+		}
+	}
+	else if (DetailsView.IsValid())
+	{
+		if (Selection.Num() == 0)
+		{
+			// if nothing is selected, display the root
+			UGameTaskGraphNode* RootNode = nullptr;
+			for (const auto& Node : MyGraph->Nodes)
+			{
+				RootNode = Cast<UGameTaskGraphNode_Root>(Node);
+				if (RootNode != nullptr)
+				{
+					break;
+				}
+			}
+			DetailsView->SetObject(RootNode);
+		}
+		else
+		{
+			DetailsView->SetObject(nullptr);
+		}
+	}
 }
 
 TSharedRef<SGraphEditor> FGameTaskEditor::CreateGraphEditorWidget(

@@ -9,7 +9,7 @@ class UGameTaskGraphNode;
 class FDragGameTaskGraphNode : public FDragNode
 {
 public:
-	DRAG_DROP_OPERATOR_TYPE(FDragAIGraphNode, FDragNode)
+	DRAG_DROP_OPERATOR_TYPE(FDragGameTaskGraphNode, FDragNode)
 
 		static TSharedRef<FDragGameTaskGraphNode> New(const TSharedRef<SGraphPanel>& InGraphPanel, const TSharedRef<SGraphNode>& InDraggedNode);
 	static TSharedRef<FDragGameTaskGraphNode> New(const TSharedRef<SGraphPanel>& InGraphPanel, const TArray< TSharedRef<SGraphNode> >& InDraggedNodes);
@@ -18,6 +18,7 @@ public:
 
 	double StartTime;
 
+	bool bEnter;
 protected:
 	typedef FDragNode Super;
 };
@@ -64,6 +65,7 @@ protected:
 
 	virtual FText GetDescription() const;
 	virtual EVisibility GetDescriptionVisibility() const;
+	virtual  EVisibility GetEventVisibility() const;
 
 	virtual FText GetPreviewCornerText() const;
 	virtual const FSlateBrush* GetNameIcon() const;
@@ -81,6 +83,5 @@ protected:
 	virtual FSlateColor GetPinColor() const override;
 	virtual TSharedRef<SWidget>	GetDefaultValueWidget() override;
 	//~ End SGraphPin Interface
-
 	const FSlateBrush* GetPinBorder() const;
 };

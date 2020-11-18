@@ -1,0 +1,56 @@
+{
+	"RemapUnityFiles": 
+	{
+		"Module.GameTaskEditor.cpp.obj": [
+			"GameTaskDebugger.cpp.obj",
+			"FAssetTypeActions_GameTask.cpp.obj",
+			"GameTaskEditor.cpp.obj",
+			"GameTaskEditorCommands.cpp.obj",
+			"GameTaskEditorGraphSchema.cpp.obj",
+			"GameTaskEditorGraphTypes.cpp.obj",
+			"GameTaskEditorModule.cpp.obj",
+			"GameTaskEditorStyle.cpp.obj",
+			"GameTaskEditorTabFactories.cpp.obj",
+			"GameTaskEditorToolbar.cpp.obj",
+			"GameTaskEditorTypes.cpp.obj",
+			"GameTaskEditorUtils.cpp.obj",
+			"GameTaskFactory.cpp.obj",
+			"GameTaskColor.cpp.obj",
+			"GameTaskGraph.cpp.obj",
+			"GameTaskGraphBase.cpp.obj",
+			"GameTaskGraphConnectionDrawingPolicy.cpp.obj",
+			"GameTaskGraphEditor.cpp.obj",
+			"SGraphEditorActionMenuGameTask.cpp.obj",
+			"SGraphNode_GameTask.cpp.obj",
+			"SGraphNodeGameTaskBase.cpp.obj",
+			"GameTaskEditorModes.cpp.obj",
+			"GameTaskGraphNode.cpp.obj",
+			"GameTaskGraphNode_Composite.cpp.obj",
+			"GameTaskGraphNode_Event.cpp.obj",
+			"GameTaskGraphNode_Execute.cpp.obj",
+			"GameTaskGraphNode_Flow.cpp.obj",
+			"GameTaskGraphNode_Parallel.cpp.obj",
+			"GameTaskGraphNode_Root.cpp.obj",
+			"GameTaskGraphNode_Sequence.cpp.obj",
+			"GameTaskGraphNodeBase.cpp.obj"
+		],
+		"Module.GameTaskEditor.gen.cpp.obj": [
+			"GameTaskEditor.init.gen.cpp.obj",
+			"GameTaskEditorGraphSchema.gen.cpp.obj",
+			"GameTaskEditorGraphTypes.gen.cpp.obj",
+			"GameTaskEditorTypes.gen.cpp.obj",
+			"GameTaskFactory.gen.cpp.obj",
+			"GameTaskGraph.gen.cpp.obj",
+			"GameTaskGraphBase.gen.cpp.obj",
+			"GameTaskGraphNode.gen.cpp.obj",
+			"GameTaskGraphNode_Composite.gen.cpp.obj",
+			"GameTaskGraphNode_Event.gen.cpp.obj",
+			"GameTaskGraphNode_Execute.gen.cpp.obj",
+			"GameTaskGraphNode_Flow.gen.cpp.obj",
+			"GameTaskGraphNode_Parallel.gen.cpp.obj",
+			"GameTaskGraphNode_Root.gen.cpp.obj",
+			"GameTaskGraphNode_Sequence.gen.cpp.obj",
+			"GameTaskGraphNodeBase.gen.cpp.obj"
+		]
+	}
+}

@@ -1,0 +1,14 @@
+/NOLOGO
+/errorReport:prompt
+/MACHINE:x64
+/SUBSYSTEM:WINDOWS
+/DEF
+/NAME:"UE4Editor-GameTaskEditor-Win64-DebugGame.dll"
+/IGNORE:4221
+/NODEFAULTLIB
+"F:\NewTask\TaskProject\Intermediate\Build\Win64\TaskProjectEditor\DebugGame\UnrealEd\SharedPCH.UnrealEd.NonOptimized.ShadowErrors.h.obj"
+"F:\NewTask\TaskProject\Plugins\GameTask\Intermediate\Build\Win64\UE4Editor\DebugGame\GameTaskEditor\Module.GameTaskEditor.cpp.obj"
+"F:\NewTask\TaskProject\Plugins\GameTask\Intermediate\Build\Win64\UE4Editor\DebugGame\GameTaskEditor\Module.GameTaskEditor.gen.cpp.obj"
+"F:\NewTask\TaskProject\Plugins\GameTask\Intermediate\Build\Win64\UE4Editor\DebugGame\GameTaskEditor\Default.rc2.res"
+/OUT:"F:\NewTask\TaskProject\Plugins\GameTask\Intermediate\Build\Win64\UE4Editor\DebugGame\GameTaskEditor\UE4Editor-GameTaskEditor-Win64-DebugGame.lib"
+/INCLUDE:IMPLEMENT_MODULE_GameTaskEditor

@@ -10,8 +10,11 @@ class GAMETASK_API UGameTask :public UObject
 public:
 	UGameTask();
 
+	//First Flow Node
 	UPROPERTY()
 		class UGameTaskCompositeNode* RootNode;
+	UFUNCTION(BlueprintCallable)
+		void Start();
 
 #if WITH_EDITORONLY_DATA
 	UPROPERTY(EditDefaultsOnly)

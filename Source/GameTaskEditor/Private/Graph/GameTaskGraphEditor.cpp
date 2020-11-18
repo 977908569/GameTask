@@ -44,7 +44,7 @@ FGraphPanelSelectionSet FGameTaskGraphEditor::GetSelectedNodes() const
 
 void FGameTaskGraphEditor::OnSelectedNodesChanged(const TSet<UObject*>& NewSelection)
 {
-
+	// empty in base class
 }
 
 void FGameTaskGraphEditor::PostUndo(bool bSuccess)

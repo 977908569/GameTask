@@ -1,8 +1,10 @@
 #include "SGraphNodeGameTaskBase.h"
 
-
+#include "SGraphNode_GameTask.h"
 #include "SGraphPanel.h"
 #include "Node/GameTaskGraphNode.h"
+#include "Node/GameTaskGraphNode_Execute.h"
+#include "Node/GameTaskGraphNode_Flow.h"
 #define LOCTEXT_NAMESPACE "GameTask"
 
 TSharedRef<FDragGameTaskGraphNode> FDragGameTaskGraphNode::New(const TSharedRef<SGraphPanel>& InGraphPanel,
@@ -12,7 +14,6 @@ TSharedRef<FDragGameTaskGraphNode> FDragGameTaskGraphNode::New(const TSharedRef<
 	Operation->StartTime = FPlatformTime::Seconds();
 	Operation->GraphPanel = InGraphPanel;
 	Operation->DraggedNodes.Add(InDraggedNode);
-	// adjust the decorator away from the current mouse location a small amount based on cursor size
 	Operation->DecoratorAdjust = FSlateApplication::Get().GetCursorSize();
 	Operation->Construct();
 	return Operation;
@@ -126,13 +127,15 @@ FReply SGraphNodeGameTaskBase::OnDrop(const FGeometry& MyGeometry, const FDragDr
 		}
 
 		UGameTaskGraphNode* DropTargetNode = DragNodeOp->GetDropTargetNode();
+
 		const int32 InsertIndex = MyNode->FindSubNodeDropIndex(DropTargetNode);
 
 		for (int32 Idx = 0; Idx < DraggedNodes.Num(); Idx++)
 		{
-			UGameTaskGraphNode* DraggedTestNode = Cast<UGameTaskGraphNode>(DraggedNodes[Idx]->GetNodeObj());
+			UGameTaskGraphNode_Event* DraggedTestNode = Cast<UGameTaskGraphNode_Event>(DraggedNodes[Idx]->GetNodeObj());
 			DraggedTestNode->Modify();
 			DraggedTestNode->ParentNode = MyNode;
+			DraggedTestNode->bEnterEvent = MyNode->bDragEnter;
 
 			MyNode->Modify();
 			MyNode->InsertSubNodeAt(DraggedTestNode, InsertIndex);
@@ -150,6 +153,8 @@ FReply SGraphNodeGameTaskBase::OnDrop(const FGeometry& MyGeometry, const FDragDr
 				MyGraph->OnSubNodeDropped();
 			}
 		}
+		//Reset
+		MyNode->bDragEnter = true;
 	}
 
 	return SGraphNode::OnDrop(MyGeometry, DragDropEvent);
@@ -309,6 +314,15 @@ EVisibility SGraphNodeGameTaskBase::GetDescriptionVisibility() const
 	return (!MyOwnerPanel.IsValid() || MyOwnerPanel->GetCurrentLOD() > EGraphRenderingLOD::LowDetail) ? EVisibility::Visible : EVisibility::Collapsed;
 }
 
+EVisibility SGraphNodeGameTaskBase::GetEventVisibility() const
+{
+	if (GraphNode && (GraphNode->IsA(UGameTaskGraphNode_Flow::StaticClass()) || GraphNode->IsA(UGameTaskGraphNode_Execute::StaticClass())))
+	{
+		return EVisibility::SelfHitTestInvisible;
+	}
+	return EVisibility::Collapsed;
+}
+
 FText SGraphNodeGameTaskBase::GetPreviewCornerText() const
 {
 	return FText::GetEmpty();
@@ -326,7 +340,7 @@ void SGraphPinGameTask::Construct(const FArguments& InArgs, UEdGraphPin* InPin)
 	bShowLabel = true;
 
 	GraphPinObj = InPin;
-	check(GraphPinObj != NULL);
+	check(GraphPinObj != nullptr);
 
 	const UEdGraphSchema* Schema = GraphPinObj->GetSchema();
 	check(Schema);

@@ -290,6 +290,11 @@ void UGameTaskGraphNodeBase::OnSubNodeAdded(UGameTaskGraphNodeBase* SubNode)
 	// empty in base class
 }
 
+int32 UGameTaskGraphNodeBase::GetSubNodeNum()
+{
+	return 0;
+}
+
 void UGameTaskGraphNodeBase::RemoveSubNode(UGameTaskGraphNodeBase* SubNode)
 {
 	SubNodes.RemoveSingle(SubNode);

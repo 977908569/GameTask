@@ -2,6 +2,8 @@
 #include "GameTaskEditorTypes.h"
 #include "SGraphNodeGameTaskBase.h"
 
+#define  EVENT_AREA_SIZE  20
+
 class SGraphNode_GameTask : public SGraphNodeGameTaskBase
 {
 public:
@@ -34,8 +36,7 @@ public:
 	virtual void Tick(const FGeometry& AllottedGeometry, const double InCurrentTime, const float InDeltaTime) override;
 
 	/** adds event widget inside current node */
-	void AddEvent(TSharedPtr<SGraphNode> EventWidget);
-
+	void AddEvent(TSharedPtr<SGraphNode> EventWidget, bool bEnterEvent = true);
 
 	/** shows red marker when search failed*/
 	EVisibility GetDebuggerSearchFailedMarkerVisibility() const;
@@ -62,8 +63,10 @@ protected:
 	/** cached draw position */
 	FVector2D CachedPosition;
 
-	TArray< TSharedPtr<SGraphNode> > EventWidgets;
-	TSharedPtr<SVerticalBox> EventsBox;
+	TArray< TSharedPtr<SGraphNode> > EnterWidgets;
+	TArray< TSharedPtr<SGraphNode> > ExitWidgets;
+	TSharedPtr<SVerticalBox> EnterEventsBox;
+	TSharedPtr<SVerticalBox> ExitEventsBox;
 	TSharedPtr<SHorizontalBox> OutputPinBox;
 
 	/** The widget we use to display the index of the node */
