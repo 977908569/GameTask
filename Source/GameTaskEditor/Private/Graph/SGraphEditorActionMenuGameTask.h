@@ -11,7 +11,7 @@ public:
 		, _GraphNode(nullptr)
 		, _NewNodePosition(FVector2D::ZeroVector)
 		, _AutoExpandActionMenu(false)
-		, _SubNodeFlags(EGameTaskSubNode::Event)
+		, _SubNodeFlags(EGameTaskSubNode::EnterEvent)
 	{}
 
 	SLATE_ARGUMENT(UEdGraph*, GraphObj)

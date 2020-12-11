@@ -15,7 +15,7 @@ void EmptyLinkFunctionForGeneratedCodeGameTaskComposite_Sequence() {}
 // Cross Module References
 	GAMETASK_API UClass* Z_Construct_UClass_UGameTaskComposite_Sequence_NoRegister();
 	GAMETASK_API UClass* Z_Construct_UClass_UGameTaskComposite_Sequence();
-	GAMETASK_API UClass* Z_Construct_UClass_UGameTaskCompositeNode();
+	GAMETASK_API UClass* Z_Construct_UClass_UGameTaskNode();
 	UPackage* Z_Construct_UPackage__Script_GameTask();
 // End Cross Module References
 	void UGameTaskComposite_Sequence::StaticRegisterNativesUGameTaskComposite_Sequence()
@@ -35,7 +35,7 @@ void EmptyLinkFunctionForGeneratedCodeGameTaskComposite_Sequence() {}
 		static const UE4CodeGen_Private::FClassParams ClassParams;
 	};
 	UObject* (*const Z_Construct_UClass_UGameTaskComposite_Sequence_Statics::DependentSingletons[])() = {
-		(UObject* (*)())Z_Construct_UClass_UGameTaskCompositeNode,
+		(UObject* (*)())Z_Construct_UClass_UGameTaskNode,
 		(UObject* (*)())Z_Construct_UPackage__Script_GameTask,
 	};
 #if WITH_METADATA
@@ -71,7 +71,7 @@ void EmptyLinkFunctionForGeneratedCodeGameTaskComposite_Sequence() {}
 		}
 		return OuterClass;
 	}
-	IMPLEMENT_CLASS(UGameTaskComposite_Sequence, 614214490);
+	IMPLEMENT_CLASS(UGameTaskComposite_Sequence, 1894208102);
 	template<> GAMETASK_API UClass* StaticClass<UGameTaskComposite_Sequence>()
 	{
 		return UGameTaskComposite_Sequence::StaticClass();

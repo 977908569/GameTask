@@ -1,5 +1,8 @@
 #include "GameTaskGraphNode_Flow.h"
+#include "GameTask.h"
+#include "GameTaskComposite_Flow.h"
 #include "GameTaskEditorTypes.h"
+#include "GameTaskEvent.h"
 #define LOCTEXT_NAMESPACE "GameTask"
 
 UGameTaskGraphNode_Flow::UGameTaskGraphNode_Flow()
@@ -14,7 +17,7 @@ int32 UGameTaskGraphNode_Flow::GetSubNodeNum()
 void UGameTaskGraphNode_Flow::AllocateDefaultPins()
 {
 	CreatePin(EGPD_Input, UGameTaskEditorTypes::PinCategory_SingleFlow, TEXT("In"));
-	CreatePin(EGPD_Output, UGameTaskEditorTypes::PinCategory_MultipleNodes, TEXT("Tasks"));
+	CreatePin(EGPD_Output, UGameTaskEditorTypes::PinCategory_SingleNode, TEXT("Composite"));
 	CreatePin(EGPD_Output, UGameTaskEditorTypes::PinCategory_SingleFlow, TEXT("Out"));
 }
 
@@ -25,12 +28,13 @@ void UGameTaskGraphNode_Flow::GetPinHoverText(const UEdGraphPin& Pin, FString& H
 void UGameTaskGraphNode_Flow::OnSubNodeAdded(UGameTaskGraphNodeBase* SubNode)
 {
 	UGameTaskGraphNode_Event* EventNode = Cast<UGameTaskGraphNode_Event>(SubNode);
-	if(EventNode)
+	if (EventNode)
 	{
-		if(EventNode->bEnterEvent)
+		if (EventNode->bEnterEvent)
 		{
 			EnterEvents.Add(EventNode);
-		}else
+		}
+		else
 		{
 			ExitEvents.Add(EventNode);
 		}
@@ -57,6 +61,41 @@ void UGameTaskGraphNode_Flow::RemoveAllSubNodes()
 	Super::RemoveAllSubNodes();
 	EnterEvents.Reset();
 	ExitEvents.Reset();
+}
+
+void UGameTaskGraphNode_Flow::GetNodeContextMenuActions(UToolMenu* Menu, UGraphNodeContextMenuContext* Context) const {
+	AddContextMenuActionsEvents(Menu, "GameTaskGraphNode", Context, EGameTaskSubNode::EnterEvent);
+	AddContextMenuActionsEvents(Menu, "GameTaskGraphNode", Context, EGameTaskSubNode::ExitEvent);
+}
+
+void UGameTaskGraphNode_Flow::UpdateAsset(UGameTask* InTaskAsset, UGameTaskNode* InParentNode)
+{
+	UGameTaskComposite_Flow* Asset = Cast<UGameTaskComposite_Flow>(NodeInstance);
+	check(Asset);
+	CollectEvents(InTaskAsset, EnterEvents, Asset->EnterEvents);
+	CollectEvents(InTaskAsset, ExitEvents, Asset->ExitEvents);
+
+	UGameTaskComposite_Flow* RootFlow = Cast<UGameTaskComposite_Flow>(InParentNode);
+	if (RootFlow)
+	{
+		RootFlow->Next = Asset;
+	}
+}
+
+void UGameTaskGraphNode_Flow::UpdateGraph()
+{
+	Super::UpdateGraph();
+	for (auto& Each : EnterEvents)
+	{
+		if (Each)
+			Each->ParentNode = this;
+	}
+
+	for (auto& Each : ExitEvents)
+	{
+		if (Each)
+			Each->ParentNode = this;
+	}
 }
 
 int32 UGameTaskGraphNode_Flow::FindSubNodeDropIndex(UGameTaskGraphNodeBase* SubNode) const
@@ -112,6 +151,27 @@ void UGameTaskGraphNode_Flow::InsertSubNodeAt(UGameTaskGraphNodeBase* SubNode, i
 			}
 		}
 	}
+}
+
+void UGameTaskGraphNode_Flow::CollectEvents(UGameTask* TaskAsset, TArray<UGameTaskGraphNode_Event*>& Events, TArray<UGameTaskEvent*>& InEventIns) const
+{
+	InEventIns.Reset();
+	TArray<UGameTaskEvent*> EventInstances;
+	for (auto& Each : Events)
+	{
+		Each->CollectEventData(EventInstances);
+	}
+
+	for (int32 InsIdx = 0; InsIdx < EventInstances.Num(); InsIdx++)
+	{
+		if (EventInstances[InsIdx] && TaskAsset && Cast<UGameTask>(EventInstances[InsIdx]->GetOuter()) == nullptr)
+		{
+			EventInstances[InsIdx]->Rename(nullptr, TaskAsset);
+		}
+
+		EventInstances[InsIdx]->InitializeNode(Cast<UGameTaskComposite_Flow>(NodeInstance));
+	}
+	InEventIns.Append(EventInstances);
 }
 
 #undef LOCTEXT_NAMESPACE

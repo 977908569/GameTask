@@ -6,15 +6,24 @@ UCLASS(BlueprintType)
 class GAMETASK_API UGameTask :public UObject
 {
 	GENERATED_BODY()
-
 public:
 	UGameTask();
-
-	//First Flow Node
-	UPROPERTY()
-		class UGameTaskCompositeNode* RootNode;
+	//Main Node
+	UPROPERTY(BlueprintReadOnly)
+		class UGameTaskComposite_Flow* RootNode;
+	//Sub Nodes
+	UPROPERTY(BlueprintReadOnly)
+		TArray<UGameTaskComposite_Flow*> SubNodes;
+public:
+	//任务开始
 	UFUNCTION(BlueprintCallable)
-		void Start();
+		void Start(class AGameTaskActor* InOwner);
+
+	UFUNCTION(BlueprintCallable)
+		AGameTaskActor* GetTaskActor() const;
+	//查找节点
+	UFUNCTION(BlueprintCallable)
+		class UGameTaskNode* FindNode(int32 InID);
 
 #if WITH_EDITORONLY_DATA
 	UPROPERTY(EditDefaultsOnly)
@@ -32,5 +41,11 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 		UWorld* GetWorld() const override;
+protected:
+	void CheckInit();
 
+private:
+	TArray<UGameTaskNode*> CachNodes;
+	bool bInit = false;
+	TWeakObjectPtr<AGameTaskActor> TaskActor;
 };

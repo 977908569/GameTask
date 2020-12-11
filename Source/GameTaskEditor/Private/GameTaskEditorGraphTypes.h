@@ -27,7 +27,6 @@ struct GAMETASKEDITOR_API FGameTaskGraphNodeClassData
 
 	/** set when child class masked this one out (e.g. always use game specific class instead of engine one) */
 	uint32 bIsHidden : 1;
-
 	/** set when class wants to hide parent class from selection (just one class up hierarchy) */
 	uint32 bHideParent : 1;
 

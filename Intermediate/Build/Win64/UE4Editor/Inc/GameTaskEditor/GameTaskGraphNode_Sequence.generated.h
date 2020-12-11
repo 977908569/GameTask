@@ -21,7 +21,7 @@ private: \
 	static void StaticRegisterNativesUGameTaskGraphNode_Sequence(); \
 	friend struct Z_Construct_UClass_UGameTaskGraphNode_Sequence_Statics; \
 public: \
-	DECLARE_CLASS(UGameTaskGraphNode_Sequence, UGameTaskGraphNode_Composite, COMPILED_IN_FLAGS(0), CASTCLASS_None, TEXT("/Script/GameTaskEditor"), NO_API) \
+	DECLARE_CLASS(UGameTaskGraphNode_Sequence, UGameTaskGraphNode, COMPILED_IN_FLAGS(0), CASTCLASS_None, TEXT("/Script/GameTaskEditor"), NO_API) \
 	DECLARE_SERIALIZER(UGameTaskGraphNode_Sequence)
 
 
@@ -30,7 +30,7 @@ private: \
 	static void StaticRegisterNativesUGameTaskGraphNode_Sequence(); \
 	friend struct Z_Construct_UClass_UGameTaskGraphNode_Sequence_Statics; \
 public: \
-	DECLARE_CLASS(UGameTaskGraphNode_Sequence, UGameTaskGraphNode_Composite, COMPILED_IN_FLAGS(0), CASTCLASS_None, TEXT("/Script/GameTaskEditor"), NO_API) \
+	DECLARE_CLASS(UGameTaskGraphNode_Sequence, UGameTaskGraphNode, COMPILED_IN_FLAGS(0), CASTCLASS_None, TEXT("/Script/GameTaskEditor"), NO_API) \
 	DECLARE_SERIALIZER(UGameTaskGraphNode_Sequence)
 
 

@@ -13,60 +13,66 @@
 PRAGMA_DISABLE_DEPRECATION_WARNINGS
 void EmptyLinkFunctionForGeneratedCodeGameTaskTypes() {}
 // Cross Module References
-	GAMETASK_API UEnum* Z_Construct_UEnum_GameTask_GameTaskNodeStateType();
+	GAMETASK_API UEnum* Z_Construct_UEnum_GameTask_ENodeState();
 	UPackage* Z_Construct_UPackage__Script_GameTask();
 	GAMETASK_API UClass* Z_Construct_UClass_UGameTaskTypes_NoRegister();
 	GAMETASK_API UClass* Z_Construct_UClass_UGameTaskTypes();
 	COREUOBJECT_API UClass* Z_Construct_UClass_UObject();
 // End Cross Module References
-	static UEnum* GameTaskNodeStateType_StaticEnum()
+	static UEnum* ENodeState_StaticEnum()
 	{
 		static UEnum* Singleton = nullptr;
 		if (!Singleton)
 		{
-			Singleton = GetStaticEnum(Z_Construct_UEnum_GameTask_GameTaskNodeStateType, Z_Construct_UPackage__Script_GameTask(), TEXT("GameTaskNodeStateType"));
+			Singleton = GetStaticEnum(Z_Construct_UEnum_GameTask_ENodeState, Z_Construct_UPackage__Script_GameTask(), TEXT("ENodeState"));
 		}
 		return Singleton;
 	}
-	template<> GAMETASK_API UEnum* StaticEnum<GameTaskNodeStateType>()
+	template<> GAMETASK_API UEnum* StaticEnum<ENodeState>()
 	{
-		return GameTaskNodeStateType_StaticEnum();
+		return ENodeState_StaticEnum();
 	}
-	static FCompiledInDeferEnum Z_CompiledInDeferEnum_UEnum_GameTaskNodeStateType(GameTaskNodeStateType_StaticEnum, TEXT("/Script/GameTask"), TEXT("GameTaskNodeStateType"), false, nullptr, nullptr);
-	uint32 Get_Z_Construct_UEnum_GameTask_GameTaskNodeStateType_Hash() { return 4218431446U; }
-	UEnum* Z_Construct_UEnum_GameTask_GameTaskNodeStateType()
+	static FCompiledInDeferEnum Z_CompiledInDeferEnum_UEnum_ENodeState(ENodeState_StaticEnum, TEXT("/Script/GameTask"), TEXT("ENodeState"), false, nullptr, nullptr);
+	uint32 Get_Z_Construct_UEnum_GameTask_ENodeState_Hash() { return 4165583879U; }
+	UEnum* Z_Construct_UEnum_GameTask_ENodeState()
 	{
 #if WITH_HOT_RELOAD
 		UPackage* Outer = Z_Construct_UPackage__Script_GameTask();
-		static UEnum* ReturnEnum = FindExistingEnumIfHotReloadOrDynamic(Outer, TEXT("GameTaskNodeStateType"), 0, Get_Z_Construct_UEnum_GameTask_GameTaskNodeStateType_Hash(), false);
+		static UEnum* ReturnEnum = FindExistingEnumIfHotReloadOrDynamic(Outer, TEXT("ENodeState"), 0, Get_Z_Construct_UEnum_GameTask_ENodeState_Hash(), false);
 #else
 		static UEnum* ReturnEnum = nullptr;
 #endif // WITH_HOT_RELOAD
 		if (!ReturnEnum)
 		{
 			static const UE4CodeGen_Private::FEnumeratorParam Enumerators[] = {
-				{ "GameTaskNodeStateType::Disable", (int64)GameTaskNodeStateType::Disable },
-				{ "GameTaskNodeStateType::Progress", (int64)GameTaskNodeStateType::Progress },
-				{ "GameTaskNodeStateType::Finish", (int64)GameTaskNodeStateType::Finish },
-				{ "GameTaskNodeStateType::Fail", (int64)GameTaskNodeStateType::Fail },
+				{ "ENodeState::Normal", (int64)ENodeState::Normal },
+				{ "ENodeState::InProgress", (int64)ENodeState::InProgress },
+				{ "ENodeState::Succeeded", (int64)ENodeState::Succeeded },
+				{ "ENodeState::Failed", (int64)ENodeState::Failed },
 			};
 #if WITH_METADATA
 			const UE4CodeGen_Private::FMetaDataPairParam Enum_MetaDataParams[] = {
 				{ "BlueprintType", "true" },
 				{ "Comment", "/**\n *Current entry status\n */" },
-				{ "Disable.Name", "GameTaskNodeStateType::Disable" },
-				{ "Fail.Name", "GameTaskNodeStateType::Fail" },
-				{ "Finish.Name", "GameTaskNodeStateType::Finish" },
+				{ "Failed.Comment", "//\xe6\x88\x90\xe5\x8a\x9f\n" },
+				{ "Failed.Name", "ENodeState::Failed" },
+				{ "Failed.ToolTip", "\xe6\x88\x90\xe5\x8a\x9f" },
+				{ "InProgress.Comment", "//\xe7\xa9\xba\xe9\x97\xb2\n" },
+				{ "InProgress.Name", "ENodeState::InProgress" },
+				{ "InProgress.ToolTip", "\xe7\xa9\xba\xe9\x97\xb2" },
 				{ "ModuleRelativePath", "Public/GameTaskTypes.h" },
-				{ "Progress.Name", "GameTaskNodeStateType::Progress" },
+				{ "Normal.Name", "ENodeState::Normal" },
+				{ "Succeeded.Comment", "//\xe6\x89\xa7\xe8\xa1\x8c\xe4\xb8\xad\n" },
+				{ "Succeeded.Name", "ENodeState::Succeeded" },
+				{ "Succeeded.ToolTip", "\xe6\x89\xa7\xe8\xa1\x8c\xe4\xb8\xad" },
 				{ "ToolTip", "Current entry status" },
 			};
 #endif
 			static const UE4CodeGen_Private::FEnumParams EnumParams = {
 				(UObject*(*)())Z_Construct_UPackage__Script_GameTask,
 				nullptr,
-				"GameTaskNodeStateType",
-				"GameTaskNodeStateType",
+				"ENodeState",
+				"ENodeState",
 				Enumerators,
 				UE_ARRAY_COUNT(Enumerators),
 				RF_Public|RF_Transient|RF_MarkAsNative,

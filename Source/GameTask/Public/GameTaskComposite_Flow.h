@@ -1,30 +1,30 @@
 #pragma once
-#include "GameTaskCompositeNode.h"
+#include "GameTaskNode.h"
 #include "GameTaskComposite_Flow.generated.h"
 
-/**
- * Flow
- */
-UCLASS()
-class GAMETASK_API UGameTaskComposite_Flow : public UGameTaskCompositeNode
+UCLASS(BlueprintType)
+class GAMETASK_API UGameTaskComposite_Flow : public UGameTaskNode
 {
 	GENERATED_UCLASS_BODY()
-		/**
-		 * Enter Node Events
-		 */
 		UPROPERTY(BlueprintReadOnly)
 		TArray<class UGameTaskEvent*> EnterEvents;
-	/**
-	 * Exit Node Event
-	 */
 	UPROPERTY(BlueprintReadOnly)
 		TArray<class UGameTaskEvent*> ExitEvents;
-
-	UPROPERTY()
+	UPROPERTY(BlueprintReadOnly)
 		UGameTaskComposite_Flow* Next;
 public:
-	virtual void DoEnter() override;
-	virtual void DoExit() override;
+	//进入节点
+	UFUNCTION(BlueprintCallable)
+		virtual void Enter() override;
+	UFUNCTION(BlueprintImplementableEvent)
+		void OnEnter();
+	//退出节点
+	UFUNCTION(BlueprintCallable)
+		virtual void Exit();
+	UFUNCTION(BlueprintImplementableEvent)
+		void OnExit();
+
+	virtual void CheckNodeState() override;
 
 	virtual FString GetStaticDescription() const override;
 #if WITH_EDITOR

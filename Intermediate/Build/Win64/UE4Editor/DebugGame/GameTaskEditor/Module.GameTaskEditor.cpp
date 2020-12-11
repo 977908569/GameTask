@@ -22,7 +22,6 @@
 #include "F:/NewTask/TaskProject/Plugins/GameTask/Source/GameTaskEditor/Private/Graph/SGraphNodeGameTaskBase.cpp"
 #include "F:/NewTask/TaskProject/Plugins/GameTask/Source/GameTaskEditor/Private/Modes/GameTaskEditorModes.cpp"
 #include "F:/NewTask/TaskProject/Plugins/GameTask/Source/GameTaskEditor/Private/Node/GameTaskGraphNode.cpp"
-#include "F:/NewTask/TaskProject/Plugins/GameTask/Source/GameTaskEditor/Private/Node/GameTaskGraphNode_Composite.cpp"
 #include "F:/NewTask/TaskProject/Plugins/GameTask/Source/GameTaskEditor/Private/Node/GameTaskGraphNode_Event.cpp"
 #include "F:/NewTask/TaskProject/Plugins/GameTask/Source/GameTaskEditor/Private/Node/GameTaskGraphNode_Execute.cpp"
 #include "F:/NewTask/TaskProject/Plugins/GameTask/Source/GameTaskEditor/Private/Node/GameTaskGraphNode_Flow.cpp"

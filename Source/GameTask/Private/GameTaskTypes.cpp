@@ -4,12 +4,13 @@
 
 FString UGameTaskTypes::DescribeNodeHelper(const UGameTaskNode* Node)
 {
-	return Node ? FString::Printf(TEXT("%s::%s"), *GetNameSafe(Node->GetGameTaskAsset()), *Node->GetNodeName()): FString();
+	return Node ? FString::Printf(TEXT("%s::%s"), *GetNameSafe(Node->GetGameTaskAsset()), *Node->GetNodeName()) : FString();
 }
 
-FString UGameTaskTypes::DescribeNodeResult(GameTaskNodeStateType NodeResult)
+FString UGameTaskTypes::DescribeNodeResult(ENodeState NodeResult)
 {
-	return FString();
+	static FString ResultDesc[] = { TEXT("Normal"),TEXT("InProgress"), TEXT("Succeeded"), TEXT("Failed") };
+	return ResultDesc[static_cast<int32>(NodeResult)];
 }
 
 FString UGameTaskTypes::GetShortTypeName(const UObject* Ob)

@@ -23,8 +23,7 @@ void UGameTaskGraphNode::AllocateDefaultPins() {
 }
 
 FText UGameTaskGraphNode::GetTooltipText() const {
-	FText TooltipDesc;
-	return TooltipDesc;
+	return Super::GetTooltipText();
 }
 
 bool UGameTaskGraphNode::CanCreateUnderSpecifiedSchema(
@@ -73,28 +72,64 @@ FName UGameTaskGraphNode::GetNameIcon() const
 	return GameTaskNodeInstance != nullptr ? GameTaskNodeInstance->GetNodeIconName() : FName("BTEditor.Graph.BTNode.Icon");
 }
 
-void UGameTaskGraphNode::CreateAddEventSubMenu(UToolMenu* Menu, UEdGraph* Graph) const
+FText UGameTaskGraphNode::GetNodeTitle(ENodeTitleType::Type TitleType) const
 {
-	TSharedRef<SGraphEditorActionMenuGameTask> Widget =
+	const UGameTaskNode* MyNode = Cast<UGameTaskNode>(NodeInstance);
+	if (MyNode != nullptr)
+	{
+		return FText::FromString(MyNode->GetNodeName());
+	}
+	return Super::GetNodeTitle(TitleType);
+}
+
+bool UGameTaskGraphNode::GetCanRenameNode() const {
+	return true;
+}
+
+void UGameTaskGraphNode::UpdateAsset(UGameTask* InTaskAsset, UGameTaskNode* InParentNode)
+{
+
+}
+
+void UGameTaskGraphNode::UpdateGraph()
+{
+
+}
+
+void UGameTaskGraphNode::CreateAddEventSubMenu(UToolMenu* Menu, UEdGraph* Graph, const EGameTaskSubNode NodeType) const
+{
+	const TSharedRef<SGraphEditorActionMenuGameTask> Widget =
 		SNew(SGraphEditorActionMenuGameTask)
 		.GraphObj(Graph)
-		.GraphNode((UGameTaskGraphNode*)this)
-		.SubNodeFlags(EGameTaskSubNode::Event)
+		.GraphNode(const_cast<UGameTaskGraphNode*>(this))
+		.SubNodeFlags(NodeType)
 		.AutoExpandActionMenu(true);
 
 	FToolMenuSection& Section = Menu->FindOrAddSection("Section");
 	Section.AddEntry(FToolMenuEntry::InitWidget("EventWidget", Widget, FText(), true));
 }
 
-void UGameTaskGraphNode::AddContextMenuActionsEvents(UToolMenu* Menu, const FName SectionName,
-	UGraphNodeContextMenuContext* Context) const
+void UGameTaskGraphNode::AddContextMenuActionsEvents(UToolMenu* Menu, const FName SectionName, UGraphNodeContextMenuContext* Context, const EGameTaskSubNode NodeType) const
 {
 	FToolMenuSection& Section = Menu->FindOrAddSection(SectionName);
-	Section.AddSubMenu(
-		"AddEvent",
-		LOCTEXT("AddEvent", "Add Event..."),
-		LOCTEXT("AddEventTooltip", "Adds new event as a subnode"),
-		FNewToolMenuDelegate::CreateUObject(this, &UGameTaskGraphNode::CreateAddEventSubMenu, (UEdGraph*)Context->Graph));
+	switch (NodeType) {
+	case EGameTaskSubNode::EnterEvent:
+		Section.AddSubMenu(
+			"AddEnterEvent",
+			LOCTEXT("AddEnterEvent", "Add Enter Event..."),
+			LOCTEXT("AddEventTooltip", "Adds new event as a subnode"),
+			FNewToolMenuDelegate::CreateUObject(this, &UGameTaskGraphNode::CreateAddEventSubMenu, const_cast<UEdGraph*>(Context->Graph), NodeType));
+		break;
+	case EGameTaskSubNode::ExitEvent:
+		Section.AddSubMenu(
+			"AddExitEvent",
+			LOCTEXT("AddExitEvent", "Add Exit Event..."),
+			LOCTEXT("AddEventTooltip", "Adds new event as a subnode"),
+			FNewToolMenuDelegate::CreateUObject(this, &UGameTaskGraphNode::CreateAddEventSubMenu, const_cast<UEdGraph*>(Context->Graph), NodeType));
+		break;
+	default:;
+	}
+
 }
 
 #undef LOCTEXT_NAMESPACE

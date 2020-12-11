@@ -22,4 +22,10 @@ class GAMETASKEDITOR_API UGameTaskGraphNode_Execute : public UGameTaskGraphNode
 	virtual void RemoveAllSubNodes() override;
 	virtual int32 FindSubNodeDropIndex(UGameTaskGraphNodeBase* SubNode) const override;
 	virtual void OnSubNodeAdded(UGameTaskGraphNodeBase* SubNode) override;
+	virtual int32 GetSubNodeNum() override;
+
+	virtual void UpdateGraph() override;
+	virtual void UpdateAsset(UGameTask* InTaskAsset, UGameTaskNode* InParentNode) override;
+private:
+	void CollectEvents(UGameTask* TaskAsset, TArray<UGameTaskGraphNode_Event*>& Events, TArray<UGameTaskEvent*>& InEventIns) const;
 };

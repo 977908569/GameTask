@@ -183,7 +183,7 @@ void FGameTaskEditor::NotifyPostChange(const FPropertyChangedEvent& PropertyChan
 }
 
 void FGameTaskEditor::OnNodeDoubleClicked(UEdGraphNode* Node) {
-	
+
 }
 
 void FGameTaskEditor::OnGraphEditorFocused(
@@ -194,7 +194,7 @@ void FGameTaskEditor::OnGraphEditorFocused(
 	FGraphPanelSelectionSet CurrentSelection;
 	CurrentSelection = InGraphEditor->GetSelectedNodes();
 	OnSelectedNodesChanged(CurrentSelection);
-	
+
 }
 
 void FGameTaskEditor::OnNodeTitleCommitted(const FText& NewText,
@@ -363,6 +363,15 @@ TSharedPtr<FGameTaskEditorToolbar> FGameTaskEditor::GetToolbarBuilder() const {
 	return ToolbarBuilder;
 }
 
+void FGameTaskEditor::SaveAsset_Execute() {
+	if (GameTask) {
+		if (UGameTaskGraph* GameTaskGraph = Cast<UGameTaskGraph>(GameTask->TaskGraph)) {
+			GameTaskGraph->OnSave();
+		}
+	}
+	IGameTaskEditor::SaveAsset_Execute();
+}
+
 void FGameTaskEditor::CreateInternalWidgets() {
 	FPropertyEditorModule& PropertyEditorModule = FModuleManager::GetModuleChecked<FPropertyEditorModule>("PropertyEditor");
 	FDetailsViewArgs DetailsViewArgs(false, false, true, FDetailsViewArgs::HideNameArea, false);
@@ -396,7 +405,7 @@ void FGameTaskEditor::OnSelectedNodesChanged(const TSet<UObject*>& NewSelection)
 
 		if (SelectionInfo.FoundEvent)
 		{
-			
+
 		}
 	}
 	else if (DetailsView.IsValid())

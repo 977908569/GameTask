@@ -7,17 +7,19 @@ class GAMETASKEDITOR_API UGameTaskGraphNodeBase : public UEdGraphNode
 {
 	GENERATED_UCLASS_BODY()
 public:
-
 	/** instance class */
 	UPROPERTY()
 		struct FGameTaskGraphNodeClassData ClassData;
 
+	//关联的资源
 	UPROPERTY()
 		UObject* NodeInstance;
 
+	//父节点
 	UPROPERTY(transient)
 		UGameTaskGraphNodeBase* ParentNode;
 
+	//附属子节点
 	UPROPERTY()
 		TArray<UGameTaskGraphNodeBase*> SubNodes;
 

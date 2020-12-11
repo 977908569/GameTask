@@ -9,6 +9,8 @@
 
 PRAGMA_DISABLE_DEPRECATION_WARNINGS
 class UWorld;
+class UGameTaskNode;
+class AGameTaskActor;
 #ifdef GAMETASK_GameTask_generated_h
 #error "GameTask.generated.h already included, missing '#pragma once' in GameTask.h"
 #endif
@@ -18,12 +20,16 @@ class UWorld;
 #define TaskProject_Plugins_GameTask_Source_GameTask_Public_GameTask_h_8_RPC_WRAPPERS \
  \
 	DECLARE_FUNCTION(execGetWorld); \
+	DECLARE_FUNCTION(execFindNode); \
+	DECLARE_FUNCTION(execGetTaskActor); \
 	DECLARE_FUNCTION(execStart);
 
 
 #define TaskProject_Plugins_GameTask_Source_GameTask_Public_GameTask_h_8_RPC_WRAPPERS_NO_PURE_DECLS \
  \
 	DECLARE_FUNCTION(execGetWorld); \
+	DECLARE_FUNCTION(execFindNode); \
+	DECLARE_FUNCTION(execGetTaskActor); \
 	DECLARE_FUNCTION(execStart);
 
 

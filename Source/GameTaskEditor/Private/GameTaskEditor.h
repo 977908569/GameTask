@@ -71,15 +71,17 @@ public:
 
 	bool IsPropertyEditable() const;
 	void OnFinishedChangingProperties(const FPropertyChangedEvent& PropertyChangedEvent);
-	
+
 	/** Spawns the tab with the update graph inside */
 	TSharedRef<SWidget> SpawnProperties();
 	UGameTask* GetGameTask() const;
-	
+
 	void RegisterToolbarTab(const TSharedRef<class FTabManager>& TabManager);
 	void RestoreGameTask();
 
 	TSharedPtr<class FGameTaskEditorToolbar> GetToolbarBuilder() const;
+protected:
+	virtual void SaveAsset_Execute() override;
 
 private:
 	void CreateInternalWidgets();

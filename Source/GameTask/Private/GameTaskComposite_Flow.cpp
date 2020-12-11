@@ -2,26 +2,33 @@
 #include "GameTaskEvent.h"
 
 UGameTaskComposite_Flow::UGameTaskComposite_Flow(const FObjectInitializer& ObjectInitializer)
-	: Super(ObjectInitializer)
-{
+	: Super(ObjectInitializer), Next(nullptr) {
 	NodeName = "Flow";
 }
 
-void UGameTaskComposite_Flow::DoEnter() {
-	for (auto& Each : EnterEvents) {
-		Each->Enter();
-	}
-
+void UGameTaskComposite_Flow::Enter() {
+	for (auto& Each : EnterEvents) Each->Enter();
+	for (auto& Each : Children) Each->Enter();
+	Super::Enter();
 }
 
-void UGameTaskComposite_Flow::DoExit() {
-	for (auto& Each : ExitEvents) {
-		Each->Exit();
+void UGameTaskComposite_Flow::Exit() {
+	for (auto& Each : ExitEvents) Each->Enter();
+	if (Next) Next->Enter();
+	else UE_LOG(LogTemp, Log, TEXT("********TASK END*********"));
+}
+
+void UGameTaskComposite_Flow::CheckNodeState() {
+
+	bool bAllSucc = true;
+	for (auto& Each : Children) {
+		if (Each->GetNodeState() != ENodeState::Succeeded) {
+			bAllSucc = false;
+		}
 	}
-	Super::DoExit();
-	if (Next)
-	{
-		Next->Enter();
+	if (bAllSucc) {
+		NodeState = ENodeState::Succeeded;
+		Exit();
 	}
 }
 

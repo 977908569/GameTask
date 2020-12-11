@@ -34,8 +34,19 @@ void UGameTaskGraphNode_Event::CollectEventData(TArray<UGameTaskEvent*>& NodeIns
 {
 	if (NodeInstance)
 	{
-		UGameTaskEvent* EventNode = (UGameTaskEvent*)NodeInstance;
-		const int32 InstanceIdx = NodeInstances.Add(EventNode);
+		UGameTaskEvent* EventNode = Cast<UGameTaskEvent>(NodeInstance);
+		check(EventNode);
+		NodeInstances.Add(EventNode);
 	}
+}
+
+FName UGameTaskGraphNode_Event::GetNameIcon() const {
+	if (UGameTaskEvent* EventNode = Cast<UGameTaskEvent>(NodeInstance))
+	{
+		if (bEnterEvent) return EventNode->GetEnterIconName();
+		else return  EventNode->GetExitIconName();
+
+	}
+	return Super::GetNameIcon();
 }
 #undef LOCTEXT_NAMESPACE

@@ -10,6 +10,7 @@
 #include "F:/NewTask/TaskProject/Plugins/GameTask/Source/GameTaskEditor/Private/GameTaskEditorTabFactories.cpp"
 #include "F:/NewTask/TaskProject/Plugins/GameTask/Source/GameTaskEditor/Private/GameTaskEditorToolbar.cpp"
 #include "F:/NewTask/TaskProject/Plugins/GameTask/Source/GameTaskEditor/Private/GameTaskEditorTypes.cpp"
+#include "F:/NewTask/TaskProject/Plugins/GameTask/Source/GameTaskEditor/Private/GameTaskEditorUtils.cpp"
 #include "F:/NewTask/TaskProject/Plugins/GameTask/Source/GameTaskEditor/Private/GameTaskFactory.cpp"
 #include "F:/NewTask/TaskProject/Plugins/GameTask/Source/GameTaskEditor/Private/Graph/GameTaskColor.cpp"
 #include "F:/NewTask/TaskProject/Plugins/GameTask/Source/GameTaskEditor/Private/Graph/GameTaskGraph.cpp"

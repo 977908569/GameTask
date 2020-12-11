@@ -5,22 +5,22 @@
 /**
  * Task Event Node
  */
-UCLASS(BlueprintType)
+UCLASS(BlueprintType, Blueprintable)
 class GAMETASK_API UGameTaskEvent :public UGameTaskAuxiliaryNode
 {
 	GENERATED_BODY()
-
 public:
 	UGameTaskEvent();
+	virtual void Enter() override;
+	UFUNCTION(BlueprintImplementableEvent)
+		bool OnTrigger();
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		bool bTest;
+	virtual void SetNodeState(ENodeState InState) override;
 
 	virtual FString GetStaticDescription() const override;
-
 #if WITH_EDITOR
-
-	virtual FName GetNodeIconName() const override;
+	virtual FName GetEnterIconName() const;
+	virtual FName GetExitIconName() const;
 #endif
 
 };

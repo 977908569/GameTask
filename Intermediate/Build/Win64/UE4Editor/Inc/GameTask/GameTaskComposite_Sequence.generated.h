@@ -21,7 +21,7 @@ private: \
 	static void StaticRegisterNativesUGameTaskComposite_Sequence(); \
 	friend struct Z_Construct_UClass_UGameTaskComposite_Sequence_Statics; \
 public: \
-	DECLARE_CLASS(UGameTaskComposite_Sequence, UGameTaskCompositeNode, COMPILED_IN_FLAGS(0), CASTCLASS_None, TEXT("/Script/GameTask"), NO_API) \
+	DECLARE_CLASS(UGameTaskComposite_Sequence, UGameTaskNode, COMPILED_IN_FLAGS(0), CASTCLASS_None, TEXT("/Script/GameTask"), NO_API) \
 	DECLARE_SERIALIZER(UGameTaskComposite_Sequence)
 
 
@@ -30,7 +30,7 @@ private: \
 	static void StaticRegisterNativesUGameTaskComposite_Sequence(); \
 	friend struct Z_Construct_UClass_UGameTaskComposite_Sequence_Statics; \
 public: \
-	DECLARE_CLASS(UGameTaskComposite_Sequence, UGameTaskCompositeNode, COMPILED_IN_FLAGS(0), CASTCLASS_None, TEXT("/Script/GameTask"), NO_API) \
+	DECLARE_CLASS(UGameTaskComposite_Sequence, UGameTaskNode, COMPILED_IN_FLAGS(0), CASTCLASS_None, TEXT("/Script/GameTask"), NO_API) \
 	DECLARE_SERIALIZER(UGameTaskComposite_Sequence)
 
 

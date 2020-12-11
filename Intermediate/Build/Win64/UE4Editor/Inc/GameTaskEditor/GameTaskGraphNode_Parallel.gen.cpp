@@ -15,7 +15,7 @@ void EmptyLinkFunctionForGeneratedCodeGameTaskGraphNode_Parallel() {}
 // Cross Module References
 	GAMETASKEDITOR_API UClass* Z_Construct_UClass_UGameTaskGraphNode_Parallel_NoRegister();
 	GAMETASKEDITOR_API UClass* Z_Construct_UClass_UGameTaskGraphNode_Parallel();
-	GAMETASKEDITOR_API UClass* Z_Construct_UClass_UGameTaskGraphNode_Composite();
+	GAMETASKEDITOR_API UClass* Z_Construct_UClass_UGameTaskGraphNode();
 	UPackage* Z_Construct_UPackage__Script_GameTaskEditor();
 // End Cross Module References
 	void UGameTaskGraphNode_Parallel::StaticRegisterNativesUGameTaskGraphNode_Parallel()
@@ -35,7 +35,7 @@ void EmptyLinkFunctionForGeneratedCodeGameTaskGraphNode_Parallel() {}
 		static const UE4CodeGen_Private::FClassParams ClassParams;
 	};
 	UObject* (*const Z_Construct_UClass_UGameTaskGraphNode_Parallel_Statics::DependentSingletons[])() = {
-		(UObject* (*)())Z_Construct_UClass_UGameTaskGraphNode_Composite,
+		(UObject* (*)())Z_Construct_UClass_UGameTaskGraphNode,
 		(UObject* (*)())Z_Construct_UPackage__Script_GameTaskEditor,
 	};
 #if WITH_METADATA
@@ -71,7 +71,7 @@ void EmptyLinkFunctionForGeneratedCodeGameTaskGraphNode_Parallel() {}
 		}
 		return OuterClass;
 	}
-	IMPLEMENT_CLASS(UGameTaskGraphNode_Parallel, 364474203);
+	IMPLEMENT_CLASS(UGameTaskGraphNode_Parallel, 1582268769);
 	template<> GAMETASKEDITOR_API UClass* StaticClass<UGameTaskGraphNode_Parallel>()
 	{
 		return UGameTaskGraphNode_Parallel::StaticClass();

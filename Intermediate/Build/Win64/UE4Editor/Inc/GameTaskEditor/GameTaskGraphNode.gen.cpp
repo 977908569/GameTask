@@ -71,7 +71,7 @@ void EmptyLinkFunctionForGeneratedCodeGameTaskGraphNode() {}
 		}
 		return OuterClass;
 	}
-	IMPLEMENT_CLASS(UGameTaskGraphNode, 2192100924);
+	IMPLEMENT_CLASS(UGameTaskGraphNode, 370689313);
 	template<> GAMETASKEDITOR_API UClass* StaticClass<UGameTaskGraphNode>()
 	{
 		return UGameTaskGraphNode::StaticClass();

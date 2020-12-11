@@ -1,6 +1,5 @@
 #include "SGraphNode_GameTask.h"
 #include "GameTaskColor.h"
-#include "GameTaskCompositeNode.h"
 #include "GameTaskNode.h"
 #include "GraphEditorSettings.h"
 #include "IDocumentation.h"
@@ -11,8 +10,6 @@
 #include "Node/GameTaskGraphNode_Event.h"
 #include "Widgets/Text/SInlineEditableTextBlock.h"
 #include "SLevelOfDetailBranchNode.h"
-#include "Debug/GameTaskDebugger.h"
-#include "Node/GameTaskGraphNode_Composite.h"
 #include "Node/GameTaskGraphNode_Execute.h"
 #include "Node/GameTaskGraphNode_Flow.h"
 #include "Node/GameTaskGraphNode_Root.h"
@@ -48,8 +45,7 @@ FSlateColor SGameTaskPin::GetPinColor() const
 	return
 		GraphPinObj->bIsDiffing ? GameTaskColors::Pin::Diff :
 		IsHovered() ? GameTaskColors::Pin::Hover :
-		(GraphPinObj->PinType.PinCategory == UGameTaskEditorTypes::PinCategory_SingleComposite) ? GameTaskColors::Pin::CompositeOnly :
-		(GraphPinObj->PinType.PinCategory == UGameTaskEditorTypes::PinCategory_SingleExecute) ? GameTaskColors::Pin::TaskOnly :
+		(GraphPinObj->PinType.PinCategory == UGameTaskEditorTypes::PinCategory_SingleNode) ? GameTaskColors::Pin::CompositeOnly :
 		(GraphPinObj->PinType.PinCategory == UGameTaskEditorTypes::PinCategory_SingleFlow) ? GameTaskColors::Pin::SingleNode :
 		GameTaskColors::Pin::Default;
 }
@@ -251,6 +247,21 @@ void SGraphNode_GameTask::UpdateGraphNode()
 				NewNode->UpdateGraphNode();
 			}
 		}
+
+		for (int32 i = 0; i < GameTaskExecuteNode->ExitEvents.Num(); i++)
+		{
+			if (GameTaskExecuteNode->ExitEvents[i])
+			{
+				TSharedPtr<SGraphNode> NewNode = FNodeFactory::CreateNodeWidget(GameTaskExecuteNode->ExitEvents[i]);
+				if (OwnerGraphPanelPtr.IsValid())
+				{
+					NewNode->SetOwner(OwnerGraphPanelPtr.Pin().ToSharedRef());
+					OwnerGraphPanelPtr.Pin()->AttachGraphEvents(NewNode);
+				}
+				AddEvent(NewNode, false);
+				NewNode->UpdateGraphNode();
+			}
+		}
 	}
 
 	TSharedPtr<SErrorText> ErrorText;
@@ -322,7 +333,7 @@ void SGraphNode_GameTask::UpdateGraphNode()
 		.AutoHeight()
 		[
 			SNew(SBox)
-		.Visibility(this, &SGraphNode_GameTask::GetEventVisibility)
+			.Visibility(this, &SGraphNode_GameTask::GetEventVisibility)
 		[
 			EnterEventsBox.ToSharedRef()
 		]
@@ -427,7 +438,7 @@ void SGraphNode_GameTask::UpdateGraphNode()
 		.Padding(FMargin(10.0f, 0, 0, 0))
 		[
 			SNew(SBox)
-		.Visibility(this, &SGraphNode_GameTask::GetEventVisibility)
+			.Visibility(this, &SGraphNode_GameTask::GetEventVisibility)
 		[
 			ExitEventsBox.ToSharedRef()
 		]
@@ -721,7 +732,6 @@ FSlateColor SGraphNode_GameTask::GetBorderBackgroundColor() const
 {
 	UGameTaskGraphNode* GameTaskGraphNode = Cast<UGameTaskGraphNode>(GraphNode);
 	UGameTaskGraphNode* GameTaskParentNode = GameTaskGraphNode ? Cast<UGameTaskGraphNode>(GameTaskGraphNode->ParentNode) : nullptr;
-
 	const bool bSelectedSubNode = GameTaskParentNode && GetOwnerPanel()->SelectionManager.SelectedNodes.Contains(GraphNode);
 
 	UGameTaskNode* NodeInstance = GameTaskGraphNode ? Cast<UGameTaskNode>(GameTaskGraphNode->NodeInstance) : nullptr;
@@ -737,29 +747,24 @@ FSlateColor SGraphNode_GameTask::GetBorderBackgroundColor() const
 FSlateColor SGraphNode_GameTask::GetBackgroundColor() const
 {
 	UGameTaskGraphNode* GameTaskGraphNode = Cast<UGameTaskGraphNode>(GraphNode);
-	UGameTaskGraphNode_Event* GameTaskGraph_Event = Cast<UGameTaskGraphNode_Event>(GraphNode);
-
 
 	FLinearColor NodeColor = GameTaskColors::NodeBody::Default;
 	if (GameTaskGraphNode && GameTaskGraphNode->HasErrors())
 	{
 		NodeColor = GameTaskColors::NodeBody::Error;
 	}
-
+	else if (Cast<UGameTaskGraphNode_Flow>(GraphNode))
+	{
+		NodeColor = GameTaskColors::NodeBody::Flow;
+	}
 	else if (Cast<UGameTaskGraphNode_Execute>(GraphNode))
 	{
-		check(GameTaskGraphNode);
 		NodeColor = GameTaskColors::NodeBody::Execute;
 	}
-	else if (Cast<UGameTaskGraphNode_Composite>(GraphNode))
+	else if (const auto Event = Cast<UGameTaskGraphNode_Event>(GraphNode))
 	{
-		check(GameTaskGraphNode);
-		UGameTaskCompositeNode* CompositeNodeInstance = Cast<UGameTaskCompositeNode>(GameTaskGraphNode->NodeInstance);
-		NodeColor = GameTaskColors::NodeBody::Composite;
-	}
-	else if (Cast<UGameTaskGraphNode_Event>(GraphNode))
-	{
-		NodeColor = GameTaskColors::NodeBody::Event;
+		if (Event->bEnterEvent) NodeColor = GameTaskColors::NodeBody::EnterEvent;
+		else NodeColor = GameTaskColors::NodeBody::ExitEvent;
 	}
 	else if (Cast<UGameTaskGraphNode_Root>(GraphNode) && GraphNode->Pins.IsValidIndex(0) && GraphNode->Pins[0]->LinkedTo.Num() > 0)
 	{
@@ -788,22 +793,22 @@ EVisibility SGraphNode_GameTask::GetBlueprintIconVisibility() const
 EVisibility SGraphNode_GameTask::GetIndexVisibility() const
 {
 	// always hide the index on the root node
-	if (GraphNode->IsA(UGameTaskGraphNode_Root::StaticClass()))
+	if (GraphNode->IsA(UGameTaskGraphNode_Root::StaticClass()) || GraphNode->IsA(UGameTaskGraphNode_Event::StaticClass()))
 	{
 		return EVisibility::Collapsed;
 	}
 
 	UGameTaskGraphNode* StateNode = CastChecked<UGameTaskGraphNode>(GraphNode);
 	UEdGraphPin* MyInputPin = StateNode->GetInputPin();
-	UEdGraphPin* MyParentOutputPin = NULL;
-	if (MyInputPin != NULL && MyInputPin->LinkedTo.Num() > 0)
+	UEdGraphPin* MyParentOutputPin = nullptr;
+	if (MyInputPin != nullptr && MyInputPin->LinkedTo.Num() > 0)
 	{
 		MyParentOutputPin = MyInputPin->LinkedTo[0];
 	}
 
 	// Visible if we are in PIE or if we have siblings
 	CA_SUPPRESS(6235);
-	const bool bCanShowIndex = (GEditor->bIsSimulatingInEditor || GEditor->PlayWorld != NULL) || (MyParentOutputPin && MyParentOutputPin->LinkedTo.Num() > 1);
+	const bool bCanShowIndex = (GEditor->bIsSimulatingInEditor || GEditor->PlayWorld != nullptr) || (MyParentOutputPin && MyParentOutputPin->LinkedTo.Num() > 1);
 
 	// LOD this out once things get too small
 	TSharedPtr<SGraphPanel> MyOwnerPanel = GetOwnerPanel();
@@ -814,8 +819,8 @@ FText SGraphNode_GameTask::GetIndexText() const
 {
 	UGameTaskGraphNode* StateNode = CastChecked<UGameTaskGraphNode>(GraphNode);
 	UEdGraphPin* MyInputPin = StateNode->GetInputPin();
-	UEdGraphPin* MyParentOutputPin = NULL;
-	if (MyInputPin != NULL && MyInputPin->LinkedTo.Num() > 0)
+	UEdGraphPin* MyParentOutputPin = nullptr;
+	if (MyInputPin != nullptr && MyInputPin->LinkedTo.Num() > 0)
 	{
 		MyParentOutputPin = MyInputPin->LinkedTo[0];
 	}
@@ -823,7 +828,7 @@ FText SGraphNode_GameTask::GetIndexText() const
 	int32 Index = 0;
 
 	CA_SUPPRESS(6235);
-	if (bShowExecutionIndexInEditorMode || GEditor->bIsSimulatingInEditor || GEditor->PlayWorld != NULL)
+	if (bShowExecutionIndexInEditorMode || GEditor->bIsSimulatingInEditor || GEditor->PlayWorld != nullptr)
 	{
 	}
 	else
@@ -835,7 +840,7 @@ FText SGraphNode_GameTask::GetIndexText() const
 FText SGraphNode_GameTask::GetIndexTooltipText() const
 {
 	CA_SUPPRESS(6235);
-	if (bShowExecutionIndexInEditorMode || GEditor->bIsSimulatingInEditor || GEditor->PlayWorld != NULL)
+	if (bShowExecutionIndexInEditorMode || GEditor->bIsSimulatingInEditor || GEditor->PlayWorld != nullptr)
 	{
 		return LOCTEXT("ExecutionIndexTooltip", "Execution index: this shows the order in which nodes are executed.");
 	}

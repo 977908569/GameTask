@@ -1,33 +1,17 @@
 #include "GameTaskNode.h"
+#include "GameTask.h"
+#include "GameTaskComposite_Sequence.h"
 #include "GameTaskTypes.h"
 
 UGameTaskNode::UGameTaskNode(const FObjectInitializer& ObjectInitializer)
-	: Super(ObjectInitializer), GameTaskAsset(nullptr), ParentNode(nullptr) {
-}
-
-void UGameTaskNode::Enter() {
-	DoEnter();
-	OnEnter();
-}
-
-void UGameTaskNode::DoEnter() {
-}
-
-void UGameTaskNode::Exit() {
-	DoExit();
-	OnExit();
-}
-
-void UGameTaskNode::DoExit() {
+	: Super(ObjectInitializer), ID(0), GameTaskAsset(nullptr),
+	ParentNode(nullptr) {
 }
 
 UWorld* UGameTaskNode::GetWorld() const
 {
-	if (GetOuter() == nullptr)
-	{
-		return nullptr;
-	}
-	return GetOuter()->GetWorld();
+	if (GameTaskAsset) return GameTaskAsset->GetWorld();
+	return nullptr;
 }
 
 void UGameTaskNode::InitializeFromAsset(UGameTask& Asset)
@@ -35,12 +19,12 @@ void UGameTaskNode::InitializeFromAsset(UGameTask& Asset)
 	GameTaskAsset = &Asset;
 }
 
-void UGameTaskNode::InitializeNode(UGameTaskCompositeNode* InParentNode)
+void UGameTaskNode::InitializeNode(UGameTaskNode* InParentNode)
 {
 	ParentNode = InParentNode;
 }
 
-UGameTaskCompositeNode* UGameTaskNode::GetParentNode() const
+UGameTaskNode* UGameTaskNode::GetParentNode() const
 {
 	return ParentNode;
 }
@@ -58,6 +42,26 @@ UGameTask* UGameTaskNode::GetGameTaskAsset() const
 FString UGameTaskNode::GetStaticDescription() const
 {
 	return UGameTaskTypes::GetShortTypeName(this);
+}
+
+void UGameTaskNode::SetNodeState(const ENodeState InState) {
+	NodeState = InState;
+	if (NodeState == ENodeState::Succeeded) {
+		if (auto Parent = GetParentNode()) {
+			Parent->CheckNodeState();
+		}
+	}
+}
+
+ENodeState UGameTaskNode::GetNodeState() const {
+	return  NodeState;
+}
+
+void UGameTaskNode::CheckNodeState() {
+}
+
+void UGameTaskNode::Enter() {
+	SetNodeState(ENodeState::InProgress);
 }
 
 #if WITH_EDITOR

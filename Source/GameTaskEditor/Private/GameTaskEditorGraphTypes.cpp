@@ -152,15 +152,13 @@ FGameTaskGraphNodeClassHelper::~FGameTaskGraphNodeClassHelper()
 	}
 }
 
-void FGameTaskGraphNodeClassHelper::GatherClasses(const UClass* BaseClass,
-	TArray<FGameTaskGraphNodeClassData>& AvailableClasses)
+void FGameTaskGraphNodeClassHelper::GatherClasses(const UClass* BaseClass, TArray<FGameTaskGraphNodeClassData>& AvailableClasses)
 {
 	const FString BaseClassName = BaseClass->GetName();
 	if (!RootNode.IsValid())
 	{
 		BuildClassGraph();
 	}
-
 	TSharedPtr<FGameTaskGraphNodeClassNode> BaseNode = FindBaseClassNode(RootNode, BaseClassName);
 	FindAllSubClasses(BaseNode, AvailableClasses);
 }
@@ -318,10 +316,14 @@ TSharedPtr<FGameTaskGraphNodeClassNode> FGameTaskGraphNodeClassHelper::CreateCla
 		Node = MakeShareable(new FGameTaskGraphNodeClassNode);
 		Node->ParentClassName = AssetParentClassName;
 
-		UObject* AssetOb = AssetData.IsAssetLoaded() ? AssetData.GetAsset() : NULL;
+		UObject* AssetOb = AssetData.IsAssetLoaded() ? AssetData.GetAsset() : nullptr;
 		UBlueprint* AssetBP = Cast<UBlueprint>(AssetOb);
-		UClass* AssetClass = AssetBP ? *AssetBP->GeneratedClass : AssetOb ? AssetOb->GetClass() : NULL;
-
+		UClass* AssetClass = AssetBP ? *AssetBP->GeneratedClass : AssetOb ? AssetOb->GetClass() : nullptr;
+		if (AssetClass == nullptr) {
+			const FString AssetPath = AssetData.ObjectPath.ToString();
+			UBlueprint* LoadedBP= LoadObject<UBlueprint>(nullptr, *AssetPath);
+			if (LoadedBP) AssetClass = LoadedBP->GeneratedClass;
+		}
 		FGameTaskGraphNodeClassData NewData(AssetData.AssetName.ToString(), AssetData.PackageName.ToString(), AssetClassName, AssetClass);
 		Node->Data = NewData;
 	}
@@ -329,8 +331,7 @@ TSharedPtr<FGameTaskGraphNodeClassNode> FGameTaskGraphNodeClassHelper::CreateCla
 	return Node;
 }
 
-TSharedPtr<FGameTaskGraphNodeClassNode> FGameTaskGraphNodeClassHelper::FindBaseClassNode(
-	TSharedPtr<FGameTaskGraphNodeClassNode> Node, const FString& ClassName)
+TSharedPtr<FGameTaskGraphNodeClassNode> FGameTaskGraphNodeClassHelper::FindBaseClassNode(TSharedPtr<FGameTaskGraphNodeClassNode> Node, const FString& ClassName)
 {
 	TSharedPtr<FGameTaskGraphNodeClassNode> RetNode;
 	if (Node.IsValid())
@@ -400,7 +401,6 @@ void FGameTaskGraphNodeClassHelper::BuildClassGraph()
 		{
 			TSharedPtr<FGameTaskGraphNodeClassNode> NewNode = MakeShareable(new FGameTaskGraphNodeClassNode);
 			NewNode->ParentClassName = TestClass->GetSuperClass()->GetName();
-
 			FString DeprecatedMessage = GetDeprecationMessage(TestClass);
 			FGameTaskGraphNodeClassData NewData(TestClass, DeprecatedMessage);
 

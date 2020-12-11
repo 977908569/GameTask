@@ -15,7 +15,7 @@ void EmptyLinkFunctionForGeneratedCodeGameTaskGraphNode_Flow() {}
 // Cross Module References
 	GAMETASKEDITOR_API UClass* Z_Construct_UClass_UGameTaskGraphNode_Flow_NoRegister();
 	GAMETASKEDITOR_API UClass* Z_Construct_UClass_UGameTaskGraphNode_Flow();
-	GAMETASKEDITOR_API UClass* Z_Construct_UClass_UGameTaskGraphNode_Composite();
+	GAMETASKEDITOR_API UClass* Z_Construct_UClass_UGameTaskGraphNode();
 	UPackage* Z_Construct_UPackage__Script_GameTaskEditor();
 	GAMETASKEDITOR_API UClass* Z_Construct_UClass_UGameTaskGraphNode_Event_NoRegister();
 // End Cross Module References
@@ -47,7 +47,7 @@ void EmptyLinkFunctionForGeneratedCodeGameTaskGraphNode_Flow() {}
 		static const UE4CodeGen_Private::FClassParams ClassParams;
 	};
 	UObject* (*const Z_Construct_UClass_UGameTaskGraphNode_Flow_Statics::DependentSingletons[])() = {
-		(UObject* (*)())Z_Construct_UClass_UGameTaskGraphNode_Composite,
+		(UObject* (*)())Z_Construct_UClass_UGameTaskGraphNode,
 		(UObject* (*)())Z_Construct_UPackage__Script_GameTaskEditor,
 	};
 #if WITH_METADATA
@@ -103,7 +103,7 @@ void EmptyLinkFunctionForGeneratedCodeGameTaskGraphNode_Flow() {}
 		}
 		return OuterClass;
 	}
-	IMPLEMENT_CLASS(UGameTaskGraphNode_Flow, 4041059387);
+	IMPLEMENT_CLASS(UGameTaskGraphNode_Flow, 2656303903);
 	template<> GAMETASKEDITOR_API UClass* StaticClass<UGameTaskGraphNode_Flow>()
 	{
 		return UGameTaskGraphNode_Flow::StaticClass();

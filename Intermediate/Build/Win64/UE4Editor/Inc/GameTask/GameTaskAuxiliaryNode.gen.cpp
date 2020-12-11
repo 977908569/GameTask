@@ -73,7 +73,7 @@ void EmptyLinkFunctionForGeneratedCodeGameTaskAuxiliaryNode() {}
 		}
 		return OuterClass;
 	}
-	IMPLEMENT_CLASS(UGameTaskAuxiliaryNode, 989673555);
+	IMPLEMENT_CLASS(UGameTaskAuxiliaryNode, 775313782);
 	template<> GAMETASK_API UClass* StaticClass<UGameTaskAuxiliaryNode>()
 	{
 		return UGameTaskAuxiliaryNode::StaticClass();

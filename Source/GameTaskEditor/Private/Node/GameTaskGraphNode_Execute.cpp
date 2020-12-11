@@ -1,6 +1,9 @@
 #include "GameTaskGraphNode_Execute.h"
+#include "GameTask.h"
 #include "GameTaskEditorTypes.h"
+#include "GameTaskEvent.h"
 #include "GameTaskNode.h"
+#include "GameTask_Execute.h"
 
 UGameTaskGraphNode_Execute::UGameTaskGraphNode_Execute(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
@@ -8,7 +11,7 @@ UGameTaskGraphNode_Execute::UGameTaskGraphNode_Execute(const FObjectInitializer&
 
 void UGameTaskGraphNode_Execute::AllocateDefaultPins()
 {
-	CreatePin(EGPD_Input, UGameTaskEditorTypes::PinCategory_SingleComposite, TEXT("In"));
+	CreatePin(EGPD_Input, UGameTaskEditorTypes::PinCategory_SingleNode, TEXT("In"));
 	CreatePin(EGPD_Output, UGameTaskEditorTypes::PinCategory_OnlyShow, TEXT("Out"));
 }
 
@@ -32,7 +35,8 @@ FText UGameTaskGraphNode_Execute::GetNodeTitle(ENodeTitleType::Type TitleType) c
 
 void UGameTaskGraphNode_Execute::GetNodeContextMenuActions(UToolMenu* Menu, UGraphNodeContextMenuContext* Context) const
 {
-	AddContextMenuActionsEvents(Menu, "GameTaskGraphNode", Context);
+	AddContextMenuActionsEvents(Menu, "GameTaskGraphNode", Context, EGameTaskSubNode::EnterEvent);
+	AddContextMenuActionsEvents(Menu, "GameTaskGraphNode", Context, EGameTaskSubNode::ExitEvent);
 }
 
 void UGameTaskGraphNode_Execute::InsertSubNodeAt(UGameTaskGraphNodeBase* SubNode, int32 DropIndex)
@@ -125,4 +129,55 @@ void UGameTaskGraphNode_Execute::OnSubNodeAdded(UGameTaskGraphNodeBase* SubNode)
 			ExitEvents.Add(EventNode);
 		}
 	}
+}
+
+int32 UGameTaskGraphNode_Execute::GetSubNodeNum() {
+	return EnterEvents.Num() + ExitEvents.Num();
+}
+
+void UGameTaskGraphNode_Execute::UpdateGraph()
+{
+	Super::UpdateGraph();
+	for (auto& Each : EnterEvents)
+	{
+		if (Each)
+			Each->ParentNode = this;
+	}
+
+	for (auto& Each : ExitEvents)
+	{
+		if (Each)
+			Each->ParentNode = this;
+	}
+}
+
+void UGameTaskGraphNode_Execute::UpdateAsset(UGameTask* InTaskAsset, UGameTaskNode* InParentNode)
+{
+	Super::UpdateAsset(InTaskAsset, InParentNode);
+	UGameTask_Execute* Asset = Cast<UGameTask_Execute>(this->NodeInstance);
+	check(Asset);
+	CollectEvents(InTaskAsset, EnterEvents, Asset->ActiveEvents);
+	CollectEvents(InTaskAsset, ExitEvents, Asset->FinishEvents);
+	InParentNode->Children.Add(Asset);
+}
+
+void UGameTaskGraphNode_Execute::CollectEvents(UGameTask* TaskAsset, TArray<UGameTaskGraphNode_Event*>& Events, TArray<UGameTaskEvent*>& InEventIns) const
+{
+	InEventIns.Reset();
+	TArray<UGameTaskEvent*> EventInstances;
+	for (auto& Each : Events)
+	{
+		Each->CollectEventData(EventInstances);
+	}
+
+	for (int32 InsIdx = 0; InsIdx < EventInstances.Num(); InsIdx++)
+	{
+		if (EventInstances[InsIdx] && TaskAsset && Cast<UGameTask>(EventInstances[InsIdx]->GetOuter()) == nullptr)
+		{
+			EventInstances[InsIdx]->Rename(nullptr, TaskAsset);
+		}
+
+		EventInstances[InsIdx]->InitializeNode(Cast<UGameTask_Execute>(NodeInstance));
+	}
+	InEventIns.Append(EventInstances);
 }

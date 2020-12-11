@@ -1,13 +1,30 @@
 #include "GameTaskComposite_Parallel.h"
 
 UGameTaskComposite_Parallel::UGameTaskComposite_Parallel(const FObjectInitializer& ObjectInitializer)
-: Super(ObjectInitializer)
+	: Super(ObjectInitializer)
 {
 	NodeName = "Parallel";
 }
 FString UGameTaskComposite_Parallel::GetStaticDescription() const
 {
 	return Super::GetStaticDescription();
+}
+
+void UGameTaskComposite_Parallel::Enter() {
+	for (auto& Each : Children) {
+		Each->Enter();
+	}
+	Super::Enter();
+}
+
+void UGameTaskComposite_Parallel::CheckNodeState() {
+	bool bAllSucc = true;
+	for (auto& Each : Children) {
+		if (Each->GetNodeState() != ENodeState::Succeeded) {
+			bAllSucc = false;
+		}
+	}
+	if (bAllSucc) SetNodeState(ENodeState::Succeeded);
 }
 
 #if WITH_EDITOR

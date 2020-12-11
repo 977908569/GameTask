@@ -124,20 +124,26 @@ void EmptyLinkFunctionForGeneratedCodeGameTaskGraphNodeBase() {}
 	const UE4CodeGen_Private::FIntPropertyParams Z_Construct_UClass_UGameTaskGraphNodeBase_Statics::NewProp_CopySubNodeIndex = { "CopySubNodeIndex", nullptr, (EPropertyFlags)0x0010000000000000, UE4CodeGen_Private::EPropertyGenFlags::Int, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(UGameTaskGraphNodeBase, CopySubNodeIndex), METADATA_PARAMS(Z_Construct_UClass_UGameTaskGraphNodeBase_Statics::NewProp_CopySubNodeIndex_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_UGameTaskGraphNodeBase_Statics::NewProp_CopySubNodeIndex_MetaData)) };
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_UGameTaskGraphNodeBase_Statics::NewProp_SubNodes_MetaData[] = {
+		{ "Comment", "//\xe9\x99\x84\xe5\xb1\x9e\xe5\xad\x90\xe8\x8a\x82\xe7\x82\xb9\n" },
 		{ "ModuleRelativePath", "Private/Node/GameTaskGraphNodeBase.h" },
+		{ "ToolTip", "\xe9\x99\x84\xe5\xb1\x9e\xe5\xad\x90\xe8\x8a\x82\xe7\x82\xb9" },
 	};
 #endif
 	const UE4CodeGen_Private::FArrayPropertyParams Z_Construct_UClass_UGameTaskGraphNodeBase_Statics::NewProp_SubNodes = { "SubNodes", nullptr, (EPropertyFlags)0x0010000000000000, UE4CodeGen_Private::EPropertyGenFlags::Array, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(UGameTaskGraphNodeBase, SubNodes), EArrayPropertyFlags::None, METADATA_PARAMS(Z_Construct_UClass_UGameTaskGraphNodeBase_Statics::NewProp_SubNodes_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_UGameTaskGraphNodeBase_Statics::NewProp_SubNodes_MetaData)) };
 	const UE4CodeGen_Private::FObjectPropertyParams Z_Construct_UClass_UGameTaskGraphNodeBase_Statics::NewProp_SubNodes_Inner = { "SubNodes", nullptr, (EPropertyFlags)0x0000000000000000, UE4CodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, 1, 0, Z_Construct_UClass_UGameTaskGraphNodeBase_NoRegister, METADATA_PARAMS(nullptr, 0) };
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_UGameTaskGraphNodeBase_Statics::NewProp_ParentNode_MetaData[] = {
+		{ "Comment", "//\xe7\x88\xb6\xe8\x8a\x82\xe7\x82\xb9\n" },
 		{ "ModuleRelativePath", "Private/Node/GameTaskGraphNodeBase.h" },
+		{ "ToolTip", "\xe7\x88\xb6\xe8\x8a\x82\xe7\x82\xb9" },
 	};
 #endif
 	const UE4CodeGen_Private::FObjectPropertyParams Z_Construct_UClass_UGameTaskGraphNodeBase_Statics::NewProp_ParentNode = { "ParentNode", nullptr, (EPropertyFlags)0x0010000000002000, UE4CodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(UGameTaskGraphNodeBase, ParentNode), Z_Construct_UClass_UGameTaskGraphNodeBase_NoRegister, METADATA_PARAMS(Z_Construct_UClass_UGameTaskGraphNodeBase_Statics::NewProp_ParentNode_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_UGameTaskGraphNodeBase_Statics::NewProp_ParentNode_MetaData)) };
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_UGameTaskGraphNodeBase_Statics::NewProp_NodeInstance_MetaData[] = {
+		{ "Comment", "//\xe5\x85\xb3\xe8\x81\x94\xe7\x9a\x84\xe8\xb5\x84\xe6\xba\x90\n" },
 		{ "ModuleRelativePath", "Private/Node/GameTaskGraphNodeBase.h" },
+		{ "ToolTip", "\xe5\x85\xb3\xe8\x81\x94\xe7\x9a\x84\xe8\xb5\x84\xe6\xba\x90" },
 	};
 #endif
 	const UE4CodeGen_Private::FObjectPropertyParams Z_Construct_UClass_UGameTaskGraphNodeBase_Statics::NewProp_NodeInstance = { "NodeInstance", nullptr, (EPropertyFlags)0x0010000000000000, UE4CodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(UGameTaskGraphNodeBase, NodeInstance), Z_Construct_UClass_UObject_NoRegister, METADATA_PARAMS(Z_Construct_UClass_UGameTaskGraphNodeBase_Statics::NewProp_NodeInstance_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_UGameTaskGraphNodeBase_Statics::NewProp_NodeInstance_MetaData)) };
@@ -187,7 +193,7 @@ void EmptyLinkFunctionForGeneratedCodeGameTaskGraphNodeBase() {}
 		}
 		return OuterClass;
 	}
-	IMPLEMENT_CLASS(UGameTaskGraphNodeBase, 2483240942);
+	IMPLEMENT_CLASS(UGameTaskGraphNodeBase, 366035632);
 	template<> GAMETASKEDITOR_API UClass* StaticClass<UGameTaskGraphNodeBase>()
 	{
 		return UGameTaskGraphNodeBase::StaticClass();

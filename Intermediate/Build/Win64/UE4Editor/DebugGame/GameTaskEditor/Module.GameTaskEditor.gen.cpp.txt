@@ -26,9 +26,6 @@ F:\NewTask\TaskProject\Plugins\GameTask\Source\GameTaskEditor/Private/Node/GameT
 F:\NewTask\TaskProject\Plugins\GameTask\Source\GameTaskEditor\Private\Node\GameTaskGraphNodeBase.h
 F:\NewTask\TaskProject\Plugins\GameTask\Intermediate\Build\Win64\UE4Editor\Inc\GameTaskEditor\GameTaskGraphNodeBase.generated.h
 F:\NewTask\TaskProject\Plugins\GameTask\Intermediate\Build\Win64\UE4Editor\Inc\GameTaskEditor\GameTaskGraphNode.generated.h
-F:/NewTask/TaskProject/Plugins/GameTask/Intermediate/Build/Win64/UE4Editor/Inc/GameTaskEditor/GameTaskGraphNode_Composite.gen.cpp
-F:\NewTask\TaskProject\Plugins\GameTask\Source\GameTaskEditor/Private/Node/GameTaskGraphNode_Composite.h
-F:\NewTask\TaskProject\Plugins\GameTask\Intermediate\Build\Win64\UE4Editor\Inc\GameTaskEditor\GameTaskGraphNode_Composite.generated.h
 F:/NewTask/TaskProject/Plugins/GameTask/Intermediate/Build/Win64/UE4Editor/Inc/GameTaskEditor/GameTaskGraphNode_Event.gen.cpp
 F:\NewTask\TaskProject\Plugins\GameTask\Source\GameTaskEditor/Private/Node/GameTaskGraphNode_Event.h
 F:\NewTask\TaskProject\Plugins\GameTask\Intermediate\Build\Win64\UE4Editor\Inc\GameTaskEditor\GameTaskGraphNode_Event.generated.h

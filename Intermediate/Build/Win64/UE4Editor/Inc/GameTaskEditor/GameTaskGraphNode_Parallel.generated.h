@@ -21,7 +21,7 @@ private: \
 	static void StaticRegisterNativesUGameTaskGraphNode_Parallel(); \
 	friend struct Z_Construct_UClass_UGameTaskGraphNode_Parallel_Statics; \
 public: \
-	DECLARE_CLASS(UGameTaskGraphNode_Parallel, UGameTaskGraphNode_Composite, COMPILED_IN_FLAGS(0), CASTCLASS_None, TEXT("/Script/GameTaskEditor"), NO_API) \
+	DECLARE_CLASS(UGameTaskGraphNode_Parallel, UGameTaskGraphNode, COMPILED_IN_FLAGS(0), CASTCLASS_None, TEXT("/Script/GameTaskEditor"), NO_API) \
 	DECLARE_SERIALIZER(UGameTaskGraphNode_Parallel)
 
 
@@ -30,7 +30,7 @@ private: \
 	static void StaticRegisterNativesUGameTaskGraphNode_Parallel(); \
 	friend struct Z_Construct_UClass_UGameTaskGraphNode_Parallel_Statics; \
 public: \
-	DECLARE_CLASS(UGameTaskGraphNode_Parallel, UGameTaskGraphNode_Composite, COMPILED_IN_FLAGS(0), CASTCLASS_None, TEXT("/Script/GameTaskEditor"), NO_API) \
+	DECLARE_CLASS(UGameTaskGraphNode_Parallel, UGameTaskGraphNode, COMPILED_IN_FLAGS(0), CASTCLASS_None, TEXT("/Script/GameTaskEditor"), NO_API) \
 	DECLARE_SERIALIZER(UGameTaskGraphNode_Parallel)
 
 

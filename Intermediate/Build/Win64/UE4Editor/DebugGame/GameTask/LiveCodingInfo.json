@@ -4,25 +4,25 @@
 		"Module.GameTask.cpp.obj": [
 			"GameTask.cpp.obj",
 			"GameTask_Execute.cpp.obj",
+			"GameTaskActor.cpp.obj",
+			"GameTaskAuxiliaryNode.cpp.obj",
 			"GameTaskComposite_Flow.cpp.obj",
 			"GameTaskComposite_Parallel.cpp.obj",
 			"GameTaskComposite_Sequence.cpp.obj",
-			"GameTaskCompositeNode.cpp.obj",
 			"GameTaskEvent.cpp.obj",
 			"GameTaskModule.cpp.obj",
 			"GameTaskNode.cpp.obj",
-			"GameTaskTypes.cpp.obj",
-			"GameTaskAuxiliaryNode.cpp.obj"
+			"GameTaskTypes.cpp.obj"
 		],
 		"Module.GameTask.gen.cpp.obj": [
 			"GameTask.gen.cpp.obj",
 			"GameTask.init.gen.cpp.obj",
 			"GameTask_Execute.gen.cpp.obj",
+			"GameTaskActor.gen.cpp.obj",
 			"GameTaskAuxiliaryNode.gen.cpp.obj",
 			"GameTaskComposite_Flow.gen.cpp.obj",
 			"GameTaskComposite_Parallel.gen.cpp.obj",
 			"GameTaskComposite_Sequence.gen.cpp.obj",
-			"GameTaskCompositeNode.gen.cpp.obj",
 			"GameTaskEvent.gen.cpp.obj",
 			"GameTaskNode.gen.cpp.obj",
 			"GameTaskTypes.gen.cpp.obj"

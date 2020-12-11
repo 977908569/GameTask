@@ -1,6 +1,7 @@
 #include "GameTaskGraphNodeBase.h"
 #include "BlueprintNodeHelpers.h"
 #include "DiffResults.h"
+#include "GameTaskNode.h"
 #include "Graph/GameTaskGraphBase.h"
 
 #define LOCTEXT_NAMESPACE "GameTask"

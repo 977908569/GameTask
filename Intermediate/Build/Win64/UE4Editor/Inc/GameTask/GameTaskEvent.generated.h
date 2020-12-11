@@ -16,6 +16,20 @@ PRAGMA_DISABLE_DEPRECATION_WARNINGS
 #define TaskProject_Plugins_GameTask_Source_GameTask_Public_GameTaskEvent_h_11_SPARSE_DATA
 #define TaskProject_Plugins_GameTask_Source_GameTask_Public_GameTaskEvent_h_11_RPC_WRAPPERS
 #define TaskProject_Plugins_GameTask_Source_GameTask_Public_GameTaskEvent_h_11_RPC_WRAPPERS_NO_PURE_DECLS
+#define TaskProject_Plugins_GameTask_Source_GameTask_Public_GameTaskEvent_h_11_EVENT_PARMS \
+	struct GameTaskEvent_eventOnTrigger_Parms \
+	{ \
+		bool ReturnValue; \
+ \
+		/** Constructor, initializes return property only **/ \
+		GameTaskEvent_eventOnTrigger_Parms() \
+			: ReturnValue(false) \
+		{ \
+		} \
+	};
+
+
+#define TaskProject_Plugins_GameTask_Source_GameTask_Public_GameTaskEvent_h_11_CALLBACK_WRAPPERS
 #define TaskProject_Plugins_GameTask_Source_GameTask_Public_GameTaskEvent_h_11_INCLASS_NO_PURE_DECLS \
 private: \
 	static void StaticRegisterNativesUGameTaskEvent(); \
@@ -59,13 +73,17 @@ DEFINE_VTABLE_PTR_HELPER_CTOR_CALLER(UGameTaskEvent); \
 
 
 #define TaskProject_Plugins_GameTask_Source_GameTask_Public_GameTaskEvent_h_11_PRIVATE_PROPERTY_OFFSET
-#define TaskProject_Plugins_GameTask_Source_GameTask_Public_GameTaskEvent_h_8_PROLOG
+#define TaskProject_Plugins_GameTask_Source_GameTask_Public_GameTaskEvent_h_8_PROLOG \
+	TaskProject_Plugins_GameTask_Source_GameTask_Public_GameTaskEvent_h_11_EVENT_PARMS
+
+
 #define TaskProject_Plugins_GameTask_Source_GameTask_Public_GameTaskEvent_h_11_GENERATED_BODY_LEGACY \
 PRAGMA_DISABLE_DEPRECATION_WARNINGS \
 public: \
 	TaskProject_Plugins_GameTask_Source_GameTask_Public_GameTaskEvent_h_11_PRIVATE_PROPERTY_OFFSET \
 	TaskProject_Plugins_GameTask_Source_GameTask_Public_GameTaskEvent_h_11_SPARSE_DATA \
 	TaskProject_Plugins_GameTask_Source_GameTask_Public_GameTaskEvent_h_11_RPC_WRAPPERS \
+	TaskProject_Plugins_GameTask_Source_GameTask_Public_GameTaskEvent_h_11_CALLBACK_WRAPPERS \
 	TaskProject_Plugins_GameTask_Source_GameTask_Public_GameTaskEvent_h_11_INCLASS \
 	TaskProject_Plugins_GameTask_Source_GameTask_Public_GameTaskEvent_h_11_STANDARD_CONSTRUCTORS \
 public: \
@@ -78,6 +96,7 @@ public: \
 	TaskProject_Plugins_GameTask_Source_GameTask_Public_GameTaskEvent_h_11_PRIVATE_PROPERTY_OFFSET \
 	TaskProject_Plugins_GameTask_Source_GameTask_Public_GameTaskEvent_h_11_SPARSE_DATA \
 	TaskProject_Plugins_GameTask_Source_GameTask_Public_GameTaskEvent_h_11_RPC_WRAPPERS_NO_PURE_DECLS \
+	TaskProject_Plugins_GameTask_Source_GameTask_Public_GameTaskEvent_h_11_CALLBACK_WRAPPERS \
 	TaskProject_Plugins_GameTask_Source_GameTask_Public_GameTaskEvent_h_11_INCLASS_NO_PURE_DECLS \
 	TaskProject_Plugins_GameTask_Source_GameTask_Public_GameTaskEvent_h_11_ENHANCED_CONSTRUCTORS \
 private: \

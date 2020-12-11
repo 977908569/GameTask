@@ -15,7 +15,7 @@ void EmptyLinkFunctionForGeneratedCodeGameTaskComposite_Parallel() {}
 // Cross Module References
 	GAMETASK_API UClass* Z_Construct_UClass_UGameTaskComposite_Parallel_NoRegister();
 	GAMETASK_API UClass* Z_Construct_UClass_UGameTaskComposite_Parallel();
-	GAMETASK_API UClass* Z_Construct_UClass_UGameTaskCompositeNode();
+	GAMETASK_API UClass* Z_Construct_UClass_UGameTaskNode();
 	UPackage* Z_Construct_UPackage__Script_GameTask();
 // End Cross Module References
 	void UGameTaskComposite_Parallel::StaticRegisterNativesUGameTaskComposite_Parallel()
@@ -35,14 +35,15 @@ void EmptyLinkFunctionForGeneratedCodeGameTaskComposite_Parallel() {}
 		static const UE4CodeGen_Private::FClassParams ClassParams;
 	};
 	UObject* (*const Z_Construct_UClass_UGameTaskComposite_Parallel_Statics::DependentSingletons[])() = {
-		(UObject* (*)())Z_Construct_UClass_UGameTaskCompositeNode,
+		(UObject* (*)())Z_Construct_UClass_UGameTaskNode,
 		(UObject* (*)())Z_Construct_UPackage__Script_GameTask,
 	};
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_UGameTaskComposite_Parallel_Statics::Class_MetaDataParams[] = {
-		{ "HideCategories", "Composite" },
+		{ "Comment", "/**\n * \xe4\xbb\xbb\xe5\x8a\xa1\xe6\x9d\xa1\xe7\x9b\xae\xe5\xb9\xb6\xe8\xa1\x8c\n */" },
 		{ "IncludePath", "GameTaskComposite_Parallel.h" },
 		{ "ModuleRelativePath", "Public/GameTaskComposite_Parallel.h" },
+		{ "ToolTip", "\xe4\xbb\xbb\xe5\x8a\xa1\xe6\x9d\xa1\xe7\x9b\xae\xe5\xb9\xb6\xe8\xa1\x8c" },
 	};
 #endif
 	const FCppClassTypeInfoStatic Z_Construct_UClass_UGameTaskComposite_Parallel_Statics::StaticCppClassTypeInfo = {
@@ -72,7 +73,7 @@ void EmptyLinkFunctionForGeneratedCodeGameTaskComposite_Parallel() {}
 		}
 		return OuterClass;
 	}
-	IMPLEMENT_CLASS(UGameTaskComposite_Parallel, 4103850451);
+	IMPLEMENT_CLASS(UGameTaskComposite_Parallel, 1473984974);
 	template<> GAMETASK_API UClass* StaticClass<UGameTaskComposite_Parallel>()
 	{
 		return UGameTaskComposite_Parallel::StaticClass();

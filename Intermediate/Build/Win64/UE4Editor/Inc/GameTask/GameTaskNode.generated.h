@@ -13,22 +13,10 @@ PRAGMA_DISABLE_DEPRECATION_WARNINGS
 #endif
 #define GAMETASK_GameTaskNode_generated_h
 
-#define TaskProject_Plugins_GameTask_Source_GameTask_Public_GameTaskNode_h_16_SPARSE_DATA
-#define TaskProject_Plugins_GameTask_Source_GameTask_Public_GameTaskNode_h_16_RPC_WRAPPERS \
- \
-	DECLARE_FUNCTION(execExit); \
-	DECLARE_FUNCTION(execEnter);
-
-
-#define TaskProject_Plugins_GameTask_Source_GameTask_Public_GameTaskNode_h_16_RPC_WRAPPERS_NO_PURE_DECLS \
- \
-	DECLARE_FUNCTION(execExit); \
-	DECLARE_FUNCTION(execEnter);
-
-
-#define TaskProject_Plugins_GameTask_Source_GameTask_Public_GameTaskNode_h_16_EVENT_PARMS
-#define TaskProject_Plugins_GameTask_Source_GameTask_Public_GameTaskNode_h_16_CALLBACK_WRAPPERS
-#define TaskProject_Plugins_GameTask_Source_GameTask_Public_GameTaskNode_h_16_INCLASS_NO_PURE_DECLS \
+#define TaskProject_Plugins_GameTask_Source_GameTask_Public_GameTaskNode_h_18_SPARSE_DATA
+#define TaskProject_Plugins_GameTask_Source_GameTask_Public_GameTaskNode_h_18_RPC_WRAPPERS
+#define TaskProject_Plugins_GameTask_Source_GameTask_Public_GameTaskNode_h_18_RPC_WRAPPERS_NO_PURE_DECLS
+#define TaskProject_Plugins_GameTask_Source_GameTask_Public_GameTaskNode_h_18_INCLASS_NO_PURE_DECLS \
 private: \
 	static void StaticRegisterNativesUGameTaskNode(); \
 	friend struct Z_Construct_UClass_UGameTaskNode_Statics; \
@@ -37,7 +25,7 @@ public: \
 	DECLARE_SERIALIZER(UGameTaskNode)
 
 
-#define TaskProject_Plugins_GameTask_Source_GameTask_Public_GameTaskNode_h_16_INCLASS \
+#define TaskProject_Plugins_GameTask_Source_GameTask_Public_GameTaskNode_h_18_INCLASS \
 private: \
 	static void StaticRegisterNativesUGameTaskNode(); \
 	friend struct Z_Construct_UClass_UGameTaskNode_Statics; \
@@ -46,7 +34,7 @@ public: \
 	DECLARE_SERIALIZER(UGameTaskNode)
 
 
-#define TaskProject_Plugins_GameTask_Source_GameTask_Public_GameTaskNode_h_16_STANDARD_CONSTRUCTORS \
+#define TaskProject_Plugins_GameTask_Source_GameTask_Public_GameTaskNode_h_18_STANDARD_CONSTRUCTORS \
 	/** Standard constructor, called after all reflected properties have been initialized */ \
 	NO_API UGameTaskNode(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get()); \
 	DEFINE_DEFAULT_OBJECT_INITIALIZER_CONSTRUCTOR_CALL(UGameTaskNode) \
@@ -59,7 +47,7 @@ private: \
 public:
 
 
-#define TaskProject_Plugins_GameTask_Source_GameTask_Public_GameTaskNode_h_16_ENHANCED_CONSTRUCTORS \
+#define TaskProject_Plugins_GameTask_Source_GameTask_Public_GameTaskNode_h_18_ENHANCED_CONSTRUCTORS \
 	/** Standard constructor, called after all reflected properties have been initialized */ \
 	NO_API UGameTaskNode(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get()) : Super(ObjectInitializer) { }; \
 private: \
@@ -72,37 +60,32 @@ DEFINE_VTABLE_PTR_HELPER_CTOR_CALLER(UGameTaskNode); \
 	DEFINE_DEFAULT_OBJECT_INITIALIZER_CONSTRUCTOR_CALL(UGameTaskNode)
 
 
-#define TaskProject_Plugins_GameTask_Source_GameTask_Public_GameTaskNode_h_16_PRIVATE_PROPERTY_OFFSET \
+#define TaskProject_Plugins_GameTask_Source_GameTask_Public_GameTaskNode_h_18_PRIVATE_PROPERTY_OFFSET \
 	FORCEINLINE static uint32 __PPO__GameTaskAsset() { return STRUCT_OFFSET(UGameTaskNode, GameTaskAsset); } \
 	FORCEINLINE static uint32 __PPO__ParentNode() { return STRUCT_OFFSET(UGameTaskNode, ParentNode); }
 
 
-#define TaskProject_Plugins_GameTask_Source_GameTask_Public_GameTaskNode_h_13_PROLOG \
-	TaskProject_Plugins_GameTask_Source_GameTask_Public_GameTaskNode_h_16_EVENT_PARMS
-
-
-#define TaskProject_Plugins_GameTask_Source_GameTask_Public_GameTaskNode_h_16_GENERATED_BODY_LEGACY \
+#define TaskProject_Plugins_GameTask_Source_GameTask_Public_GameTaskNode_h_15_PROLOG
+#define TaskProject_Plugins_GameTask_Source_GameTask_Public_GameTaskNode_h_18_GENERATED_BODY_LEGACY \
 PRAGMA_DISABLE_DEPRECATION_WARNINGS \
 public: \
-	TaskProject_Plugins_GameTask_Source_GameTask_Public_GameTaskNode_h_16_PRIVATE_PROPERTY_OFFSET \
-	TaskProject_Plugins_GameTask_Source_GameTask_Public_GameTaskNode_h_16_SPARSE_DATA \
-	TaskProject_Plugins_GameTask_Source_GameTask_Public_GameTaskNode_h_16_RPC_WRAPPERS \
-	TaskProject_Plugins_GameTask_Source_GameTask_Public_GameTaskNode_h_16_CALLBACK_WRAPPERS \
-	TaskProject_Plugins_GameTask_Source_GameTask_Public_GameTaskNode_h_16_INCLASS \
-	TaskProject_Plugins_GameTask_Source_GameTask_Public_GameTaskNode_h_16_STANDARD_CONSTRUCTORS \
+	TaskProject_Plugins_GameTask_Source_GameTask_Public_GameTaskNode_h_18_PRIVATE_PROPERTY_OFFSET \
+	TaskProject_Plugins_GameTask_Source_GameTask_Public_GameTaskNode_h_18_SPARSE_DATA \
+	TaskProject_Plugins_GameTask_Source_GameTask_Public_GameTaskNode_h_18_RPC_WRAPPERS \
+	TaskProject_Plugins_GameTask_Source_GameTask_Public_GameTaskNode_h_18_INCLASS \
+	TaskProject_Plugins_GameTask_Source_GameTask_Public_GameTaskNode_h_18_STANDARD_CONSTRUCTORS \
 public: \
 PRAGMA_ENABLE_DEPRECATION_WARNINGS
 
 
-#define TaskProject_Plugins_GameTask_Source_GameTask_Public_GameTaskNode_h_16_GENERATED_BODY \
+#define TaskProject_Plugins_GameTask_Source_GameTask_Public_GameTaskNode_h_18_GENERATED_BODY \
 PRAGMA_DISABLE_DEPRECATION_WARNINGS \
 public: \
-	TaskProject_Plugins_GameTask_Source_GameTask_Public_GameTaskNode_h_16_PRIVATE_PROPERTY_OFFSET \
-	TaskProject_Plugins_GameTask_Source_GameTask_Public_GameTaskNode_h_16_SPARSE_DATA \
-	TaskProject_Plugins_GameTask_Source_GameTask_Public_GameTaskNode_h_16_RPC_WRAPPERS_NO_PURE_DECLS \
-	TaskProject_Plugins_GameTask_Source_GameTask_Public_GameTaskNode_h_16_CALLBACK_WRAPPERS \
-	TaskProject_Plugins_GameTask_Source_GameTask_Public_GameTaskNode_h_16_INCLASS_NO_PURE_DECLS \
-	TaskProject_Plugins_GameTask_Source_GameTask_Public_GameTaskNode_h_16_ENHANCED_CONSTRUCTORS \
+	TaskProject_Plugins_GameTask_Source_GameTask_Public_GameTaskNode_h_18_PRIVATE_PROPERTY_OFFSET \
+	TaskProject_Plugins_GameTask_Source_GameTask_Public_GameTaskNode_h_18_SPARSE_DATA \
+	TaskProject_Plugins_GameTask_Source_GameTask_Public_GameTaskNode_h_18_RPC_WRAPPERS_NO_PURE_DECLS \
+	TaskProject_Plugins_GameTask_Source_GameTask_Public_GameTaskNode_h_18_INCLASS_NO_PURE_DECLS \
+	TaskProject_Plugins_GameTask_Source_GameTask_Public_GameTaskNode_h_18_ENHANCED_CONSTRUCTORS \
 static_assert(false, "Unknown access specifier for GENERATED_BODY() macro in class GameTaskNode."); \
 PRAGMA_ENABLE_DEPRECATION_WARNINGS
 

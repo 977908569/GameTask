@@ -92,13 +92,13 @@ template<> GAMETASK_API UClass* StaticClass<class UGameTaskTypes>();
 #define CURRENT_FILE_ID TaskProject_Plugins_GameTask_Source_GameTask_Public_GameTaskTypes_h
 
 
-#define FOREACH_ENUM_GAMETASKNODESTATETYPE(op) \
-	op(GameTaskNodeStateType::Disable) \
-	op(GameTaskNodeStateType::Progress) \
-	op(GameTaskNodeStateType::Finish) \
-	op(GameTaskNodeStateType::Fail) 
+#define FOREACH_ENUM_ENODESTATE(op) \
+	op(ENodeState::Normal) \
+	op(ENodeState::InProgress) \
+	op(ENodeState::Succeeded) \
+	op(ENodeState::Failed) 
 
-enum class GameTaskNodeStateType : uint8;
-template<> GAMETASK_API UEnum* StaticEnum<GameTaskNodeStateType>();
+enum class ENodeState : uint8;
+template<> GAMETASK_API UEnum* StaticEnum<ENodeState>();
 
 PRAGMA_ENABLE_DEPRECATION_WARNINGS
